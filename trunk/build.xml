@@ -1,0 +1,91 @@
+<project name="caDSRPasswordChange" basedir="./" default="all">
+
+	<!-- Project settings -->
+	<property name="project.title" value="caDSRPasswordChange" />
+	<property name="project.war.file" value="cadsrpasswordchange.war" />
+
+	<property name="src.dir" value="src/main" />
+	<property name="classes.dir" value="WebRoot/WEB-INF/classes" />
+	<property name="dist.dir" value="dist" />
+
+	<path id="class.path">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="lib-ext">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+<!-- need to do something with this  -->
+  <property name="appl.release" value="4.0.2" /> 
+  <property name="appl.version" value="${appl.release}.${DSTAMP}${TSTAMP}" /> 
+
+
+	<!-- Check timestamp on files -->
+	<target name="prepare">
+		<tstamp />
+	</target>
+
+
+	<!-- Copy any resource or configuration files -->
+	<target name="resources">
+<echo message="(no resources)"/>
+	</target>
+
+
+	<!-- Normal build of application -->
+	<target name="compile" depends="prepare,resources">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="class.path" />
+		</javac>
+	</target>
+
+
+	<!-- Remove classes directory for clean build -->
+	<target name="clean" description="Prepare for clean build">
+		<delete dir="${classes.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<delete dir="WebRoot/WEB-INF/lib" />
+		<mkdir dir="WebRoot/WEB-INF/lib" />
+	</target>
+
+
+	<!-- Build entire project -->
+	<target name="project" depends="clean,prepare,compile, dist" />
+
+
+	<!-- Create binary distribution -->
+	<target name="dist" description="Create binary distribution">
+
+		
+		<delete dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}" />
+
+		<filter token="connectionUrl" value="${connectionUrl}"/>
+		<echo>connectionUrl = ${connectionUrl}</echo>
+		<filter token="logLevel" value="${logLevel}"/>
+		<echo>logLevel = ${logLevel}</echo>
+
+		<copy tofile="${dist.dir}/jboss/cadsr-oracle-ds.xml" filtering="true">
+		  <fileset file="conf/template.cadsr-oracle-ds.xml" /> 
+		</copy>
+		
+		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-appender.xml" filtering="true">
+		  <fileset file="conf/template.cadsrpasswordchange-log4j-appender.xml" /> 
+		</copy>
+		
+		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-category.xml" filtering="true">
+		  <fileset file="conf/template.cadsrpasswordchange-log4j-category.xml" /> 
+		</copy>
+		
+		<war basedir="WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="WebRoot/WEB-INF/web.xml" excludes="**/log4j*.jar,**/commons-logging*.jar" > 
+		</war>
+
+	</target>
+
+
+	<!-- Build project and create distribution-->
+	<target name="all" depends="project" />
+
+</project>
