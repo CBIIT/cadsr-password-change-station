@@ -4,15 +4,15 @@
 	<property name="project.title" value="caDSRPasswordChange" />
 	<property name="project.war.file" value="cadsrpasswordchange.war" />
 
-	<property name="src.dir" value="src/main" />
-	<property name="classes.dir" value="WebRoot/WEB-INF/classes" />
+	<property name="src.dir" value="src/java" />
+	<property name="classes.dir" value="src/WebRoot/WEB-INF/classes" />
 	<property name="dist.dir" value="dist" />
 
 	<path id="class.path">
-		<fileset dir="lib">
+		<fileset dir="src/lib">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="lib-ext">
+		<fileset dir="src/lib-ext">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
@@ -46,8 +46,8 @@
 	<target name="clean" description="Prepare for clean build">
 		<delete dir="${classes.dir}" />
 		<mkdir dir="${classes.dir}" />
-		<delete dir="WebRoot/WEB-INF/lib" />
-		<mkdir dir="WebRoot/WEB-INF/lib" />
+		<delete dir="src/WebRoot/WEB-INF/lib" />
+		<mkdir dir="src/WebRoot/WEB-INF/lib" />
 	</target>
 
 
@@ -68,18 +68,18 @@
 		<echo>logLevel = ${logLevel}</echo>
 
 		<copy tofile="${dist.dir}/jboss/cadsr-oracle-ds.xml" filtering="true">
-		  <fileset file="conf/template.cadsr-oracle-ds.xml" /> 
+		  <fileset file="src/conf/template.cadsr-oracle-ds.xml" /> 
 		</copy>
 		
 		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-appender.xml" filtering="true">
-		  <fileset file="conf/template.cadsrpasswordchange-log4j-appender.xml" /> 
+		  <fileset file="src/conf/template.cadsrpasswordchange-log4j-appender.xml" /> 
 		</copy>
 		
 		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-category.xml" filtering="true">
-		  <fileset file="conf/template.cadsrpasswordchange-log4j-category.xml" /> 
+		  <fileset file="src/conf/template.cadsrpasswordchange-log4j-category.xml" /> 
 		</copy>
 		
-		<war basedir="WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="WebRoot/WEB-INF/web.xml" excludes="**/log4j*.jar,**/commons-logging*.jar" > 
+		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>
 
 	</target>
