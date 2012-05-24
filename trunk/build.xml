@@ -17,20 +17,25 @@
 		</fileset>
 	</path>
 
-<!-- need to do something with this  -->
-  <property name="appl.release" value="4.0.2" /> 
-  <property name="appl.version" value="${appl.release}.${DSTAMP}${TSTAMP}" /> 
-
-
+	
 	<!-- Check timestamp on files -->
 	<target name="prepare">
 		<tstamp />
 	</target>
 
-
+	
 	<!-- Copy any resource or configuration files -->
 	<target name="resources">
-<echo message="(no resources)"/>
+		<echo message="resources"/>
+		<filter token="buildDateTime" value="${DSTAMP}${TSTAMP}"/>
+
+		<copy tofile="src/WebRoot/cadsrpasswordchange.properties" filtering="true">
+		  <fileset file="src/conf/template.cadsrpasswordchange.properties" /> 
+		</copy>
+		
+		<copy tofile="src/WebRoot/WEB-INF/Owasp.CsrfGuard.properties" filtering="false">
+		  <fileset file="src/conf/Owasp.CsrfGuard.properties" /> 
+		</copy>		
 	</target>
 
 
@@ -77,6 +82,10 @@
 		
 		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-category.xml" filtering="true">
 		  <fileset file="src/conf/template.cadsrpasswordchange-log4j-category.xml" /> 
+		</copy>
+
+		<copy tofile="src/WebRoot/WEB-INF/lib/Owasp.CsrfGuard.jar" filtering="false">
+		  <fileset file="src/lib/Owasp.CsrfGuard.jar" /> 
 		</copy>
 		
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
