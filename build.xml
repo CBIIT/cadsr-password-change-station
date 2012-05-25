@@ -69,9 +69,17 @@
 
 		<filter token="connectionUrl" value="${connectionUrl}"/>
 		<echo>connectionUrl = ${connectionUrl}</echo>
+		<filter token="systemAccountName" value="${systemAccountName}"/>
+		<echo>systemAccountName = ${systemAccountName}</echo>
+		<filter token="systemAccountPassword" value="${systemAccountPassword}"/>
+		<echo>systemAccountPassword not echoed</echo>
 		<filter token="logLevel" value="${logLevel}"/>
 		<echo>logLevel = ${logLevel}</echo>
 
+		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-oracle-ds.xml" filtering="true">
+		  <fileset file="src/conf/template.cadsrpasswordchange-oracle-ds.xml" /> 
+		</copy>
+			
 		<copy tofile="${dist.dir}/jboss/cadsr-oracle-ds.xml" filtering="true">
 		  <fileset file="src/conf/template.cadsr-oracle-ds.xml" /> 
 		</copy>
