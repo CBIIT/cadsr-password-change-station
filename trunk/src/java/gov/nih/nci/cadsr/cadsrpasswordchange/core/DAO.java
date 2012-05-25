@@ -16,8 +16,9 @@ public class DAO {
 
     private Logger logger = Logger.getLogger(DAO.class);  
     
-    private static String _jndiName = "java:/jdbc/caDSR";
-
+    private static String _jndiUser = "java:/jdbc/caDSR";
+    private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
+    
     public DAO() { 	
     }
     
@@ -30,8 +31,8 @@ public class DAO {
 		Connection conn = null;
 		try {
 			Context envContext = new InitialContext();	
-	        DataSource ds = (DataSource)envContext.lookup(_jndiName);
-	        logger.debug("got DataSource for " + _jndiName);
+	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
+	        logger.debug("got DataSource for " + _jndiUser);
 	        conn = ds.getConnection(username, password);
 	        logger.debug("connected");	        
 			userBean.setLoggedIn(true);
@@ -73,13 +74,14 @@ public class DAO {
 		
 		try {
 			Context envContext = new InitialContext();	
-			DataSource ds = (DataSource)envContext.lookup(_jndiName);
-	        logger.debug("got DataSource for " + _jndiName);
-			conn = ds.getConnection(user, password);
+			DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
+	        logger.debug("got DataSource for " + _jndiSystem);
+			conn = ds.getConnection();
 	        logger.debug("connected");	    
 		
-			// can't use parameters with PreparedStatement and "alter user", create a single string	
-			String alterUser = "alter user " + user + " identified by " + newPassword + " replace " + password;
+			// can't use parameters with PreparedStatement and "alter user", create a single string
+	        // (must quote password to retain capitalization for verification function)
+			String alterUser = "alter user " + user + " identified by \"" + newPassword + "\" replace " + password;
 			pstmt = conn.prepareStatement(alterUser);
 			logger.debug("attempted to alter user " + user);
 			pstmt.execute();
