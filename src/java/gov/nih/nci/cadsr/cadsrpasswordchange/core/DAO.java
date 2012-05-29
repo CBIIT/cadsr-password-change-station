@@ -178,6 +178,12 @@ public class DAO {
 				result = new Result(ResultCode.TOO_RECENT, errorMessage.substring(found + 11));		
 		}
 		
+		if (result == null) {
+			found = errorMessage.indexOf("ORA-20004");
+			if (found != -1)
+				result = new Result(ResultCode.START_NOT_LETTER, errorMessage.substring(found + 11));		
+		}
+		
 		// check for unspecified custom error (range is -20000 to -20999)
 		if (result == null) {	
 			found = errorMessage.indexOf("ORA-20");
