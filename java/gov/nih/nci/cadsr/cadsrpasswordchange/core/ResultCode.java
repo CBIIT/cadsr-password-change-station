@@ -73,6 +73,12 @@ public enum ResultCode {
 			return "Password changed too recently.";
 		}
 	},
+	START_NOT_LETTER {
+		@Override
+		public String userMessage() {
+			return "Your password must start with letter.";
+		}
+	},
 	UNKNOWN_CUSTOM{
 		@Override
 		public String userMessage() {
