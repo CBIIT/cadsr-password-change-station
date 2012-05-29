@@ -4,6 +4,13 @@
 <html>
     <head>
         <title>caDSR Password Change Station</title>
+        
+		<div style="position:absolute;">
+ 			<a href="#skip">
+  			<img src="/cadsrpasswordchange/images/skipnav.gif" border="0" height="1" width="1" alt="Skip Navigation" title="Skip Navigation" />
+	 		</a>
+		</div>
+		        
         <html:base />
         <meta http-equiv="Content-Language" content="en-us">
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=WINDOWS-1252">
@@ -39,7 +46,9 @@
     	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
 
 		<cadsrpasswordchangetags:header showlogout="true"/>
-	
+
+		<a name="skip" id="skip"></a>
+			
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/changePassword" method="POST" focus="userid">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
@@ -50,25 +59,25 @@
         				<p class=std><%=userMessage%></p>
         			<%} %>
             <%} else { %>
-				<h4 align="center"><font color="#FF0000" style="font-size: 12pt"><%=errorMessage%></font></h4>
+					<strong align="center"><%=errorMessage%></strong>
             <%} %>          
         	
         	<table summary="Login credentials and new password to change password.">
             <tr>
-                <td valign="middle"><p class=bstd>Login ID:</p></td>
-                <td valign="middle"><input type="text" name="userid" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>
+                <td valign="middle"><input id="LoginID" type="text" name="userid" value="" style="width: 3.75in" class="std"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><p class=bstd>Current Password:</p></td>
-                <td valign="middle"><input type="password" name="pswd" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><label for="OldPassword" class=bstd>Current Password:</p></td>
+                <td valign="middle"><input id="OldPassword" type="password" name="pswd" value="" style="width: 3.75in" class="std"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><p class=bstd>New Password:</p></td>
-                <td valign="middle"><input type="password" name="newpswd1" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><label for="NewPassword" class=bstd>New Password:</p></td>
+                <td valign="middle"><input id="NewPassword" type="password" name="newpswd1" value="" style="width: 3.75in" class="std"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><p class=bstd>New Password (repeated):</p></td>
-                <td valign="middle"><input type="password" name="newpswd2" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><label for="NewPasswordRepeat" class=bstd>New Password (repeated):</p></td>
+                <td valign="middle"><input id="NewPasswordRepeat" type="password" name="newpswd2" value="" style="width: 3.75in" class="std"></td>
             </tr><tr>
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login credentials and your desired new password (repeated to avoid typos).</p></td>
             </tr><tr>

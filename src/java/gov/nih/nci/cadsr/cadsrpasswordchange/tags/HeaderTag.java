@@ -39,17 +39,18 @@ public class HeaderTag extends TagSupport {
     	   
     	   String logoutLink = "";
     	   if (showLogout != null && (showLogout.equalsIgnoreCase("yes") || showLogout.equalsIgnoreCase("true") ) )
-    			   logoutLink = "<td align=\"right\"><a href=\"javascript:callLogout();\">Logout</a></td>";
+    			   logoutLink = "<td align=\"right\"><a href=\"javascript:callLogout();\" alt=\"Logout\">Logout</a></td>";
           
     	   out.print("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#A90101\">"
     			   + "<tr bgcolor=\"#A90101\">"
     			   + "<td valign=\"center\" align=\"left\"><a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"NCI Logo\">"
-    			   + "<img src=\"/cadsrpasswordchange/images/brandtype.gif\" border=\"0\"></a></td>"
+    			   + "<img src=\"/cadsrpasswordchange/images/brandtype.gif\" alt=\"NCI Logo\" border=\"0\"></a></td>"
     			   + "<td valign=\"center\" align=\"right\"><a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"NCI Logo\">"
-    			   + "<img src=\"/cadsrpasswordchange/images/tagline_nologo.gif\" border=\"0\"></a></td></tr>"
+    			   + "<img src=\"/cadsrpasswordchange/images/tagline_nologo.gif\" alt=\"NCI Logo\" border=\"0\"></a></td></tr>"
     			   + "\n</table>\n"
     			   + "<table class=\"secttable\"><colgroup><col /></colgroup><tbody class=\"secttbody\" />"
-    			   + "<tr><td align=\"left\"><a target=\"_blank\" href=\"http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/cadsr\"><img style=\"border: 0px solid black\" title=\"NCICB caDSR\" src=\"/cadsrpasswordchange/images/cadsrpasswordchange_banner.gif\"></a></td>"
+    			   + "<tr><td align=\"left\"><a target=\"_blank\" href=\"http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/cadsr\">"
+    			   + "<img style=\"border: 0px solid black\" title=\"NCICB caDSR\" src=\"/cadsrpasswordchange/images/cadsrpasswordchange_banner.gif\" alt=\"Application Logo\"></a></td>"
     			   + logoutLink + "</tr>"
     			   + "<tr><td align=\"center\"><p class=\"ttl18\">caDSR Password Change Station</p></td></tr>"
     			   + "\n</table>\n");
