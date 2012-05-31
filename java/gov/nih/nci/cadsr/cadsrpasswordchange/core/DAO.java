@@ -71,13 +71,16 @@ public class DAO {
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
 		try {
 			Context envContext = new InitialContext();	
 			DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
 	        logger.debug("got DataSource for " + _jndiSystem);
 			conn = ds.getConnection();
-	        logger.debug("connected");	    
+	        logger.debug("connected");
+	        
+	        isConnectionException = false;
 		
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
@@ -88,7 +91,10 @@ public class DAO {
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
-			result = decode(ex);
+			if (isConnectionException)
+				result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
+			else
+				result = decode(ex);
 		} finally {
 			if (pstmt != null) {
 				try {
