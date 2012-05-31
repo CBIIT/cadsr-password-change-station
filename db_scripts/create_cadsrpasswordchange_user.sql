@@ -6,5 +6,7 @@
 
 create user cadsrpasswordchange identified by cadsrpasswordchange default tablespace USERS temporary tablespace TEMP account unlock
 /
+grant create session to cadsrpasswordchange
+/
 grant alter user to cadsrpasswordchange
 /
