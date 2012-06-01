@@ -76,23 +76,23 @@
 		<filter token="logLevel" value="${logLevel}"/>
 		<echo>logLevel = ${logLevel}</echo>
 
-		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-oracle-ds.xml" filtering="true">
-		  <fileset file="src/conf/template.cadsrpasswordchange-oracle-ds.xml" /> 
+		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-oracle-ds.xml" filtering="true" verbose="true">
+		  <fileset file="src/conf/template.cadsrpasswordchange-oracle-ds.xml" />
 		</copy>
-			
-		<copy tofile="${dist.dir}/jboss/cadsr-oracle-ds.xml" filtering="true">
+	
+		<copy tofile="${dist.dir}/jboss/cadsr-oracle-ds.xml" filtering="true" verbose="true">
 		  <fileset file="src/conf/template.cadsr-oracle-ds.xml" /> 
 		</copy>
 		
-		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-appender.xml" filtering="true">
+		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-appender.xml" filtering="true" verbose="true">
 		  <fileset file="src/conf/template.cadsrpasswordchange-log4j-appender.xml" /> 
 		</copy>
 		
-		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-category.xml" filtering="true">
+		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-log4j-category.xml" filtering="true" verbose="true">
 		  <fileset file="src/conf/template.cadsrpasswordchange-log4j-category.xml" /> 
 		</copy>
 
-		<copy tofile="src/WebRoot/WEB-INF/lib/Owasp.CsrfGuard.jar" filtering="false">
+		<copy tofile="src/WebRoot/WEB-INF/lib/Owasp.CsrfGuard.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/Owasp.CsrfGuard.jar" /> 
 		</copy>
 		
