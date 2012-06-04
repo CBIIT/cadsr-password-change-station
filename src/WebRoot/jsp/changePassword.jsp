@@ -69,15 +69,15 @@
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="OldPassword" class=bstd>Current Password:</p></td>
-                <td valign="middle"><input id="OldPassword" type="password" name="pswd" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><input id="OldPassword" type="password" name="pswd" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="NewPassword" class=bstd>New Password:</p></td>
-                <td valign="middle"><input id="NewPassword" type="password" name="newpswd1" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><input id="NewPassword" type="password" name="newpswd1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="NewPasswordRepeat" class=bstd>New Password (repeated):</p></td>
-                <td valign="middle"><input id="NewPasswordRepeat" type="password" name="newpswd2" value="" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><input id="NewPasswordRepeat" type="password" name="newpswd2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login credentials and your desired new password (repeated to avoid typos).</p></td>
             </tr><tr>
