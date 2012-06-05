@@ -1,3 +1,5 @@
+-- run as sbrext
+
 create profile "cadsr_user" limit
  password_life_time 60
  password_grace_time 0
