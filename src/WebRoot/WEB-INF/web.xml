@@ -32,38 +32,6 @@
 
 
 
-<!-- 
-  <servlet>
-     <servlet-name>
-         BaseServlet
-     </servlet-name>
-     <servlet-class>
-         gov.nih.nci.cadsr.BaseServlet
-     </servlet-class>
-	<init-param>
-      <param-name>jbossDataSource</param-name>
-      <param-value>jdbc/CDECurateDS</param-value>
-    </init-param>
-    <init-param>
-      <param-name>jbossAuthenticate</param-name>
-      <param-value>jdbc/caDSR</param-value>
-    </init-param>
-    <init-param>
-      <param-name>username</param-name>
-      <param-value>sbrext</param-value>
-    </init-param>
-    <init-param>
-      <param-name>password</param-name>
-      <param-value>jjuser</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-
-  </servlet>
-
-
-
--->  
-
   <session-config>
     <session-timeout>45</session-timeout>
   </session-config>
@@ -105,16 +73,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	
-<!--
-  <login-config>
-    <auth-method>FORM</auth-method>
-    <form-login-config>
-    <form-login-page>/jsp/login.jsp</form-login-page>
-    <form-error-page>/jsp/login.jsp</form-error-page>
-    </form-login-config>
-  </login-config>
--->
 
 </web-app>
 
