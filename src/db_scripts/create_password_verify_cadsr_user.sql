@@ -19,9 +19,9 @@ CREATE OR REPLACE FUNCTION password_verify_casdr_user (username_in VARCHAR2
         hasSpecial          BOOLEAN;
         hasDigit            BOOLEAN;
         currentChar         CHAR;
-        daysUntilExpiration NUMERIC;
-        daysSinceLastChangeMin  NUMERIC;
-        passwordLifetime    NUMERIC;
+        daysUntilExpiration NUMERIC(7,2);
+        daysSinceLastChangeMin  NUMERIC(7,2);
+        passwordLifetime    NUMERIC(7,2);
         username_copy       VARCHAR2(100);
 
     BEGIN
@@ -115,7 +115,7 @@ CREATE OR REPLACE FUNCTION password_verify_casdr_user (username_in VARCHAR2
 
         SELECT (u.expiry_date - sysdate) into daysUntilExpiration from dba_users u where u.username = username_in;
         IF (passwordLifetime - daysUntilExpiration) < daysSinceLastChangeMin THEN
-                raise_application_error(-20003, 'Password may not be changed less than ' || daysSinceLastChangeMin || ' days from last password change date.' );
+                raise_application_error(-20003, 'Password may not be changed less than ' || daysSinceLastChangeMin || ' day(s) from last password change date.' );
         END IF;
 
 
