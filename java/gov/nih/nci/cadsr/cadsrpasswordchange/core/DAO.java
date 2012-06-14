@@ -159,6 +159,12 @@ public class DAO {
 				result = new Result(ResultCode.PASSWORD_REUSED);
 		}
 		
+		if (result == null) {
+			found = errorMessage.indexOf("ORA-00972");
+			if (found != -1)
+				result = new Result(ResultCode.PASSWORD_TOO_LONG);
+		}		
+		
 		// custom codes (from stored procedure)
 		if (result == null) {		
 			found = errorMessage.indexOf("ORA-20000");
