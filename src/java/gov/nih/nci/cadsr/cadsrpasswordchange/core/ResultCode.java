@@ -43,6 +43,12 @@ public enum ResultCode {
 			return "Invalid Login ID or Password. Please try again.";
 		}
 	},
+	PASSWORD_TOO_LONG{
+		@Override
+		public String userMessage() {
+			return "Password may not be longer than 30 characters.";
+		}
+	},
 	PASSWORD_LENGTH {
 		@Override
 		public String userMessage() {
