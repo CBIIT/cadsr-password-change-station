@@ -36,6 +36,10 @@
 		<copy tofile="src/WebRoot/WEB-INF/Owasp.CsrfGuard.properties" filtering="false">
 		  <fileset file="src/conf/Owasp.CsrfGuard.properties" /> 
 		</copy>		
+
+		<copy tofile="src/WebRoot/WEB-INF/classes/messages.properties" filtering="true">
+		  <fileset file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" /> 
+		</copy>
 	</target>
 
 

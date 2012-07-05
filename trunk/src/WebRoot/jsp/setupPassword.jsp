@@ -1,7 +1,5 @@
 <%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -70,22 +68,8 @@
                 <td valign="middle"><input id="LoginID" type="text" name="userid" value="" style="width: 3.75in" class="std"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="OldPassword" class=bstd>Current Password:</p></td>
-                <td valign="middle"><input id="OldPassword" type="password" name="pswd" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
-            </tr><tr>
-            <tr>
-                <td valign="middle"><label for="NewPassword" class=bstd>New Password:</p></td>
-                <td valign="middle"><input id="NewPassword" type="password" name="newpswd1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
-            </tr><tr>
-            <tr>
-                <td valign="middle"><label for="NewPasswordRepeat" class=bstd>New Password (repeated):</p></td>
-                <td valign="middle"><input id="NewPasswordRepeat" type="password" name="newpswd2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
-            </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login credentials and your desired new password (repeated to avoid typos).</p></td>
-            </tr><tr>
-            <tr>
                 <td valign="middle"><label for="Question1" class=bstd>Question 1:</p></td>
-                <td valign="middle"><input id="Question1" type="text" name="question1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Question1" type="text" name="question1" value="What is the name of your pet?" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer1" class=bstd>Answer 1:</p></td>
@@ -107,14 +91,11 @@
                 <td valign="middle"><label for="Answer3" class=bstd>Answer 3:</p></td>
                 <td valign="middle"><input id="Answer3" type="text" name="answer3" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">If you choose to provide security questions and answers, you can reset your own password later on.</p></td>
+                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login ID, your desired new password (repeated to avoid typos) and three security questions with an associated answers.</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Change" style="text-align: center" class="but2"></td>
             </tr><tr>
-            	<!--
                 <td colspan="2" valign="middle"><a target="_blank" href="https://wiki.nci.nih.gov/x/3AJQB">Please see the NCI Wiki for information on caDSR passwords including restrictions on choice of passwords</a></td>
-                -->
-                <td colspan="2" valign="middle"><%=Constants.PWD_RESTRICTIONS%></td>
             </tr>
         	</table>
     	</form>

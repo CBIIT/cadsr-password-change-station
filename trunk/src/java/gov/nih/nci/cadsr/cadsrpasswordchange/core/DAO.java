@@ -1,9 +1,13 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.Result;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.ResultCode;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,8 +23,57 @@ public class DAO {
     private static String _jndiUser = "java:/jdbc/caDSR";
     private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
     
+    //TBD - dev only, to be moved out to the template/handled by the build
+    private static String adminUser = "cadsrpasswordchange";
+    private static String adminPassword = "cadsrpasswordchange";
+    
     public DAO() { 	
     }
+    	
+	public boolean checkValidUser(String username) {
+		boolean retVal = false;
+		
+		logger.info ("checkValidUser user: " + username);
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			Context envContext = new InitialContext();	
+	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
+	        logger.debug("got DataSource for " + _jndiUser);
+	        conn = ds.getConnection(adminUser, adminPassword);
+
+	        logger.debug("connected");
+			ResultSet result = pstmt.executeQuery("select * from user where userid = \"" + username + "\"");
+			int count = 0;
+			while(result.next()) {
+			    count++;
+			}
+			if(count > 0) {
+				//assuming all user Ids are unique/no duplicate
+				retVal = true;
+			}
+	    } catch (Exception ex) {
+	    	logger.debug(ex.getMessage());
+			//just for dev
+			retVal = true;
+//			retVal = false;
+        }
+        finally {
+        	if (conn != null) {
+        		try {
+        			conn.close();
+        		} catch (Exception ex) {
+        			logger.error(ex.getMessage());
+        		}
+	        }
+	    }
+		
+		
+        logger.info("checkValidUser(): " + retVal);
+        return retVal;
+	}
+	
     
 	public UserBean checkValidUser(String username, String password) {
 
@@ -38,6 +91,7 @@ public class DAO {
 			userBean.setLoggedIn(true);
 			userBean.setResult(new Result(ResultCode.NOT_EXPIRED));
 	    } catch (Exception ex) {
+	    	ex.printStackTrace();
 	    	logger.debug(ex.getMessage());
 			Result result = decode(ex);
 			
@@ -215,5 +269,57 @@ public class DAO {
 		return result;
 	}
 	
+	public Result changePassword2(String user, String newPassword) {
+
+		logger.info("changePassword  user " + user );
+		
+		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
+		
+		try {
+			Context envContext = new InitialContext();	
+			DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
+	        logger.debug("got DataSource for " + _jndiSystem);
+	        conn = ds.getConnection(adminUser, adminPassword);
+
+	        logger.debug("connected");
+	        
+	        isConnectionException = false;
+		
+			// can't use parameters with PreparedStatement and "alter user", create a single string
+	        // (must quote password to retain capitalization for verification function)
+			String alterUser = "update user " + user + " set password = \"" + newPassword + "\"";
+			pstmt = conn.prepareStatement(alterUser);
+			logger.debug("attempted to alter user " + user);
+			pstmt.execute();
+			result = new Result(ResultCode.PASSWORD_CHANGED);
+		} catch (Exception ex) {
+			logger.debug(ex.getMessage());
+			if (isConnectionException)
+				result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
+			else
+				result = decode(ex);
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception ex) {
+					logger.error(ex.getMessage());
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception ex) {
+					logger.error(ex.getMessage());
+				}
+			}
+		}
+
+       logger.info("returning ResultCode " + result.getResultCode().toString());        
+       return result;
+	}	
 	
 }
