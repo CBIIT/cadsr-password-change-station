@@ -51,7 +51,7 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/changePassword" method="POST" focus="userid">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/resetPassword" method="POST" focus="userid">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
@@ -66,12 +66,8 @@
         	
         	<table summary="Login credentials and new password to change password.">
             <tr>
-                <td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>
-                <td valign="middle"><input id="LoginID" type="text" name="userid" value="" style="width: 3.75in" class="std"></td>
-            </tr><tr>
-            <tr>
-                <td valign="middle"><label for="OldPassword" class=bstd>Current Password:</p></td>
-                <td valign="middle"><input id="OldPassword" type="password" name="pswd" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <!--<td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>-->
+                <td valign="middle"><input id="LoginID" type="hidden" name="userid" value="<%=session.getAttribute(Constants.USERNAME) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="NewPassword" class=bstd>New Password:</p></td>
@@ -81,39 +77,34 @@
                 <td valign="middle"><label for="NewPasswordRepeat" class=bstd>New Password (repeated):</p></td>
                 <td valign="middle"><input id="NewPasswordRepeat" type="password" name="newpswd2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login credentials and your desired new password (repeated to avoid typos).</p></td>
+            <tr>
+                <td valign="middle"><label for="question1" class=bstd>Question 1:</p></td>
+                <td valign="middle"><input id="question1" type="text" name="question1" value="<%=session.getAttribute(Constants.Q1) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="Question1" class=bstd>Question 1:</p></td>
-                <td valign="middle"><input id="Question1" type="text" name="question1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="answer1" class=bstd>Answer 1:</p></td>
+                <td valign="middle"><input id="answer1" type="text" name="answer1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="Answer1" class=bstd>Answer 1:</p></td>
-                <td valign="middle"><input id="Answer1" type="text" name="answer1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="question2" class=bstd>Question 2:</p></td>
+                <td valign="middle"><input id="question2" type="text" name="question2" value="<%=session.getAttribute(Constants.Q2) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="Question2" class=bstd>Question 2:</p></td>
-                <td valign="middle"><input id="Question2" type="text" name="question2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="answer2" class=bstd>Answer 2:</p></td>
+                <td valign="middle"><input id="answer2" type="text" name="answer2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="Answer2" class=bstd>Answer 2:</p></td>
-                <td valign="middle"><input id="Answer2" type="text" name="answer2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="question3" class=bstd>Question 3:</p></td>
+                <td valign="middle"><input id="question3" type="text" name="question3" value="<%=session.getAttribute(Constants.Q3) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="Question3" class=bstd>Question 3:</p></td>
-                <td valign="middle"><input id="Question3" type="text" name="question3" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="answer3" class=bstd>Answer 3:</p></td>
+                <td valign="middle"><input id="answer3" type="text" name="answer3" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
-            <tr>
-                <td valign="middle"><label for="Answer3" class=bstd>Answer 3:</p></td>
-                <td valign="middle"><input id="Answer3" type="text" name="answer3" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
-            </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">If you choose to provide security questions and answers, you can reset your own password later on.</p></td>
+                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your desired new password (repeated to avoid typos) and at least one correct answer for any one of the security questions you have previously setup.</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Change" style="text-align: center" class="but2"></td>
             </tr><tr>
-            	<!--
-                <td colspan="2" valign="middle"><a target="_blank" href="https://wiki.nci.nih.gov/x/3AJQB">Please see the NCI Wiki for information on caDSR passwords including restrictions on choice of passwords</a></td>
-                -->
                 <td colspan="2" valign="middle"><%=Constants.PWD_RESTRICTIONS%></td>
             </tr>
         	</table>

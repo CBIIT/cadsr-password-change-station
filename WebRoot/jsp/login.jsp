@@ -1,5 +1,6 @@
 <%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -61,6 +62,8 @@
             	</tr>
         	</table>
     	</form>
+		<center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">I Forgot My Password</a></center>
+    	
 		<cadsrpasswordchangetags:footer />
 		
     	</td></tr></table>

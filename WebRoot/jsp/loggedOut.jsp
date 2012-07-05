@@ -1,4 +1,5 @@
 <%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -22,7 +23,7 @@
 
 
 		<center> You have been logged out (either at your request or due to an error). </center>
-		<center><a target="_top" href="../">Return to caDSR Password Change Station</a></center>
+		<center><a target="_top" href="<%=Constants.LANDING_URL%>">Return to caDSR Password Change Station</a></center>
  
 	  	<cadsrpasswordchangetags:footer />
   	
