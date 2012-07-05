@@ -30,7 +30,15 @@
      <url-pattern>/logout</url-pattern>
   </servlet-mapping>
 
-
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptUserQuestions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/resetPassword</url-pattern>
+  </servlet-mapping>
+  
 
   <session-config>
     <session-timeout>45</session-timeout>

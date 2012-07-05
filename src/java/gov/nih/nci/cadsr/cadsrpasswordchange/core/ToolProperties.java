@@ -29,7 +29,7 @@ public class ToolProperties {
         } finally {
        		if (is != null)
        			is.close();
-        }   	
+        }
     }
     
     public String getProperty(String key) {
