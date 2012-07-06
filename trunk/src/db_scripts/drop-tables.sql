@@ -1,1 +1,1 @@
-drop table securityQnA CASCADE CONSTRAINTS;
+drop table User_Security_Questions CASCADE CONSTRAINTS;
