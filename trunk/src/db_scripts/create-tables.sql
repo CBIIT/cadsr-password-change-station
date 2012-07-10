@@ -1,4 +1,4 @@
-CREATE TABLE User_Security_Questions (
+CREATE TABLE USER_SECURITY_QUESTIONS (
 	ua_name varchar2(30) NOT NULL,
 	question1 varchar2(500) NOT NULL,
 	answer1 varchar2(500) NOT NULL,
@@ -9,10 +9,10 @@ CREATE TABLE User_Security_Questions (
 	date_modified date NOT NULL
 );
 
-ALTER TABLE User_Security_Questions ADD CONSTRAINT pk_User_Security_Questions PRIMARY KEY (
+ALTER TABLE USER_SECURITY_QUESTIONS ADD CONSTRAINT pk_USER_SECURITY_QUESTIONS PRIMARY KEY (
 	ua_name
 );
 
-CREATE UNIQUE INDEX inx_qna ON User_Security_Questions (
+CREATE UNIQUE INDEX inx_qna ON USER_SECURITY_QUESTIONS (
 	ua_name
 );
