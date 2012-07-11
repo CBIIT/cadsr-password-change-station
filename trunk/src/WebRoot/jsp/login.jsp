@@ -38,7 +38,7 @@
 		<cadsrpasswordchangetags:header />
 		<a name="skip" id="skip"></a>
 
-		<form name="LoginForm" action="/cadsrpasswordchange/login" method="POST" focus="userid">
+		<form name="LoginForm" action="/cadsrpasswordchange/login" method="POST" focus="userid" title="Use this screen to login">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) { %>
@@ -62,7 +62,7 @@
             	</tr>
         	</table>
     	</form>
-		<center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">I Forgot My Password</a></center>
+		<center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">Forgot My Password</a></center>
     	
 		<cadsrpasswordchangetags:footer />
 		

@@ -27,18 +27,33 @@
   </servlet-mapping>
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/saveQuestions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
      <url-pattern>/logout</url-pattern>
   </servlet-mapping>
-
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptUserQuestions</url-pattern>
   </servlet-mapping>
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptQuestion1</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptQuestion2</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptQuestion3</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
      <url-pattern>/resetPassword</url-pattern>
   </servlet-mapping>
-  
+
 
   <session-config>
     <session-timeout>45</session-timeout>

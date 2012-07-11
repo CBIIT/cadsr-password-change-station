@@ -1,3 +1,5 @@
+/* Please run this in SBREXT schema */
+
 CREATE TABLE USER_SECURITY_QUESTIONS (
 	ua_name varchar2(30) NOT NULL,
 	question1 varchar2(500) NOT NULL,
