@@ -1,9 +1,11 @@
 <%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title>caDSR Password Change Station</title>
+        <title><%=Constants.RESET_TITLE %></title>
         
 		<div style="position:absolute;">
  			<a href="#skip">
@@ -49,12 +51,12 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptUserQuestions" method="POST" focus="userid">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptUserQuestions" method="POST" focus="userid" title="Use this screen to get your security questions">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>Use this screen to get your security questions.</p>
+        				<p class=std>You will be prompted to answer security Questions.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
@@ -67,9 +69,9 @@
                 <td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>
                 <td valign="middle"><input id="LoginID" type="text" name="userid" value="" style="width: 3.75in" class="std"></td>
             </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login ID.</p></td>
+                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your Login ID.</p></td>
             </tr><tr>
-                <td valign="bottom"><input type="submit" name="changePassword" value="Change" style="text-align: center" class="but2"></td>
+                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>
             </tr><tr>
             </tr>
         	</table>
