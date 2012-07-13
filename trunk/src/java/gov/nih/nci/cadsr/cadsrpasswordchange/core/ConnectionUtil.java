@@ -4,10 +4,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 public class ConnectionUtil {
 
-	private String dbms;
+    private static Logger logger = Logger.getLogger(ConnectionUtil.class.getName());
+
+	private static Connection pooledConnection;
+
+    private String dbms;
 	private String userName;
 	private String password;
 	private String serverName;
@@ -60,6 +69,10 @@ public class ConnectionUtil {
 
 	public void setDbName(String dbName) {
 		this.dbName = dbName;
+	}
+
+	public static Connection getPooledConnection() {
+		return pooledConnection;
 	}
 
 	public Connection getConnection() throws Exception {
@@ -201,4 +214,11 @@ public class ConnectionUtil {
 //		logger.info("returning ResultCode " + result.getResultCode().toString() + " " + result.getMessage());
 		return result;
 	}
+	
+	public static DataSource getDS(String _jndiUser) throws Exception {
+		Context envContext = new InitialContext();
+		DataSource ds = (DataSource)envContext.lookup(_jndiUser);
+		return ds;
+	}
+	
 }

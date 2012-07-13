@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 
 
@@ -15,6 +17,7 @@ import org.apache.log4j.Logger;
 public class DAO implements AbstractDao {
 	
 	private Connection conn;
+	private DataSource datasource;
     private static final String  QUESTION_TABLE_NAME = "User_Security_Questions";
 
     protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified";
@@ -24,6 +27,10 @@ public class DAO implements AbstractDao {
     private static final String SQL_INSERT = "INSERT INTO User_Security_Questions (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
     private Logger logger = Logger.getLogger(DAO.class);
+
+    public DAO(DataSource datasource) {
+    	this.datasource = datasource;
+    }
 
     public DAO(Connection conn) {
     	this.conn = conn;
@@ -73,8 +80,12 @@ public class DAO implements AbstractDao {
         return retVal;
 	}
 
-	public UserBean checkValidUser(String username, String password) {
+	public UserBean checkValidUser(String username, String password) throws Exception {
 
+		if(datasource == null) {
+			throw new Exception("DataSource is empty or NULL.");
+		}
+		
 		logger.info ("checkValidUser user: " + username);
 
 		UserBean userBean = new UserBean(username);
@@ -85,7 +96,8 @@ public class DAO implements AbstractDao {
 //	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
 //	        logger.debug("got DataSource for " + _jndiUser);
 //	        conn = ds.getConnection(username, password);
-//	        logger.debug("connected");	        
+			datasource.getConnection(username, password);
+	        logger.debug("connected");	        
 			userBean.setLoggedIn(true);
 			userBean.setResult(new Result(ResultCode.NOT_EXPIRED));
 	    } catch (Exception ex) {

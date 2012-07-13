@@ -41,13 +41,19 @@
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptQuestion1</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>     
+<!-- 
+ <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptQuestion2</url-pattern>
   </servlet-mapping>
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptQuestion3</url-pattern>
+  </servlet-mapping>
+--> 
+   <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/validateQuestions</url-pattern>
   </servlet-mapping>
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
