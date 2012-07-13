@@ -83,14 +83,18 @@ public class PasswordChangeHelper {
 	/*
 	 * Method to validate that the user setup all the questions and answers properly.
 	 */
-	public static String validateSecurityQandA(int totaQuestions, String username, Map<String, String> userQna) throws Exception {
+	public static String validateSecurityQandA(int totaQuestions, String username, Map<String, String> userQuestions, Map userAnswers) throws Exception {
 		String retVal = null;
 		
-		if(userQna == null) {
-			throw new Exception("User provided Q & A is NULL or empty.");
+		if(userQuestions == null) {
+			throw new Exception("User provided questions are NULL or empty.");
 		}
 		
-		if (userQna.size() != totaQuestions) {
+		if(userAnswers == null) {
+			throw new Exception("User provided answers are NULL or empty.");
+		}
+
+		if (userQuestions.size() != totaQuestions || userAnswers.size() != totaQuestions) {
 			retVal = Messages.getString("PasswordChangeHelper.125"); //$NON-NLS-1$
 		}					
 		

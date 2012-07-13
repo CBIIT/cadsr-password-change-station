@@ -1,6 +1,5 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
-
 public interface AbstractDao {
 
     /**
@@ -43,7 +42,7 @@ public interface AbstractDao {
 
 	public boolean checkValidUser(String username);
 	
-	public UserBean checkValidUser(String username, String password);
+	public UserBean checkValidUser(String username, String password) throws Exception;
 	
 	public Result changePassword(String user, String password, String newPassword);
 
