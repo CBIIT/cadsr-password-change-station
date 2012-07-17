@@ -62,7 +62,8 @@
             	</tr>
         	</table>
     	</form>
-		<center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">Forgot My Password</a></center>
+		<center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">Forgot My Password</a></center><p>
+		<center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">Unlock My Password</a></center>
     	
 		<cadsrpasswordchangetags:footer />
 		
