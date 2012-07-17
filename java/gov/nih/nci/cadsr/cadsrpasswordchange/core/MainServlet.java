@@ -29,9 +29,9 @@ import com.sun.org.apache.xerces.internal.impl.dv.ValidatedInfo;
 
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.UserSecurityQuestion;
 //=== dev only
-//import com.test.DAO;	//dev only
-//import com.test.oracle.dao.oracle.UserSecurityQuestionDaoImpl;
-//import com.test.oracle.dto.UserSecurityQuestion;
+//import com.test.DAO;
+////import com.test.oracle.dao.oracle.UserSecurityQuestionDaoImpl;
+////import com.test.oracle.dto.UserSecurityQuestion;
 //import com.test.mysql.dao.mysql.UserSecurityQuestionDaoImpl;
 //import com.test.mysql.dto.UserSecurityQuestion;
 
@@ -51,15 +51,15 @@ public class MainServlet extends HttpServlet {
     	
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
-//    		if(connection == null) {
+    		if(connection == null) {
         	datasource = ConnectionUtil.getDS(_jndiUser); connection = datasource.getConnection(_jndiUser, _jndiSystem);
 
-//        	datasource = ConnectionUtil.getTestDS("root", "root"); connection = datasource.getConnection();	//dev only
+//        	datasource = ConnectionUtil.getTestDS("root", "root"); connection = datasource.getConnection();
     		dao = new DAO(connection);
         	
-    	    System.out.println("Connected to database [" + _jndiUser + "/" + _jndiSystem + "]");
+    	    System.out.println("Connected to database [" + _jndiUser + " " + _jndiSystem + "]");
         	
-//    		}
+    		}
         	isConnectionException = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,16 +122,18 @@ public class MainServlet extends HttpServlet {
 				doSetupPassword(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptUserQuestions")) {
 				doRequestUserQuestions(req, resp);
-			/*
-			else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion1")) {
+			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion1")) {
 				doQuestion1(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion2")) {
 				doQuestion2(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion3")) {
 				doQuestion3(req, resp);
-			*/
-			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestions")) {
-				doValidateQuestions(req, resp);
+			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion1")) {
+				doValidateQuestion1(req, resp);
+			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion2")) {
+				doValidateQuestion2(req, resp);
+			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion3")) {
+				doValidateQuestion3(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/resetPassword")) {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
@@ -154,15 +156,12 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-/*	
 	private void doQuestion3(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.sendRedirect(Constants.RESET_URL);
 	}
 
-	private void doQuestion2(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		HttpSession session = req.getSession(false);
-		session.setAttribute(Constants.Q3, "q3");			
-		resp.sendRedirect(Constants.Q3_URL);
+	private void doQuestion2(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		doValidateQuestion2(req, resp);
 	}
 
 	private void doQuestion1(HttpServletRequest req, HttpServletResponse resp) {
@@ -178,20 +177,42 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 
-			String username = req.getParameter("q1");
+			String username = req.getParameter("userid");
 			
-			logger.debug("username " + username);
+			logger.debug("username " + username);			
+			
+			// Security enhancement
+			Map userQuestions = new HashMap();
+			Map userAnswers =  new HashMap();
+			
+			//pull all questions related to this user
+			loadUserStoredQna(username, userQuestions, userAnswers);
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
+			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
+//			session.setAttribute(Constants.Q2, userQuestions.get(Constants.Q2));
+//			session.setAttribute(Constants.Q3, userQuestions.get(Constants.Q3));			
+
+			session.setAttribute(Constants.ALL_QUESTIONS, userQuestions);
+			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			
-			resp.sendRedirect(Constants.Q2_URL);
+			if(userQuestions.size() == 0) {
+				logger.info("no security question found");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
+				resp.sendRedirect(Constants.ASK_USERID_URL);
+			} else {
+				//resp.sendRedirect(Constants.Q1_URL);
+				req.getRequestDispatcher("./jsp/askQuestion1.jsp").forward(req, resp);
+			}
 		}
 		catch (Throwable theException) {
 			logger.error(theException);
 		}		
+			
+			
+			
 	}
-*/
 
 	private void doSetupPassword(HttpServletRequest req,
 			HttpServletResponse resp) {
@@ -294,7 +315,7 @@ public class MainServlet extends HttpServlet {
 			userBean = loginDAO.checkValidUser(username, password);
 			disconnect();
 			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
-			logger.debug ("validUser" + userBean.isLoggedIn());
+			logger.debug ("validUser " + userBean.isLoggedIn());
 			logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
 			if (userBean.isLoggedIn()) {
 				// Provide a user message that notes the "expired" status
@@ -487,10 +508,9 @@ public class MainServlet extends HttpServlet {
 		}		
 	}
 
-	protected void doValidateQuestions(HttpServletRequest req, HttpServletResponse resp)
+	protected void doValidateQuestion1(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException {
-
-		logger.info("doValidateQuestions");
+		logger.info("doValidateQuestion 1");
 		
 		HttpSession session = req.getSession(false);
 		if (session == null) {
@@ -500,25 +520,10 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		Map userQuestions = (HashMap) session.getAttribute(Constants.ALL_QUESTIONS);
-		Map userAnswers = (HashMap) session.getAttribute(Constants.ALL_ANSWERS);
-		logger.info("questions " + userQuestions.size() + " answers " + userAnswers.size());
-
-		String question = req.getParameter("answer");
-		String answer1 = req.getParameter("answer1");
-		logger.debug("doValidateQuestions: (" + question + ")=" + answer1);
-		
 		try {
-			boolean validated = false;
-			//get user's stored answer related to the question selected
-			String correctAnswer = (String)userAnswers.get(question);
-			if(correctAnswer != null && correctAnswer.equals(answer1)) {
-				validated = true;
-			}
-
-			if (validated) {
+			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
-				resp.sendRedirect("./jsp/resetPassword.jsp");				
+				resp.sendRedirect("./jsp/askQuestion2.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
@@ -528,6 +533,83 @@ public class MainServlet extends HttpServlet {
 		catch (Throwable theException) {
 			logger.error(CommonUtil.toString(theException));
 		}		
+	}
+	
+	protected void doValidateQuestion2(HttpServletRequest req, HttpServletResponse resp)
+	throws ServletException, IOException {
+		logger.info("doValidateQuestion 2");
+		
+		HttpSession session = req.getSession(false);
+		if (session == null) {
+			logger.debug("null session");
+			// this shouldn't happen, make the user start over
+			resp.sendRedirect("./jsp/loggedOut.jsp");
+			return;
+		}		
+
+		try {
+			if (validateQuestions(req, resp)) {
+				logger.info("answer is correct");
+				resp.sendRedirect("./jsp/askQuestion3.jsp");				
+			} else {
+				logger.info("security question answered wrongly");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
+				resp.sendRedirect("./jsp/askQuestion2.jsp");		
+			}
+		}
+		catch (Throwable theException) {
+			logger.error(CommonUtil.toString(theException));
+		}		
+	}
+
+	protected void doValidateQuestion3(HttpServletRequest req, HttpServletResponse resp)
+	throws ServletException, IOException {
+		logger.info("doValidateQuestion 3");
+		
+		HttpSession session = req.getSession(false);
+		if (session == null) {
+			logger.debug("null session");
+			// this shouldn't happen, make the user start over
+			resp.sendRedirect("./jsp/loggedOut.jsp");
+			return;
+		}		
+
+		try {
+			if (validateQuestions(req, resp)) {
+				logger.info("answer is correct");
+				resp.sendRedirect("./jsp/resetPassword.jsp");				
+			} else {
+				logger.info("security question answered wrongly");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
+				resp.sendRedirect("./jsp/askQuestion3.jsp");		
+			}
+		}
+		catch (Throwable theException) {
+			logger.error(CommonUtil.toString(theException));
+		}		
+	}
+
+	protected boolean validateQuestions(HttpServletRequest req, HttpServletResponse resp)
+	throws ServletException, IOException {
+
+		HttpSession session = req.getSession(false);
+		Map userQuestions = (HashMap) session.getAttribute(Constants.ALL_QUESTIONS);
+		Map userAnswers = (HashMap) session.getAttribute(Constants.ALL_ANSWERS);
+		logger.info("questions " + userQuestions.size() + " answers " + userAnswers.size());
+
+		String question1 = req.getParameter("question");
+		String answer1 = req.getParameter("answer");
+		String answerIndex =  req.getParameter("answerIndex");
+		logger.debug("doValidateQuestions: (" + question1 + ")=" + answer1);
+		
+		boolean validated = false;
+		//get user's stored answer related to the question selected
+		String correctAnswer = (String)userAnswers.get(answerIndex);
+		if(correctAnswer != null && correctAnswer.equals(answer1)) {
+			validated = true;
+		}
+		
+		return validated;
 	}
 
 	protected void doChangePassword2(HttpServletRequest req, HttpServletResponse resp)

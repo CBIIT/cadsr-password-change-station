@@ -51,7 +51,7 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion2" method="POST" focus="userid">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/validateQuestion2" method="POST" focus="userid">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
@@ -66,13 +66,14 @@
         	
         	<table summary="Login credentials and new password to change password.">
             <tr>
-                <td valign="middle"><label for="question2" class=bstd>Question 2:</p></td>
-                <td valign="middle"><input id="question2" type="text" name="question2" value="<%=session.getAttribute(Constants.Q2) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
+                <td valign="middle"><label for="question" class=bstd>Question 2:</p></td>
+                <td valign="middle"><input id="question" type="text" name="question" value="<%=session.getAttribute(Constants.Q2) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="answer2" class=bstd>Answer 2:</p></td>
-                <td valign="middle"><input id="answer2" type="text" name="answer2" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="answer" class=bstd>Answer 2:</p></td>
+                <td valign="middle"><input id="answer" type="text" name="answer" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
+            	<input id="answer" type="hidden" name="answerIndex" value="answer2">
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer security question 2.</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>

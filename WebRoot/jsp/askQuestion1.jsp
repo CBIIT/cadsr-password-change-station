@@ -52,7 +52,10 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/validateQuestions" method="POST" focus="userid" title="Use this screen to validate security questions">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/validateQuestion1" method="POST" focus="userid" title="Use this screen to validate security questions">
+<!--			
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion1" method="POST" focus="userid">
+-->
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
@@ -76,6 +79,24 @@
         			//alert('changed to option ' + option.selectedIndex);
         		}
         	</script>
+        	
+        	<table summary="Login credentials and new password to change password.">
+            <tr>
+                <td valign="middle"><label for="question" class=bstd>Question 1:</p></td>
+                <td valign="middle"><input id="question" type="text" name="question" value="<%=session.getAttribute(Constants.Q1) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
+            </tr><tr>
+            <tr>
+                <td valign="middle"><label for="answer" class=bstd>Answer 1:</p></td>
+                <td valign="middle"><input id="answer" type="text" name="answer" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+            </tr><tr>
+            	<input id="answer" type="hidden" name="answerIndex" value="answer1">
+                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer security question 2.</p></td>
+            </tr><tr>
+                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>
+            </tr><tr>
+            </tr>
+        	</table>
+<!--        	
         	<table summary="Login credentials and new password to change password.">
             <tr>
                 <td valign="middle"><label for="question1" class=bstd>Question:</p></td>                
@@ -98,6 +119,7 @@
             </tr><tr>
             </tr>
         	</table>
+-->        	
     	</form>
             
 		<cadsrpasswordchangetags:footer />
