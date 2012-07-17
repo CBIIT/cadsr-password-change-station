@@ -52,7 +52,7 @@ public class MainServlet extends HttpServlet {
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
     		if(connection == null) {
-        	datasource = ConnectionUtil.getDS(_jndiUser); connection = datasource.getConnection(_jndiUser, _jndiSystem);
+        	datasource = ConnectionUtil.getDS(_jndiUser); connection = datasource.getConnection();
 
 //        	datasource = ConnectionUtil.getTestDS("root", "root"); connection = datasource.getConnection();
     		dao = new DAO(connection);

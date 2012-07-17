@@ -41,8 +41,7 @@
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptQuestion1</url-pattern>
   </servlet-mapping>
-<!-- 
- <servlet-mapping>     
+  <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptQuestion2</url-pattern>
   </servlet-mapping>
@@ -50,14 +49,27 @@
      <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptQuestion3</url-pattern>
   </servlet-mapping>
---> 
+<!--
+  -->
    <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
-     <url-pattern>/validateQuestions</url-pattern>
+     <url-pattern>/validateQuestion1</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/validateQuestion2</url-pattern>
+  </servlet-mapping>
+      <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/validateQuestion3</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/resetPassword</url-pattern>
   </servlet-mapping>
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
-     <url-pattern>/resetPassword</url-pattern>
+     <url-pattern>/setupPassword</url-pattern>
   </servlet-mapping>
 
 
