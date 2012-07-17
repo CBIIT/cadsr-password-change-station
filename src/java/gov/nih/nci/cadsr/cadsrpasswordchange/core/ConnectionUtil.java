@@ -93,7 +93,7 @@ public class ConnectionUtil {
 	    connectionProps.put("password", this.password);
 
 	    if (this.dbms.equals("oracle")) {
-	    	Class.forName("oracle.jdbc.driver.OracleDriver");
+	    	Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
 	    	//SID only, not service name (ref: http://www.orafaq.com/wiki/JDBC)
 	        conn = DriverManager.getConnection(
 	                   "jdbc:" + this.dbms + ":thin:" +
@@ -103,10 +103,13 @@ public class ConnectionUtil {
 	                   this.dbName,
 	                   connectionProps);        
 	    } else if (this.dbms.equals("mysql")) {
-	        conn = DriverManager.getConnection(
+	    	Class.forName ("com.mysql.jdbc.Driver").newInstance(); 
+	    	String jdbcUrl = 
 	                   "jdbc:" + this.dbms + "://" +
 	                   this.serverName +
-	                   ":" + this.portNumber + "/" + this.dbName,
+	                   ":" + this.portNumber + "/" + this.dbName;
+	    	logger.info("jdbc url = '" + jdbcUrl + "'");
+	        conn = DriverManager.getConnection(jdbcUrl,
 	                   connectionProps);
 	    } else if (this.dbms.equals("derby")) {
 	        conn = DriverManager.getConnection(
@@ -218,8 +221,8 @@ public class ConnectionUtil {
 	}
 	
 	public static DataSource getDS(String _jndiUser) throws Exception {
-		envContext = new InitialContext();
-		ds = (DataSource)envContext.lookup(_jndiUser);
+		Context envContext = new InitialContext();
+		DataSource ds = (DataSource)envContext.lookup(_jndiUser);
 		return ds;
 	}
 	
