@@ -8,12 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+
 
 public class DAO implements AbstractDao {
 	
@@ -521,7 +522,7 @@ public class DAO implements AbstractDao {
 		
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
-			String alterUser = "alter user " + user + " identified by \"" + newPassword + "\"";
+			String alterUser = "alter user " + user + " identified by \"" + newPassword + "\" account unlock";
 			pstmt = conn.prepareStatement(alterUser);
 			logger.debug("attempted to alter user " + user);
 			pstmt.execute();

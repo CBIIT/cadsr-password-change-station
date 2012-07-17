@@ -51,7 +51,7 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion3" method="POST" focus="userid">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/validateQuestion3" method="POST" focus="userid">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
@@ -66,13 +66,14 @@
         	
         	<table summary="Login credentials and new password to change password.">
             <tr>
-                <td valign="middle"><label for="question3" class=bstd>Question 3:</p></td>
-                <td valign="middle"><input id="question3" type="text" name="question3" value="<%=session.getAttribute(Constants.Q3) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
+                <td valign="middle"><label for="question" class=bstd>Question 3:</p></td>
+                <td valign="middle"><input id="question" type="text" name="question" value="<%=session.getAttribute(Constants.Q3) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
-                <td valign="middle"><label for="answer3" class=bstd>Answer 3:</p></td>
-                <td valign="middle"><input id="answer3" type="text" name="answer3" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><label for="answer" class=bstd>Answer 3:</p></td>
+                <td valign="middle"><input id="answer" type="text" name="answer" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
+            	<input id="answer" type="hidden" name="answerIndex" value="answer3">            
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer security question 3.</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>
