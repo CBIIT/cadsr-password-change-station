@@ -83,7 +83,7 @@ public class PasswordChangeHelper {
 	/*
 	 * Method to validate that the user setup all the questions and answers properly.
 	 */
-	public static String validateSecurityQandA(int totaQuestions, String username, Map<String, String> userQuestions, Map userAnswers) throws Exception {
+	public static String validateSecurityQandA(int totaQuestions, String username, Map<String, String> userQuestions, Map<String, String> userAnswers) throws Exception {
 		String retVal = null;
 		
 		if(userQuestions == null) {
@@ -137,4 +137,38 @@ public class PasswordChangeHelper {
 		
 		return retVal;
 	}
+	
+	/*
+	 * Method to validate that the user's at least one question and/or answer are of the right length.
+	 */
+	public static boolean validateQuestionsLength(int totaQuestions, Map<String, String> userQuestions, Map<String, String> userAnswers) throws Exception {
+		final int QUESTIONS_VALID_LENGTH = 10;
+		final int ANSWERS_VALID_LENGTH = 1;
+		boolean retVal = false;
+		int qcount = 0, acount = 0;
+		
+		if(userQuestions == null) {
+			throw new Exception("Questions are NULL or empty.");
+		}
+		if(userAnswers == null) {
+			throw new Exception("Answers are NULL or empty.");
+		}
+		for (Object key : userQuestions.keySet()) {
+		    String value = userQuestions.get(key);
+		    if(value != null && value.length() >= QUESTIONS_VALID_LENGTH) {
+		    	qcount++;
+		    }
+		}
+		for (Object key : userAnswers.keySet()) {
+		    String value = userAnswers.get(key);
+		    if(value != null && value.length() >= ANSWERS_VALID_LENGTH) {
+		    	acount++;
+		    }
+		}
+		
+		if(qcount == totaQuestions && acount == totaQuestions) retVal = true;
+
+		return retVal;
+	}
+	
 }
