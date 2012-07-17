@@ -14,6 +14,8 @@ public class ConnectionUtil {
 
     private static Logger logger = Logger.getLogger(ConnectionUtil.class.getName());
 
+	private static Context envContext;
+	private static DataSource ds;
 	private static Connection pooledConnection;
 
     private String dbms;
@@ -216,8 +218,8 @@ public class ConnectionUtil {
 	}
 	
 	public static DataSource getDS(String _jndiUser) throws Exception {
-		Context envContext = new InitialContext();
-		DataSource ds = (DataSource)envContext.lookup(_jndiUser);
+		envContext = new InitialContext();
+		ds = (DataSource)envContext.lookup(_jndiUser);
 		return ds;
 	}
 	
