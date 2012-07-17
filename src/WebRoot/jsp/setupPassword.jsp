@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title>JJ <%=Constants.RESET_TITLE %></title>
+        <title><%=Constants.RESET_TITLE %></title>
         
 		<div style="position:absolute;">
  			<a href="#skip">
@@ -70,6 +70,10 @@
                 <td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>
                 <td valign="middle"><input id="LoginID" type="text" name="userid" value="<%=session.getAttribute("username") %>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
+            <tr>
+                <td valign="middle"><label for="OldPassword" class=bstd>Current Password:</p></td>
+                <td valign="middle"><input id="OldPassword" type="password" name="password" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+            </tr><tr>            
             <tr>
                 <td valign="middle"><label for="Question1" class=bstd>Question 1:</p></td>
                 <td valign="middle"><input id="Question1" type="text" name="question1" value="${param.question1}" style="width: 3.75in" class="std" autocomplete="off"></td>

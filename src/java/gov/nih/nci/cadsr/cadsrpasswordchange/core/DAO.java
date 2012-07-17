@@ -12,7 +12,8 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 public class DAO implements AbstractDao {
 	
@@ -26,6 +27,9 @@ public class DAO implements AbstractDao {
 
     private static final String SQL_INSERT = "INSERT INTO User_Security_Questions (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
+    private static String _jndiUser = "java:/jdbc/caDSR";
+    private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
+    
     private Logger logger = Logger.getLogger(DAO.class);
 
     public DAO(DataSource datasource) {
@@ -90,13 +94,13 @@ public class DAO implements AbstractDao {
 
 		UserBean userBean = new UserBean(username);
 		
-//		Connection conn = null;
+		Connection conn = null;
 		try {
-//			Context envContext = new InitialContext();	
-//	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
-//	        logger.debug("got DataSource for " + _jndiUser);
-//	        conn = ds.getConnection(username, password);
-			datasource.getConnection(username, password);
+			Context envContext = new InitialContext();	
+	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
+	        logger.debug("got DataSource for " + _jndiUser);
+	        conn = ds.getConnection(username, password);
+//			datasource.getConnection(username, password);
 	        logger.debug("connected");	        
 			userBean.setLoggedIn(true);
 			userBean.setResult(new Result(ResultCode.NOT_EXPIRED));

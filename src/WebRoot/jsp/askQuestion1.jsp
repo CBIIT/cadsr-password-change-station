@@ -1,3 +1,4 @@
+<%@ page isELIgnored ="false" %>
 <%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
 <%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
@@ -51,37 +52,47 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion3" method="POST" focus="userid" title="Use this screen to validate security questions">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/validateQuestions" method="POST" focus="userid" title="Use this screen to validate security questions">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>Use this screen to validate security questions.</p>
+        				<p class=std></p>
         			<%} else { %>
-        				<p class=std><%=userMessage%></p>
+        				<p class=std><%=userMessage%> </p>
         			<%} %>
             <%} else { %>
 					<strong align="center"><%=errorMessage%></strong>
             <%} %>          
         	
+        	<script>
+        		function handleOption(option) {
+        			if(option.selectedIndex === 1) {
+        				document.getElementById('answer').value = '<%=Constants.A2%>';
+        			} else 
+           			if(option.selectedIndex === 2) {
+	        			document.getElementById('answer').value = '<%=Constants.A3%>';
+           			}
+        			//alert('changed to option ' + option.selectedIndex);
+        		}
+        	</script>
         	<table summary="Login credentials and new password to change password.">
             <tr>
                 <td valign="middle"><label for="question1" class=bstd>Question:</p></td>                
                 <td valign="top">
-                <select>
-				  <option selected="selected">q1</option>
-				  <option>q2</option>
-				  <option>q3</option>
+                <select name="option" onchange="handleOption(this);">
+				  <option value="<%= Constants.Q1 %>" selected="selected"><%= session.getAttribute(Constants.Q1) %></option>
+				  <option value="<%= Constants.Q2 %>"><%= session.getAttribute(Constants.Q2) %></option>
+				  <option value="<%= Constants.Q3 %>"><%= session.getAttribute(Constants.Q3) %></option>
 				</select>
-<!--
-                <input id="question1" type="text" name="question1" value="<%=session.getAttribute(Constants.Q1) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
--->
+
+                <input id="answer" type="hidden" name="answer" value="<%=Constants.A1%>">
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="answer1" class=bstd>Answer:</p></td>
                 <td valign="middle"><input id="answer1" type="text" name="answer1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please pick one security question to answer.</p></td>
+                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please select and answer one security question to be allowed to change your password.</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>
             </tr><tr>
