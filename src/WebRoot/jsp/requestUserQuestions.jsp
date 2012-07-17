@@ -52,7 +52,10 @@
 		<a name="skip" id="skip"></a>
 			
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptUserQuestions" method="POST" focus="userid" title="Use this screen to get your security questions">
-		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
+<!--
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion1" method="POST" focus="userid" title="Use this screen to get your security questions">
+-->
+ 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>

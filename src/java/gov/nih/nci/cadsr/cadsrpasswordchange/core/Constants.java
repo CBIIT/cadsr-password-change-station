@@ -3,8 +3,8 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 public class Constants {
 
 	public static final String APP_URI = "/cadsrpasswordchange";
-	public static final String SERVLET_URI = "";	//production
-//	public static final String SERVLET_URI = "/cadsrpasswordchange";	//dev
+//	public static final String SERVLET_URI = "";	//production
+	public static final String SERVLET_URI = "/cadsrpasswordchange";	//dev
 	
 	public static final String LANDING_URL = APP_URI + "/jsp/login.jsp";
 	public static final String CHANGE_PASSWORD_URL = APP_URI + "/jsp/changePassword.jsp";
