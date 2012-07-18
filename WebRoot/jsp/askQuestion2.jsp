@@ -56,7 +56,7 @@
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>Use this screen to validate security questions.</p>
+        				<p class=std></p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
@@ -71,16 +71,19 @@
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="answer" class=bstd>Answer 2:</p></td>
-                <td valign="middle"><input id="answer" type="text" name="answer" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="answer" type="password" name="answer" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             	<input id="answer" type="hidden" name="answerIndex" value="answer2">
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer security question 2.</p></td>
             </tr><tr>
-                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>
+                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2">
+                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
             </tr><tr>
             </tr>
         	</table>
     	</form>
+    	
+        <p><a href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
             
 		<cadsrpasswordchangetags:footer />
 	

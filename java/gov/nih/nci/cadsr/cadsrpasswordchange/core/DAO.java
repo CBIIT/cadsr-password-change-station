@@ -1,5 +1,7 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.UserSecurityQuestion;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -20,7 +22,7 @@ public class DAO implements AbstractDao {
 	
 	private Connection conn;
 	private DataSource datasource;
-    private static final String  QUESTION_TABLE_NAME = "User_Security_Questions";
+    private static final String  QUESTION_TABLE_NAME = "USER_SECURITY_QUESTIONS";
 
     protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified";
 
@@ -203,25 +205,33 @@ public class DAO implements AbstractDao {
         Statement stmt = null;
         ResultSet rs = null;
         String sql = null;
-        UserSecurityQuestion q = new UserSecurityQuestion();
+        UserSecurityQuestion q = null;
         try {
-            sql = "select * from " + QUESTION_TABLE_NAME + " where uaName = ?";
+            sql = "select * from " + QUESTION_TABLE_NAME + " where ua_name = ?";
 
                 PreparedStatement pstmt = conn.prepareStatement( sql );
-                pstmt.setString(0, uaName);
+                pstmt.setString(1, uaName);
     			ResultSet result = pstmt.executeQuery();
     			int count = 0;
+logger.debug("findByPrimaryKey: " + count);    			
     			while(result.next()) {
+    				q = new UserSecurityQuestion();
     				q.setUaName(rs.getString("ua_name"));
     				q.setQuestion1(rs.getString("question1"));
-    				q.setAnswer1("answer1");
-    				q.setQuestion2("question2");
-    				q.setAnswer2("answer2");
-    				q.setQuestion3("question3");
-    				q.setAnswer3("answer3");
+    				q.setAnswer1(rs.getString("answer1"));
+    				q.setQuestion2(rs.getString("question2"));
+    				q.setAnswer2(rs.getString("answer2"));
+    				q.setQuestion3(rs.getString("question3"));
+    				q.setAnswer3(("answer3"));
     				//q.setDateModified(new Timestamp());
     			    count++;
+    			    if(count > 1) {
+    			    	//should not happen, but just to be sure
+    			    	throw new Exception("Record " + uaName + " is not unique!");
+    			    }
+    			    break;	//first one only
     			}
+logger.debug("findByPrimaryKey: " + count + " q " + q); 			
         }
         catch (SQLException e) {
             throw new Exception( e );

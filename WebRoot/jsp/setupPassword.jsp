@@ -76,27 +76,113 @@
             </tr><tr>            
             <tr>
                 <td valign="middle"><label for="Question1" class=bstd>Question 1:</p></td>
-                <td valign="middle"><input id="Question1" type="text" name="question1" value="${param.question1}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle">
+                <!--<input id="Question1" type="text" name="question1" value="${param.question1}" style="width: 3.75in" class="std" autocomplete="off">-->
+<select name="question1" id="Question1">
+	<option value="">-- Please Select a Question --</option>
+<option value="What is the last name of your favorite school teacher?">What is the last name of your favorite school teacher?</option>
+<option value="What is the name of your favorite sports team?">What is the name of your favorite sports team?</option>
+<option value="What is the name of your favorite singer or band?">What is the name of your favorite singer or band?</option>
+<option value="What is the name of your favorite television series?">What is the name of your favorite television series?</option>
+<option value="What is the last name of your favorite school teacher?">What is the last name of your favorite school teacher?</option>
+<option value="What is the name of your favorite restaurant?">What is the name of your favorite restaurant?</option>
+<option value="What is the name of your favorite movie?">What is the name of your favorite movie?</option>
+<option value="What is the name of your favorite song?">What is the name of your favorite song?</option>
+<option value="What is the furthest place to which you have traveled?">What is the furthest place to which you have traveled?</option>
+<option value="What is the name of your favorite actor or actress?">What is the name of your favorite actor or actress?</option>
+<option value="Who is your personal hero?">Who is your personal hero?</option>
+<option value="What is your favorite hobby?">What is your favorite hobby?</option>
+<option value="Your mother's first name?">Your mother's first name?</option>
+<option value="The city name or town name of your birth?">The city name or town name of your birth?</option>
+<option value="A four digit PIN (personal identification number)?">A four digit PIN (personal identification number)?</option>
+<option value="What is your least favorite sports team?">What is your least favorite sports team?</option>
+<option value="What is your mother's occupation?">What is your mother's occupation?</option>
+<option value="What was your SAT score?">What was your SAT score?</option>
+<option value="What is your favorite brand of candy?">What is your favorite brand of candy?</option>
+<option value="What is your least favorite food?">What is your least favorite food?</option>
+<option value="What is your least favorite beverage?">What is your least favorite beverage?</option>
+<option value="What was your first pet's name?">What was your first pet's name?</option>
+</select>
+                </td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer1" class=bstd>Answer 1:</p></td>
-                <td valign="middle"><input id="Answer1" type="text" name="answer1" value="${param.answer1}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Answer1" type="password" name="answer1" value="${param.answer1}" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Question2" class=bstd>Question 2:</p></td>
-                <td valign="middle"><input id="Question2" type="text" name="question2" value="${param.question2}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle">
+<!--                
+                <input id="Question2" type="text" name="question2" value="${param.question2}" style="width: 3.75in" class="std" autocomplete="off"></td>
+-->
+<select name="question2" id="Question2">
+	<option value="">-- Please Select a Question --</option>
+<option value="What is the last name of your favorite school teacher?">What is the last name of your favorite school teacher?</option>
+<option value="What is the name of your favorite sports team?">What is the name of your favorite sports team?</option>
+<option value="What is the name of your favorite singer or band?">What is the name of your favorite singer or band?</option>
+<option value="What is the name of your favorite television series?">What is the name of your favorite television series?</option>
+<option value="What is the last name of your favorite school teacher?">What is the last name of your favorite school teacher?</option>
+<option value="What is the name of your favorite restaurant?">What is the name of your favorite restaurant?</option>
+<option value="What is the name of your favorite movie?">What is the name of your favorite movie?</option>
+<option value="What is the name of your favorite song?">What is the name of your favorite song?</option>
+<option value="What is the furthest place to which you have traveled?">What is the furthest place to which you have traveled?</option>
+<option value="What is the name of your favorite actor or actress?">What is the name of your favorite actor or actress?</option>
+<option value="Who is your personal hero?">Who is your personal hero?</option>
+<option value="What is your favorite hobby?">What is your favorite hobby?</option>
+<option value="Your mother's first name?">Your mother's first name?</option>
+<option value="The city name or town name of your birth?">The city name or town name of your birth?</option>
+<option value="A four digit PIN (personal identification number)?">A four digit PIN (personal identification number)?</option>
+<option value="What is your least favorite sports team?">What is your least favorite sports team?</option>
+<option value="What is your mother's occupation?">What is your mother's occupation?</option>
+<option value="What was your SAT score?">What was your SAT score?</option>
+<option value="What is your favorite brand of candy?">What is your favorite brand of candy?</option>
+<option value="What is your least favorite food?">What is your least favorite food?</option>
+<option value="What is your least favorite beverage?">What is your least favorite beverage?</option>
+<option value="What was your first pet's name?">What was your first pet's name?</option>
+</select>
+			</td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer2" class=bstd>Answer 2:</p></td>
-                <td valign="middle"><input id="Answer2" type="text" name="answer2" value="${param.answer2}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Answer2" type="password" name="answer2" value="${param.answer2}" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Question3" class=bstd>Question 3:</p></td>
-                <td valign="middle"><input id="Question3" type="text" name="question3" value="${param.question3}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle">
+<!--               
+                <td valign="middle">
+                <input id="Question3" type="text" name="question3" value="${param.question3}" style="width: 3.75in" class="std" autocomplete="off"></td>
+-->
+<select name="question3" id="Question3">
+	<option value="">-- Please Select a Question --</option>
+<option value="What is the last name of your favorite school teacher?">What is the last name of your favorite school teacher?</option>
+<option value="What is the name of your favorite sports team?">What is the name of your favorite sports team?</option>
+<option value="What is the name of your favorite singer or band?">What is the name of your favorite singer or band?</option>
+<option value="What is the name of your favorite television series?">What is the name of your favorite television series?</option>
+<option value="What is the last name of your favorite school teacher?">What is the last name of your favorite school teacher?</option>
+<option value="What is the name of your favorite restaurant?">What is the name of your favorite restaurant?</option>
+<option value="What is the name of your favorite movie?">What is the name of your favorite movie?</option>
+<option value="What is the name of your favorite song?">What is the name of your favorite song?</option>
+<option value="What is the furthest place to which you have traveled?">What is the furthest place to which you have traveled?</option>
+<option value="What is the name of your favorite actor or actress?">What is the name of your favorite actor or actress?</option>
+<option value="Who is your personal hero?">Who is your personal hero?</option>
+<option value="What is your favorite hobby?">What is your favorite hobby?</option>
+<option value="Your mother's first name?">Your mother's first name?</option>
+<option value="The city name or town name of your birth?">The city name or town name of your birth?</option>
+<option value="A four digit PIN (personal identification number)?">A four digit PIN (personal identification number)?</option>
+<option value="What is your least favorite sports team?">What is your least favorite sports team?</option>
+<option value="What is your mother's occupation?">What is your mother's occupation?</option>
+<option value="What was your SAT score?">What was your SAT score?</option>
+<option value="What is your favorite brand of candy?">What is your favorite brand of candy?</option>
+<option value="What is your least favorite food?">What is your least favorite food?</option>
+<option value="What is your least favorite beverage?">What is your least favorite beverage?</option>
+<option value="What was your first pet's name?">What was your first pet's name?</option>
+</select>
+			</td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer3" class=bstd>Answer 3:</p></td>
-                <td valign="middle"><input id="Answer3" type="text" name="answer3" value="${param.answer3}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Answer3" type="password" name="answer3" value="${param.answer3}" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide questions and anwers that you can remember. Your questions can not be repeated (must be different).</p></td>
             </tr><tr>
