@@ -7,9 +7,10 @@ CREATE TABLE USER_SECURITY_QUESTIONS (
 	question3 varchar2(500) NOT NULL,
 	answer3 varchar2(500) NOT NULL,
 	date_modified date NOT NULL,
-	attempted_count1 number(19),
-	attempted_count2 number(19),
-	attempted_count3 number(19)
+	attempted_count number(19)
+--	attempted_count1 number(19),
+--	attempted_count2 number(19),
+--	attempted_count3 number(19)
 );
 
 ALTER TABLE USER_SECURITY_QUESTIONS ADD CONSTRAINT pk_USER_SECURITY_QUESTIONS PRIMARY KEY (

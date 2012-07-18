@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -30,8 +31,8 @@ import com.sun.org.apache.xerces.internal.impl.dv.ValidatedInfo;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.UserSecurityQuestion;
 //=== dev only
 //import com.test.DAO;
-////import com.test.oracle.dao.oracle.UserSecurityQuestionDaoImpl;
-////import com.test.oracle.dto.UserSecurityQuestion;
+//import com.test.oracle.dao.oracle.UserSecurityQuestionDaoImpl;
+//import com.test.oracle.dto.UserSecurityQuestion;
 //import com.test.mysql.dao.mysql.UserSecurityQuestionDaoImpl;
 //import com.test.mysql.dto.UserSecurityQuestion;
 
@@ -43,8 +44,8 @@ public class MainServlet extends HttpServlet {
     
 	private static Connection connection = null;
 	private static DataSource datasource = null;
-//	private static AbstractDao dao;
-	private static DAO dao;
+	private static AbstractDao dao;
+//	private static DAO dao;
 
     private void connectDB() {
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
@@ -121,7 +122,11 @@ public class MainServlet extends HttpServlet {
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/setupPassword")) {
 				doSetupPassword(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptUserQuestions")) {
+				if(req.getParameter("cancel") != null) {
+					resp.sendRedirect(Constants.LANDING_URL);
+				} else {				
 				doRequestUserQuestions(req, resp);
+				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion1")) {
 				doQuestion1(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion2")) {
@@ -129,11 +134,23 @@ public class MainServlet extends HttpServlet {
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptQuestion3")) {
 				doQuestion3(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion1")) {
+				if(req.getParameter("cancel") != null) {
+					resp.sendRedirect(Constants.LANDING_URL);
+				} else {
 				doValidateQuestion1(req, resp);
+				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion2")) {
+				if(req.getParameter("cancel") != null) {
+					resp.sendRedirect(Constants.LANDING_URL);
+				} else {
 				doValidateQuestion2(req, resp);
+				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion3")) {
+				if(req.getParameter("cancel") != null) {
+					resp.sendRedirect(Constants.LANDING_URL);
+				} else {
 				doValidateQuestion3(req, resp);
+				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/resetPassword")) {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
@@ -494,7 +511,7 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(Constants.ALL_QUESTIONS, userQuestions);
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			
-			if(userQuestions.size() == 0) {
+			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
 				resp.sendRedirect(Constants.ASK_USERID_URL);
@@ -644,16 +661,16 @@ public class MainServlet extends HttpServlet {
 			Result passwordChangeResult = changeDAO.resetPassword(username, newPassword);
 			disconnect();
 
-			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
+//			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
 				logger.info("password changed");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
-			} else {
-				logger.info("password change failed");
-				String errorMessage = passwordChangeResult.getMessage();
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
-				resp.sendRedirect("./jsp/resetPassword.jsp");		
-			}
+//			} else {
+//				logger.info("password change failed");
+//				String errorMessage = passwordChangeResult.getMessage();
+//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
+//				resp.sendRedirect("./jsp/resetPassword.jsp");		
+//			}
 		}
 		catch (Throwable theException) {
 			logger.error(CommonUtil.toString(theException));
