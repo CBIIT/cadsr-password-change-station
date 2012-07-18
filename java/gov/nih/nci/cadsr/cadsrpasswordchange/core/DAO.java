@@ -203,18 +203,18 @@ public class DAO implements AbstractDao {
 	
     public UserSecurityQuestion findByPrimaryKey( String uaName ) throws Exception {
         Statement stmt = null;
-        ResultSet rs = null;
         String sql = null;
+        ResultSet rs = null;
         UserSecurityQuestion q = null;
         try {
             sql = "select * from " + QUESTION_TABLE_NAME + " where ua_name = ?";
 
                 PreparedStatement pstmt = conn.prepareStatement( sql );
                 pstmt.setString(1, uaName);
-    			ResultSet result = pstmt.executeQuery();
+    			rs = pstmt.executeQuery();
     			int count = 0;
 logger.debug("findByPrimaryKey: " + count);    			
-    			while(result.next()) {
+    			if(rs.next()) {
     				q = new UserSecurityQuestion();
     				q.setUaName(rs.getString("ua_name"));
     				q.setQuestion1(rs.getString("question1"));
@@ -224,12 +224,6 @@ logger.debug("findByPrimaryKey: " + count);
     				q.setQuestion3(rs.getString("question3"));
     				q.setAnswer3(("answer3"));
     				//q.setDateModified(new Timestamp());
-    			    count++;
-    			    if(count > 1) {
-    			    	//should not happen, but just to be sure
-    			    	throw new Exception("Record " + uaName + " is not unique!");
-    			    }
-    			    break;	//first one only
     			}
 logger.debug("findByPrimaryKey: " + count + " q " + q); 			
         }
