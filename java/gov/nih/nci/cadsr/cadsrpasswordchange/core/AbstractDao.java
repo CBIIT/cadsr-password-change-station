@@ -40,7 +40,7 @@ public interface AbstractDao {
      */
     public boolean update( String uaName, UserSecurityQuestion dto ) throws Exception;
 
-	public boolean checkValidUser(String username);
+	public boolean checkValidUser(String username) throws Exception;
 	
 	public UserBean checkValidUser(String username, String password) throws Exception;
 	
