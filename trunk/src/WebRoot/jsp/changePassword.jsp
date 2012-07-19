@@ -84,7 +84,10 @@
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login credentials and your desired new password (repeated to avoid typos).</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Change" style="text-align: center" class="but2">
-                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
+<!--
+                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2">
+-->
+                </td>
             </tr><tr>
 				<td style="width:100%;text-align: center" colspan="2">
 					<a target="_top" href="<%=Constants.SETUP_QUESTIONS_URL%>">Setup My Security Questions</a>
