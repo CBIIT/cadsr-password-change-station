@@ -53,10 +53,10 @@ public class MainServlet extends HttpServlet {
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
     		if(connection == null) {
-        	datasource = ConnectionUtil.getDS(_jndiUser); connection = datasource.getConnection("@systemAccountName@", "@systemAccountPassword@");
+        	datasource = ConnectionUtil.getDS(_jndiUser);
 
 //        	datasource = ConnectionUtil.getTestDS("root", "root"); connection = datasource.getConnection();
-    		dao = new DAO(connection);
+    		dao = new DAO(datasource); //for dto
         	
     	    System.out.println("Connected to database [" + _jndiUser + " " + _jndiSystem + "]");
         	
@@ -255,7 +255,7 @@ public class MainServlet extends HttpServlet {
 		qna.setAnswer3((String)userAnswers.get(Constants.A3));
 
 		try {
-			connect();
+			connect();			
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 			if(oldQna == null) {
 				dao.insert(qna);
@@ -438,19 +438,19 @@ public class MainServlet extends HttpServlet {
 			logger.info("saving request: user provided " +  userQuestions + " " + userAnswers);
 		    saveUserStoredQna(username, userQuestions, userAnswers);
 			
-			connect();			
-			DAO userDAO = new DAO(connection);
-			try {
-				if(!userDAO.checkValidUser(username)) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect(Constants.ASK_USERID_URL);
-					return;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				disconnect();
-			}
+//			connect();			
+//			DAO userDAO = new DAO(connection);
+//			try {
+//				if(!userDAO.checkValidUser(username)) {
+//					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+//					resp.sendRedirect(Constants.ASK_USERID_URL);
+//					return;
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			} finally {
+//				disconnect();
+//			}
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
@@ -481,8 +481,8 @@ public class MainServlet extends HttpServlet {
 			
 			logger.debug("username " + username);
 			
-			connect();		
-			DAO userDAO = new DAO(connection);
+			connect();
+			DAO userDAO = new DAO(datasource);
 			try {
 				if(!userDAO.checkValidUser(username)) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
@@ -657,7 +657,7 @@ public class MainServlet extends HttpServlet {
 		
 			logger.debug("username " + username);
 			connect();
-			DAO changeDAO = new DAO(connection);
+			DAO changeDAO = new DAO(datasource);
 			Result passwordChangeResult = changeDAO.resetPassword(username, newPassword);
 			disconnect();
 
@@ -747,7 +747,7 @@ public class MainServlet extends HttpServlet {
 
 			logger.debug("username " + username);
 			connect();
-			DAO changeDAO = new DAO(connection);
+			DAO changeDAO = new DAO(datasource);
 			Result passwordChangeResult = changeDAO.changePassword(username, oldPassword, newPassword);
 			disconnect();
 
