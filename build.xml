@@ -103,6 +103,8 @@
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>
 
+		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/core/MainServlet.java" token="@systemAccountName@" value="${systemAccountName}"/>
+		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/core/MainServlet.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
 	</target>
 
 
@@ -110,3 +112,4 @@
 	<target name="all" depends="project" />
 
 </project>
+
