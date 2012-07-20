@@ -32,9 +32,9 @@ public class DAO implements AbstractDao {
 
 //    private static String _jndiUser = "java:/jdbc/caDSR";
 //    private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
-    public static String ADMIN_ID = "@systemAccountName@";
-    public static String ADMIN_PASSWORD = "@systemAccountPassword@";
-    
+    public static String ADMIN_ID = "TANJ";
+    public static String ADMIN_PASSWORD = "TANJ";
+
     private Logger logger = Logger.getLogger(DAO.class);
 
     public DAO(DataSource datasource) {
