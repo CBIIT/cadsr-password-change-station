@@ -86,8 +86,10 @@
                 <!--<input id="Question1" type="text" name="question1" value="${param.question1}" style="width: 3.75in" class="std" autocomplete="off">-->
 <select name="question1" id="Question1">
 	<option value="">-- Please Select a Question --</option>
-<%    
+<%
+if(request.getSession() != null) {
 	List questionsList = (ArrayList)request.getSession().getAttribute("questionsList");
+	if(questionsList != null) {
 	String selectedQuestion1 = (String)request.getSession().getAttribute("selectedQuestion1");
 	//questionsList
 	for (Iterator j = questionsList.iterator(); j.hasNext(); ) {
@@ -96,6 +98,8 @@
         <option value="<%=question%>" <%=question.equals(selectedQuestion1) ? "selected" : ""%>><%=question%></option>
 <%
 	}
+	}
+}
 %>
 </select>    
                 </td>
@@ -119,7 +123,9 @@
 <select name="question2" id="Question2">
 	<option value="">-- Please Select a Question --</option>
 <%    
+if(request.getSession() != null) {
 	List questionsList2 = (ArrayList)request.getSession().getAttribute("questionsList");
+	if(questionsList2 != null) {	
 	String selectedQuestion2 = (String)request.getSession().getAttribute("selectedQuestion2");
 	//questionsList
 	for (Iterator j = questionsList2.iterator(); j.hasNext(); ) {
@@ -128,6 +134,8 @@
         <option value="<%=question%>" <%=question.equals(selectedQuestion2) ? "selected" : ""%>><%=question%></option>
 <%
 	}
+	}
+}
 %>
 </select>    
 			</td>
@@ -151,8 +159,10 @@
 -->
 <select name="question3" id="Question3">
 	<option value="">-- Please Select a Question --</option>
-<%    
+<%
+if(request.getSession() != null) {
 	List questionsList3 = (ArrayList)request.getSession().getAttribute("questionsList");
+	if(questionsList3 != null) {	
 	String selectedQuestion3 = (String)request.getSession().getAttribute("selectedQuestion3");
 	//questionsList
 	for (Iterator j = questionsList3.iterator(); j.hasNext(); ) {
@@ -161,6 +171,8 @@
         <option value="<%=question%>" <%=question.equals(selectedQuestion3) ? "selected" : ""%>><%=question%></option>
 <%
 	}
+	}
+}
 %>
 </select>    
 			</td>
