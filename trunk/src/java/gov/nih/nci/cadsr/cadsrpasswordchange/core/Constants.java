@@ -31,31 +31,18 @@ public class Constants {
 //	public static final String PWD_RESTRICTIONS = "Password Restrictions: Must not match previous 24 passwords, starts with a letter, 8-30 characters, contains a special character (_ # $), lowercase, uppercase and a number.";
 	public static final String PWD_RESTRICTIONS = "<h3>Password Restrictions:</h3> <p><table>" +
 "			<td class=\"face\" style=\"WIDTH: 617px\" colspan=\"2\">" +
-"You may not re-use your last 24 passwords. (Note: Passwords that only differ by uppercase/lowercase are not considered different passwords.)" +
-"    <ul>                                         " +
+"You may not re-use your last 24 passwords." +
+"<ul>                                         " +
 "You may not change your password more than once within 24 hours.<br>" +
 "Your password must be at least 8 and no more than 30 characters long.<br>" +
 "Your password must start with a letter.<br>" +
 
-"Your password may only use characters from the following groups and must use characters from at least three of the four groups:" +
+"Your new password may only use characters from the following categories and must include characters from at least three of these categories:" +
 "<br><br>" +
-"            	<li>Uppercase letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ</li>" +
-"            	<li>Lowercase letters: abcdefghijklmnopqrstuvwxyz</li>" +
-"            	<li>Numbers: 1234567890</li>" +
-"            	<li>Special characters: _ # $" + 
-"            	- + _ = | \\ { } [ ] (): ; \" ' &lt; &gt; , . ? / )</li>" +
-"<br>For Example: The password ADGHJKL248 uses characters from only two groups (uppercase and number) and is not acceptable. ADGHJKL248# uses characters from three groups (uppercase, number, and special) and is acceptable.<br>" +
-"<p><b><font color=\"red\">IT Administrators Please Note:</font></b> Secondary accounts are required to have a 15 character password or passphrase." +
-"<br><br>" +
-"<b><font color=\"red\">NCI Users Please Note:</font></b> You must include one of each of the four categories" +
-"	      and spaces are NOT allowed." +
-"<br><br>" +
-"Your password can contain spaces, but they are not counted as special characters. Your password may not contain more than three contiguous letters from your name. For more detail about making a good password, see" + 
-"            <a href=\"Password_Passcode_Guidance.doc\" tabindex=\"1\">" +
-"            NIH User Password Guidance</a>, " +
-"            <a href=\"Pass_Phrases.pdf\" tabindex=\"2\">" + 
-"            NIH Pass Phrase Guidance</a>, and <a href=\"nottodo.htm\" tabindex=\"3\" target=\"_top\">" +
-"            What Not To Do</a>." +
+"            	<li>Uppercase Letters (A-Z)</li>" +
+"            	<li>Lowercase Letters (a-z)</li>" +
+"            	<li>Numerals (0-9)</li>" +
+"            	<li>Special Characters ( _  #  $)" + 
 "    </ul><tt>" +
 "    </tt></td>" +
 "</table>";
