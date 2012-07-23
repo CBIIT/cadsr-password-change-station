@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import com.sun.org.apache.xerces.internal.impl.dv.ValidatedInfo;
@@ -426,6 +427,17 @@ public class MainServlet extends HttpServlet {
 			String password = req.getParameter("password");
 			
 			logger.debug("username " + username);
+			
+			//xss prevention (http://ha.ckers.org/xss.html)
+			if(!StringEscapeUtils.escapeHtml4(answer1).equals(answer1) ||
+					!StringEscapeUtils.escapeHtml4(answer2).equals(answer2) ||
+					!StringEscapeUtils.escapeHtml4(answer3).equals(answer3)) {
+				logger.debug("invalid character failed during questions/answers save");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.160"));
+//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+				return;
+			}
 			
 			connect();
 			DAO loginDAO = new DAO(datasource);
