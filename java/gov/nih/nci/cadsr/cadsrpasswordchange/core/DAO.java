@@ -22,18 +22,18 @@ public class DAO implements AbstractDao {
 	
 	private Connection conn;
 	private DataSource datasource;
-    private static final String  QUESTION_TABLE_NAME = "USER_SECURITY_QUESTIONS";
+    private static final String  QUESTION_TABLE_NAME = "SBREXT.USER_SECURITY_QUESTIONS";
 
     protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified";
 
     protected static final String PK_CONDITION = "ua_name=?";
 
-    private static final String SQL_INSERT = "INSERT INTO User_Security_Questions (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO SBREXT.USER_SECURITY_QUESTIONS (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
 //    private static String _jndiUser = "java:/jdbc/caDSR";
 //    private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
-    public static String ADMIN_ID = "TANJ";
-    public static String ADMIN_PASSWORD = "TANJ";
+    public static String ADMIN_ID = "@systemAccountName@";
+    public static String ADMIN_PASSWORD = "@systemAccountPassword@";
 
     private Logger logger = Logger.getLogger(DAO.class);
 
@@ -218,7 +218,9 @@ logger.info ("6 checkValidUser user: " + username);
         try {
             sql = "select * from " + QUESTION_TABLE_NAME + " where ua_name = ?";
 
-	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+logger.debug("findByPrimaryKey sql : " + sql);
+
+			conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
 			rs = pstmt.executeQuery();
