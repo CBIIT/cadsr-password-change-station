@@ -99,6 +99,10 @@
 		<copy tofile="src/WebRoot/WEB-INF/lib/Owasp.CsrfGuard.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/Owasp.CsrfGuard.jar" /> 
 		</copy>
+		
+		<copy tofile="src/WebRoot/WEB-INF/lib/commons-lang3-3.1.jar" filtering="false" verbose="true">
+		  <fileset file="src/lib/commons-lang3-3.1.jar" />
+		</copy>
 
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>

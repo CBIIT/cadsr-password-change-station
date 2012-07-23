@@ -1,1 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><classpath><classpathentry kind="src" path="src/java" output="src/WebRoot/WEB-INF/classes"/><classpathentry kind="output" path="src/WebRoot/WEB-INF/classes"/><classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/><classpathentry kind="lib" path="src/lib/Owasp.CsrfGuard.jar"/><classpathentry kind="lib" path="src/lib/el-api.jar"/><classpathentry kind="lib" path="src/lib/jstl-1.0.jar"/><classpathentry kind="lib" path="src/lib/junit-4.8.2.jar"/><classpathentry kind="lib" path="src/lib/log4j-1.2.13.jar"/><classpathentry kind="lib" path="src/lib/ojdbc14.jar"/><classpathentry kind="lib" path="src/lib/servlet.jar"/><classpathentry kind="lib" path="src/lib/standard-1.0.jar"/></classpath>
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="src/WebRoot/WEB-INF/classes" path="src/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/lib/Owasp.CsrfGuard.jar"/>
+	<classpathentry kind="lib" path="src/lib/el-api.jar"/>
+	<classpathentry kind="lib" path="src/lib/jstl-1.0.jar"/>
+	<classpathentry kind="lib" path="src/lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="src/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="src/lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="src/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="src/lib/standard-1.0.jar"/>
+	<classpathentry kind="lib" path="src/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="output" path="src/WebRoot/WEB-INF/classes"/>
+</classpath>
