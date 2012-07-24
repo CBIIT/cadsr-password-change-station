@@ -10,3 +10,7 @@ grant create session to cadsrpasswordchange
 /
 grant alter user to cadsrpasswordchange
 /
+grant select, insert, update, delete on sbrext.user_security_questions to cadsrpasswordchange
+/
+grant select on sbr.user_accounts_view to cadsrpasswordchange
+/
