@@ -147,7 +147,7 @@ logger.info ("6 checkValidUser user: " + username);
 		logger.info("changePassword  user " + user );
 		
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
-		Connection conn = null;
+//		Connection conn = null;
 		PreparedStatement pstmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
@@ -156,15 +156,20 @@ logger.info ("6 checkValidUser user: " + username);
 //			DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
 //	        logger.debug("got DataSource for " + _jndiSystem);
 //	        conn = datasource.getConnection(user, password);
-	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);	        
+	        if(conn == null) {
+	        	conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+	        }
 	        logger.debug("connected");
 	        
 	        isConnectionException = false;
-		
+
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
-			String alterUser = "alter user " + user + " identified by \"" + newPassword + "\" replace " + password;
+	        String alterUser = "alter user \"" + user + "\" identified by ? replace ?";
 			pstmt = conn.prepareStatement(alterUser);
+//            pstmt.setString(1, user);
+            pstmt.setString(1, newPassword);
+            pstmt.setString(2, password);
 			logger.debug("attempted to alter user " + user);
 			pstmt.execute();
 			result = new Result(ResultCode.PASSWORD_CHANGED);
@@ -526,7 +531,7 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 		logger.info("resetPassword  user " + user );
 		
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
-		Connection conn = null;
+//		Connection conn = null;
 		PreparedStatement pstmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
@@ -534,10 +539,12 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 //				Context envContext = new InitialContext();	
 //				DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
 //		        logger.debug("got DataSource for " + _jndiSystem);
+	        if(conn == null) {				
 				conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
-		        logger.debug("connected");
+	        }
+	        logger.debug("connected");
 
-		        isConnectionException = false;
+	        isConnectionException = false;
 		
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
@@ -547,6 +554,7 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 			pstmt.execute();
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			logger.debug(ex.getMessage());
 				if (isConnectionException)
 					result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
