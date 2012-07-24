@@ -27,7 +27,7 @@ public class TestPasswordReset {
     public static String ADMIN_ID = "@systemAccountName@";
     public static String ADMIN_PASSWORD = "@systemAccountPassword@";
 
-	//@Test
+	@Test
 	public void testBadUserNameInLogin() {
 		String username = "@hongj"; // bad
 		String password = "test123";
@@ -36,7 +36,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadPasswordInLogin() {
 		String username = "chongj";
 		String password = "@7esT123"; // bad
@@ -45,7 +45,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadUserIdInChangePassword() {
 		String username = "@hongj"; // bad
 		String oldPassword = "test123";
@@ -59,7 +59,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadOldPasswordInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "@7esT123"; // bad
@@ -73,7 +73,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadNewPasswordInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -87,7 +87,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testNewPasswordNotMatchingInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -101,7 +101,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testLoginIdNotMatchingInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -115,7 +115,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testNewRequestedPasswordNotMatchingInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -167,7 +167,7 @@ public class TestPasswordReset {
 	public void testPasswordChange() {
 		String username = "GUEST";
 		String oldPassword = "GUEST";
-		String newPassword = "test@Lien202";
+		String newPassword = "test@Lie777";
 		Result returned = null;
         try {
         	Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
