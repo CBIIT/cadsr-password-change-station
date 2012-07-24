@@ -1,4 +1,5 @@
 <%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -19,6 +20,8 @@
 		<cadsrpasswordchangetags:header />
 
 		<center> Password change successful. You have been logged out. </center>
+ 
+        <p><a href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
  
 	  	<cadsrpasswordchangetags:footer />
 
