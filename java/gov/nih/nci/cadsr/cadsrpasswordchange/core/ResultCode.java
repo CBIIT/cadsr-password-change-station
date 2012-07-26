@@ -85,6 +85,12 @@ public enum ResultCode {
 			return "Your password must start with letter.";
 		}
 	},
+	MISSING_OR_INVALID {
+		@Override
+		public String userMessage() {
+			return "Missing or invalid password(s).";
+		}
+	},
 	UNKNOWN_CUSTOM{
 		@Override
 		public String userMessage() {
