@@ -48,8 +48,8 @@ public class MainServlet extends HttpServlet {
     
 	private static Connection connection = null;
 	private static DataSource datasource = null;
-//	private static AbstractDao dao;
-	private static DAO dao;		//dev only
+	private static AbstractDao dao;
+//	private static DAO dao;		//dev only
 
     private void connectDB() {
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
@@ -703,16 +703,16 @@ public class MainServlet extends HttpServlet {
 			Result passwordChangeResult = changeDAO.resetPassword(username, newPassword);
 			disconnect();
 
-//			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
+			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
 				logger.info("password changed");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
-//			} else {
-//				logger.info("password change failed");
-//				String errorMessage = passwordChangeResult.getMessage();
-//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
-//				resp.sendRedirect("./jsp/resetPassword.jsp");		
-//			}
+			} else {
+				logger.info("password change failed");
+				String errorMessage = passwordChangeResult.getMessage();
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
+				resp.sendRedirect("./jsp/resetPassword.jsp");		
+			}
 		}
 		catch (Throwable theException) {
 			logger.error(CommonUtil.toString(theException));
@@ -735,14 +735,14 @@ public class MainServlet extends HttpServlet {
 
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, "");
 			
-			UserBean userBean = (UserBean) session.getAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE);
-
-			if (userBean == null || !userBean.isLoggedIn()) {
-				//logger.info("user not logged in " + userBean.getUsername());
-				session.invalidate();
-				resp.sendRedirect("./jsp/loggedOut.jsp");
-				return;
-			}
+//			UserBean userBean = (UserBean) session.getAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE);
+//
+//			if (userBean == null || !userBean.isLoggedIn()) {
+//				//logger.info("user not logged in " + userBean.getUsername());
+//				session.invalidate();
+//				resp.sendRedirect("./jsp/loggedOut.jsp");
+//				return;
+//			}
 	
 			String username = req.getParameter("userid");
 			String oldPassword = req.getParameter("pswd");
