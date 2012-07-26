@@ -146,6 +146,12 @@ public class ConnectionUtil {
 				result = new Result(ResultCode.INVALID_LOGIN);
 		}
 
+		if (result == null) {
+			found = errorMessage.indexOf("ORA-00988");  // missing or invalid password(s)
+			if (found != -1)
+				result = new Result(ResultCode.MISSING_OR_INVALID);
+		}
+
 		if (result == null) {		
 			found = errorMessage.indexOf("ORA-28000");  // locked
 			if (found != -1)
