@@ -109,6 +109,8 @@
 
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/core/DAO.java" token="@systemAccountName@" value="${systemAccountName}"/>
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/core/DAO.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
+		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountName@" value="${systemAccountName}"/>
+		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
 	</target>
 
 	<!-- Build project and create distribution-->
