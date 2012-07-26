@@ -38,6 +38,13 @@
 	<body>
 
 		<%
+			if (session.getAttribute("username") == null) {
+				// this shouldn't happen, make the user start over
+				//response.sendRedirect("./jsp/loggedOut.jsp");
+				response.sendRedirect(Constants.LOGGEDOUT_URL);
+				return;
+			}
+
 			String errorMessage = (String)session.getAttribute("ErrorMessage");
   			if (errorMessage == null)
   				errorMessage = "";
@@ -50,7 +57,7 @@
 			
 		%>
 		  
-		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
+		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/setupPassword"></form>
      
     	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
 
