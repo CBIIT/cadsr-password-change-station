@@ -24,8 +24,8 @@ public class TestPasswordReset {
 	private static Connection connection = null;
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
-    public static String ADMIN_ID = "@systemAccountName@";
-    public static String ADMIN_PASSWORD = "@systemAccountPassword@";
+    public static String ADMIN_ID = "cadsrpasswordchange";
+    public static String ADMIN_PASSWORD = "cadsrpasswordchange";
 
 	@Test
 	public void testBadUserNameInLogin() {
@@ -179,5 +179,14 @@ public class TestPasswordReset {
         Result expected = new Result(ResultCode.PASSWORD_CHANGED);
 		assertNotSame(expected.getResultCode(), returned.getResultCode());
 	}
+
+	/*
+	--asign profile to an existing user
+	alter user SCOTT profile "cadsr_user"
+	/
+	--expire the users password to force the user to change it:
+	alter user SCOTT password expire
+	/
+	*/
 
 }
