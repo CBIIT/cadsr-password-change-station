@@ -4,8 +4,9 @@
 %@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 -->
 
-<%@ taglib uri="/tags" prefix="cadsrpasswordchangetags" %>
+<%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
+
 <%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
 <%@ page import="java.util.*" %>
 <%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.QuestionHelper" %>
