@@ -654,7 +654,7 @@ public class MainServlet extends HttpServlet {
 		HttpSession session = req.getSession(false);
 		Map userQuestions = (HashMap) session.getAttribute(Constants.ALL_QUESTIONS);
 		Map userAnswers = (HashMap) session.getAttribute(Constants.ALL_ANSWERS);
-		logger.info("questions " + userQuestions.size() + " answers " + userAnswers.size());
+		logger.info("questions " + userQuestions != null?userQuestions.size():0 + " answers " + userAnswers.size());
 
 		String question1 = req.getParameter("question");
 		String answer1 = req.getParameter("answer");

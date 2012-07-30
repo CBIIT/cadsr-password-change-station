@@ -55,7 +55,8 @@ public class DAO implements AbstractDao {
 		}
 				
 		Connection conn = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		try {
 //			Context envContext = new InitialContext();	
 //	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
@@ -66,11 +67,11 @@ logger.info ("2.1 checkValidUser user: " + username);
 
 	        logger.debug("connected");
 logger.info ("2.2 checkValidUser user: " + username);
-			pstmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
-			pstmt.setString(1, username);
+			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
+			stmt.setString(1, username);
 logger.info ("3 checkValidUser user: " + username);
 			
-			ResultSet rs = pstmt.executeQuery();
+			rs = stmt.executeQuery();
 			int count = 0;
 logger.info ("4 checkValidUser user: " + username);
 			
@@ -85,13 +86,9 @@ logger.info ("6 checkValidUser user: " + username);
 	    	logger.debug(e.getMessage());
         }
         finally {
-        	if (conn != null) {
-        		try {
-        			conn.close();
-        		} catch (Exception ex) {
-        			logger.error(ex.getMessage());
-        		}
-	        }
+            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
 	    }
 		
 		
@@ -148,7 +145,7 @@ logger.info ("6 checkValidUser user: " + username);
 		
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
 //		Connection conn = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement stmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
 		try {
@@ -166,12 +163,12 @@ logger.info ("6 checkValidUser user: " + username);
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
 	        String alterUser = "alter user \"" + user + "\" identified by ? replace ?";
-			pstmt = conn.prepareStatement(alterUser);
-//            pstmt.setString(1, user);
-            pstmt.setString(1, newPassword);
-            pstmt.setString(2, password);
+	        stmt = conn.prepareStatement(alterUser);
+//            stmt.setString(1, user);
+			stmt.setString(1, newPassword);
+            stmt.setString(2, password);
 			logger.debug("attempted to alter user " + user);
-			pstmt.execute();
+			stmt.execute();
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
@@ -180,20 +177,8 @@ logger.info ("6 checkValidUser user: " + username);
 			else
 				result = ConnectionUtil.decode(ex);
 		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (Exception ex) {
-					logger.error(ex.getMessage());
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception ex) {
-					logger.error(ex.getMessage());
-				}
-			}
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
 		}
 
        logger.info("returning ResultCode " + result.getResultCode().toString());        
@@ -248,8 +233,9 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
             throw new Exception( e );
         }
         finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
+            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
         }
         return q;
     }
@@ -532,7 +518,7 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 		
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
 //		Connection conn = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement stmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
 		try {
@@ -549,9 +535,9 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
 			String alterUser = "alter user " + user + " identified by \"" + newPassword + "\" account unlock";
-			pstmt = conn.prepareStatement(alterUser);
+			stmt = conn.prepareStatement(alterUser);
 			logger.debug("attempted to alter user " + user);
-			pstmt.execute();
+			stmt.execute();
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -561,6 +547,8 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 				else
 					result = ConnectionUtil.decode(ex);
 		} finally {
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
 		}
 
        return result;
