@@ -12,10 +12,10 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-
-
 public class DAO implements AbstractDao {
 	
+    public static String _jndiUser = "java:/jdbc/caDSR";
+    public static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
 	private Connection conn;
 	private DataSource datasource;
     private static final String  QUESTION_TABLE_NAME = "SBREXT.USER_SECURITY_QUESTIONS";
@@ -25,9 +25,6 @@ public class DAO implements AbstractDao {
     protected static final String PK_CONDITION = "ua_name=?";
 
     private static final String SQL_INSERT = "INSERT INTO SBREXT.USER_SECURITY_QUESTIONS (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
-
-    public static String ADMIN_ID = "cadsrpasswordchange";
-    public static String ADMIN_PASSWORD = "cadsrpasswordchange";
 
     private Logger logger = Logger.getLogger(DAO.class);
 
@@ -43,16 +40,14 @@ public class DAO implements AbstractDao {
 		boolean retVal = false;
 		
 		logger.info ("1 checkValidUser user: " + username);
-
-		if(datasource == null) {
-			throw new Exception("DataSource is empty or NULL.");
-		}
 				
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+	        logger.debug("got DataSource for " + _jndiSystem);
+	        conn = ds.getConnection();
 
 	        logger.debug("connected");
 			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
@@ -131,7 +126,11 @@ public class DAO implements AbstractDao {
 		
 		try {
 	        if(conn == null) {
-	        	conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+				DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+	        	
+		        conn = ds.getConnection();
+	        	
 	        }
 	        logger.debug("connected");
 	        
@@ -181,7 +180,10 @@ public class DAO implements AbstractDao {
 
             logger.debug("findByPrimaryKey sql : " + sql);
 
-			conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+            DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+	        logger.debug("got DataSource for " + _jndiSystem);
+        	
+	        conn = ds.getConnection();
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
 			rs = pstmt.executeQuery();
@@ -223,7 +225,11 @@ public class DAO implements AbstractDao {
         try {
             sql = "select * from " + QUESTION_TABLE_NAME;
 
-	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+            DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+	        logger.debug("got DataSource for " + _jndiSystem);
+        	
+	        conn = ds.getConnection();
+        	
             PreparedStatement pstmt = conn.prepareStatement( sql );
 			rs = pstmt.executeQuery();
 			UserSecurityQuestion q = null;
@@ -269,7 +275,10 @@ public class DAO implements AbstractDao {
         PreparedStatement stmt = null;
 
         try {
-	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+        	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+	        logger.debug("got DataSource for " + _jndiSystem);
+        	
+	        conn = ds.getConnection();
             stmt = conn.prepareStatement( SQL_INSERT );
 
             if ( dto.getUaName() == null ) {
@@ -426,7 +435,10 @@ public class DAO implements AbstractDao {
 
         try {
             if (params != null && params.length > 0) {
-    	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+            	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+    	        logger.debug("got DataSource for " + _jndiSystem);
+            	
+    	        conn = ds.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement( sql );
                 stmt = pstmt;
 
@@ -494,7 +506,10 @@ public class DAO implements AbstractDao {
 		
 		try {
 	        if(conn == null) {				
-				conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
+	        	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+	        	
+		        conn = ds.getConnection();
 	        }
 	        logger.debug("connected");
 
