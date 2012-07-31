@@ -20,24 +20,20 @@ public class MainServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(MainServlet.class.getName());
-    private static String _jndiUser = "java:/jdbc/caDSR";
-    private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
-    
 	private static Connection connection = null;
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
 
-    private void connectDB() {
+    private void connect() {
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
     	
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
     		if(connection == null) {
-            	datasource = ConnectionUtil.getDS(_jndiUser);
+            	datasource = ConnectionUtil.getDS(DAO._jndiSystem);
             	dao = new DAO(datasource);
         	
-    	    System.out.println("Connected to database [" + _jndiUser + " " + _jndiSystem + "]");
-        	
+            	logger.info("Connected to database");
     		}
         	isConnectionException = false;
 		} catch (Exception e) {
@@ -49,10 +45,6 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-    private void connect() {
-    	connectDB();
-    }
-    
     private void disconnect() {
     	/*
     	datasource = null;
