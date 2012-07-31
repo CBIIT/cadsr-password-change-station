@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class TestPasswordReset {
 
-	private static Connection connection = null;
+//	private static Connection connection = null;
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
     public static String ADMIN_ID = "cadsrpasswordchange";
