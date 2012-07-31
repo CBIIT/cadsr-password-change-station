@@ -2,22 +2,19 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 public class ConnectionUtil {
 
     private static Logger logger = Logger.getLogger(ConnectionUtil.class.getName());
 
-	private static Context envContext;
-	private static DataSource ds;
 	private static Connection pooledConnection;
-
     private String dbms;
 	private String userName;
 	private String password;
@@ -123,7 +120,7 @@ public class ConnectionUtil {
 
 	public static Result decode(Exception ex) {
 		
-//		logger.info("decode");
+		logger.info("decode");
 		
 		Result result = null;
 		
@@ -133,7 +130,7 @@ public class ConnectionUtil {
 		
 		int found = -1;
 		String errorMessage = ex.getMessage();
-//		logger.debug("errorMessage: " + errorMessage);
+		logger.debug("errorMessage: " + errorMessage);
 		
 		// SQLException error code is vendor-specific and was just returning a zero
 		// have to parse message for codes
@@ -222,7 +219,9 @@ public class ConnectionUtil {
 		if (result == null)
 			result = new Result(ResultCode.UNKNOWN_ERROR);
 
-//		logger.info("returning ResultCode " + result.getResultCode().toString() + " " + result.getMessage());
+		if(result != null) {
+			logger.info("returning ResultCode " + result.getResultCode() + " " + result.getMessage());
+		}
 		return result;
 	}
 	
