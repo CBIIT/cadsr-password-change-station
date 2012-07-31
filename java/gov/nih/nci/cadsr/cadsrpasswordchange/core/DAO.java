@@ -1,7 +1,5 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.UserSecurityQuestion;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
@@ -30,10 +26,8 @@ public class DAO implements AbstractDao {
 
     private static final String SQL_INSERT = "INSERT INTO SBREXT.USER_SECURITY_QUESTIONS (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
-//    private static String _jndiUser = "java:/jdbc/caDSR";
-//    private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
-    public static String ADMIN_ID = "@systemAccountName@";
-    public static String ADMIN_PASSWORD = "@systemAccountPassword@";
+    public static String ADMIN_ID = "cadsrpasswordchange";
+    public static String ADMIN_PASSWORD = "cadsrpasswordchange";
 
     private Logger logger = Logger.getLogger(DAO.class);
 
@@ -58,29 +52,17 @@ public class DAO implements AbstractDao {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-//			Context envContext = new InitialContext();	
-//	        DataSource ds = (DataSource)envContext.lookup(_jndiUser);
-//	        logger.debug("got DataSource for " + _jndiUser);
-logger.info ("2 checkValidUser user: " + username);
 	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
-logger.info ("2.1 checkValidUser user: " + username);
 
 	        logger.debug("connected");
-logger.info ("2.2 checkValidUser user: " + username);
 			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
 			stmt.setString(1, username);
-logger.info ("3 checkValidUser user: " + username);
-			
 			rs = stmt.executeQuery();
-			int count = 0;
-logger.info ("4 checkValidUser user: " + username);
-			
 			if(rs.next()) {
 				//assuming all user Ids are unique/no duplicate
 				retVal = true;
 				logger.info ("5 checkValidUser user: " + username);				
 			}
-logger.info ("6 checkValidUser user: " + username);
 	    } catch (Exception e) {
 	    	e.printStackTrace();
 	    	logger.debug(e.getMessage());
@@ -144,15 +126,10 @@ logger.info ("6 checkValidUser user: " + username);
 		logger.info("changePassword  user " + user );
 		
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
-//		Connection conn = null;
 		PreparedStatement stmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
 		try {
-//			Context envContext = new InitialContext();	
-//			DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
-//	        logger.debug("got DataSource for " + _jndiSystem);
-//	        conn = datasource.getConnection(user, password);
 	        if(conn == null) {
 	        	conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
 	        }
@@ -164,7 +141,7 @@ logger.info ("6 checkValidUser user: " + username);
 	        // (must quote password to retain capitalization for verification function)
 	        String alterUser = "alter user \"" + user + "\" identified by ? replace ?";
 	        stmt = conn.prepareStatement(alterUser);
-//            stmt.setString(1, user);
+	        //stmt.setString(1, user);	//this is not an oversight, but didn't work during runtime
 			stmt.setString(1, newPassword);
             stmt.setString(2, password);
 			logger.debug("attempted to alter user " + user);
@@ -185,12 +162,6 @@ logger.info ("6 checkValidUser user: " + username);
        return result;
 	}	
 		
-    private ResultSet query( PreparedStatement pstmt, Object[] params) throws SQLException {
-        params( pstmt, params );
-
-        return pstmt.executeQuery();
-    }
-	
     private void params( PreparedStatement pstmt, Object[] params) throws SQLException {
         int i = 1;
         for (Object param : params) {
@@ -208,14 +179,14 @@ logger.info ("6 checkValidUser user: " + username);
         try {
             sql = "select * from " + QUESTION_TABLE_NAME + " where ua_name = ?";
 
-logger.debug("findByPrimaryKey sql : " + sql);
+            logger.debug("findByPrimaryKey sql : " + sql);
 
 			conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
 			rs = pstmt.executeQuery();
 			int count = 0;
-logger.debug("findByPrimaryKey: " + count);    			
+			logger.debug("findByPrimaryKey: " + count);    			
 			if(rs.next()) {
 				q = new UserSecurityQuestion();
 				q.setUaName(rs.getString("ua_name"));
@@ -227,7 +198,7 @@ logger.debug("findByPrimaryKey: " + count);
 				q.setAnswer3(rs.getString("answer3"));
 				//q.setDateModified(new Timestamp());
 			}
-logger.debug("findByPrimaryKey: " + count + " q " + q); 			
+			logger.debug("findByPrimaryKey: " + count + " q " + q); 			
         }
         catch (SQLException e) {
             throw new Exception( e );
@@ -254,10 +225,9 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 
 	        conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
             PreparedStatement pstmt = conn.prepareStatement( sql );
-			ResultSet result = pstmt.executeQuery();
-			int count = 0;
+			rs = pstmt.executeQuery();
 			UserSecurityQuestion q = null;
-			while(result.next()) {
+			while(rs.next()) {
 				q = new UserSecurityQuestion();
 				q.setUaName(rs.getString("ua_name"));
 				q.setQuestion1(rs.getString("question1"));
@@ -268,7 +238,6 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 				q.setAnswer3(rs.getString("answer3"));
 				//q.setDateModified(new Timestamp());
 				qList.add(q);
-			    count++;
 			}
         }
         catch (SQLException e) {
@@ -277,6 +246,7 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
         finally {
             if (rs != null) try { rs.close(); } catch (SQLException e) {}
             if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
         }
         return toArray(qList);
     }
@@ -356,6 +326,7 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
         }
         finally {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
         }
     }
 
@@ -474,6 +445,7 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
         }
         finally {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
+        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
         }
     }
     
@@ -517,14 +489,10 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 		logger.info("resetPassword  user " + user );
 		
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
-//		Connection conn = null;
 		PreparedStatement stmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
 		
 		try {
-//				Context envContext = new InitialContext();	
-//				DataSource ds = (DataSource)envContext.lookup(_jndiSystem);
-//		        logger.debug("got DataSource for " + _jndiSystem);
 	        if(conn == null) {				
 				conn = datasource.getConnection(ADMIN_ID, ADMIN_PASSWORD);
 	        }
@@ -553,4 +521,4 @@ logger.debug("findByPrimaryKey: " + count + " q " + q);
 
        return result;
 	}	
-}	
+}

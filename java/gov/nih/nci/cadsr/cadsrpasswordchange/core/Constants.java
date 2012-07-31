@@ -3,9 +3,7 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 public class Constants {
 
 	public static final String APP_URI = "/cadsrpasswordchange";
-	public static final String SERVLET_URI = "";	//production
-//	public static final String SERVLET_URI = "/cadsrpasswordchange";	//dev only
-	
+	public static final String SERVLET_URI = "";	//jboss
 	public static final String LANDING_URL = APP_URI + "/jsp/login.jsp";
 	public static final String CHANGE_PASSWORD_URL = APP_URI + "/jsp/changePassword.jsp";
 	public static final String SETUP_QUESTIONS_URL = APP_URI + "/jsp/setupPassword.jsp";
@@ -29,7 +27,6 @@ public class Constants {
 	
 	public static final String USERNAME = "username";
 
-//	public static final String PWD_RESTRICTIONS = "Password Restrictions: Must not match previous 24 passwords, starts with a letter, 8-30 characters, contains a special character (_ # $), lowercase, uppercase and a number.";
 	public static final String PWD_RESTRICTIONS = "<h3>Password Restrictions:</h3><table>" +
 "			<td class=\"face\" style=\"WIDTH: 617px\" colspan=\"2\">" +
 "    <ul>" +

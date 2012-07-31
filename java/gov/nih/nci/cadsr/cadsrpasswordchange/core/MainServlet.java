@@ -1,24 +1,10 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants;
-
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.naming.InitialContext;
-import javax.naming.Context;
-
-import javax.naming.Reference;
-import javax.naming.StringRefAddr;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,26 +16,16 @@ import javax.sql.DataSource;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.xerces.internal.impl.dv.ValidatedInfo;
-
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.UserSecurityQuestion;
-//dev only
-//import com.test.DAO;
-//import com.test.oracle.dao.oracle.UserSecurityQuestionDaoImpl;
-//import com.test.oracle.dto.UserSecurityQuestion;
-//import com.test.mysql.dao.mysql.UserSecurityQuestionDaoImpl;
-//import com.test.mysql.dto.UserSecurityQuestion;
-
 public class MainServlet extends HttpServlet {
 
-    private Logger logger = Logger.getLogger(MainServlet.class.getName());
+	private static final long serialVersionUID = 1L;
+	private Logger logger = Logger.getLogger(MainServlet.class.getName());
     private static String _jndiUser = "java:/jdbc/caDSR";
     private static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
     
 	private static Connection connection = null;
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
-//	private static DAO dao;		//dev only
 
     private void connectDB() {
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
@@ -57,10 +33,8 @@ public class MainServlet extends HttpServlet {
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
     		if(connection == null) {
-            	datasource = ConnectionUtil.getDS(_jndiUser); //connection = datasource.getConnection("cadsrpasswordchange", "cadsrpasswordchange");
+            	datasource = ConnectionUtil.getDS(_jndiUser);
             	dao = new DAO(datasource);
-            	//dev only
-//            	datasource = ConnectionUtil.getTestDS("root", "root"); connection = datasource.getConnection(); dao = new DAO(connection);	//for DTO
         	
     	    System.out.println("Connected to database [" + _jndiUser + " " + _jndiSystem + "]");
         	
@@ -80,35 +54,24 @@ public class MainServlet extends HttpServlet {
     }
     
     private void disconnect() {
-//    	datasource = null;
-//		try {
-//			connection.close();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+    	/*
+    	datasource = null;
+		try {
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		*/
     }
     
     private static final int TOTAL_QUESTIONS = 3;
     private static final String ERROR_MESSAGE_SESSION_ATTRIBUTE = "ErrorMessage"; 
     private static final String USER_MESSAGE_SESSION_ATTRIBUTE = "UserMessage";
-	private Map userStoredQna;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		logger.debug("doGet");
-//		String target = req.getParameter("target");
-//		
-//		try {
-//			String servletPath = req.getRequestURI();
-//			logger.debug("getServletPath  |" + servletPath +"|");
-//			if (servletPath.equals(Constants.SERVLET_URI + "/setupPassword")) {
-//				doSetupPassword(req, resp);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		initQuestionsOptions(req);
 	}
 		
 	private void handleQuestionsOptions(HttpServletRequest req, String[] selectedQuestion) {
@@ -123,7 +86,6 @@ public class MainServlet extends HttpServlet {
 
 		logger.info("doPost");
 		QuestionHelper.initQuestionsOptions(req);		
-		String target = req.getParameter("target");
 		
 		try {
 			String servletPath = req.getServletPath();
@@ -142,8 +104,6 @@ public class MainServlet extends HttpServlet {
 				} else {
 					doSaveQuestions(req, resp);
 				}
-//			} else if (servletPath.equals(Constants.SERVLET_URI + "/setupPassword")) {
-//				doSetupPassword(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptUserQuestions")) {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
@@ -222,8 +182,8 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);			
 			
 			// Security enhancement
-			Map userQuestions = new HashMap();
-			Map userAnswers =  new HashMap();
+			Map<String, String> userQuestions = new HashMap<String, String>();
+			Map<String, String> userAnswers =  new HashMap<String, String>();
 			
 			//pull all questions related to this user
 			loadUserStoredQna(username, userQuestions, userAnswers);
@@ -231,9 +191,6 @@ public class MainServlet extends HttpServlet {
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
 			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
-//			session.setAttribute(Constants.Q2, userQuestions.get(Constants.Q2));
-//			session.setAttribute(Constants.Q3, userQuestions.get(Constants.Q3));			
-
 			session.setAttribute(Constants.ALL_QUESTIONS, userQuestions);
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			
@@ -254,20 +211,7 @@ public class MainServlet extends HttpServlet {
 			
 	}
 
-	private void doSetupPassword(HttpServletRequest req,
-			HttpServletResponse resp) {
-		//populate users questions/answers
-		QuestionHelper.initQuestionsOptions(req);		
-		
-		try {
-			resp.sendRedirect("./jsp/setupPassword.jsp");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-
-	private void saveUserStoredQna(String username, Map userQuestions, Map userAnswers) {
+	private void saveUserStoredQna(String username, Map<String, String> userQuestions, Map<String, String> userAnswers) {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
 		qna.setUaName(username);
 		qna.setQuestion1((String)userQuestions.get(Constants.Q1));
@@ -285,13 +229,15 @@ public class MainServlet extends HttpServlet {
 			} else {
 				dao.update(username, qna);
 			}
-//			showUserSecurityQuestionList();	//just for debug
+			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	//Please the following method for debugging
+	/*
 	private void showUserSecurityQuestionList() {
 		UserSecurityQuestion[] results;
 		try {
@@ -311,6 +257,7 @@ public class MainServlet extends HttpServlet {
 			e1.printStackTrace();
 		}
 	}
+	*/
 	
 	protected void doLogin(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException {
@@ -334,8 +281,6 @@ public class MainServlet extends HttpServlet {
 			String username = req.getParameter("userid");
 			String password = req.getParameter("pswd");
 			logger.info("unvalidated username " + username);
-
-			String errorMessage = "";
 
 			// Limit input to legal characters before attempting any processing
 			if(Messages.getString("PasswordChangeHelper.1").equals(PasswordChangeHelper.validateLogin(username, password))) {
@@ -421,7 +366,7 @@ public class MainServlet extends HttpServlet {
 					!StringEscapeUtils.escapeHtml4(answer3).equals(answer3)) {
 				logger.debug("invalid character failed during questions/answers save");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.160"));
-//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 				return;
 			}
@@ -436,13 +381,13 @@ public class MainServlet extends HttpServlet {
 			if (!userBean.isLoggedIn()) {
 				logger.debug("auth failed during questions/answers save");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
-//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 				return;
 			}
 			
 			// Security enhancement
-		    Map userQuestions = new HashMap();	
+		    Map<String, String> userQuestions = new HashMap<String, String>();
 		    userQuestions.put(question1,"");
 		    userQuestions.put(question2,"");
 		    userQuestions.put(question3,"");
@@ -452,12 +397,12 @@ public class MainServlet extends HttpServlet {
 		    if(userQuestions.size() < TOTAL_QUESTIONS && paramCount == TOTAL_QUESTIONS) {
 				logger.debug("security Q&A validation failed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.135"));
-//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 				return;
 			}
-		    userQuestions = new HashMap();
-		    Map userAnswers = new HashMap();	
+		    userQuestions = new HashMap<String, String>();
+		    Map<String, String> userAnswers = new HashMap<String, String>();	
 		    if(question1 != null && !question1.equals("") && answer1 != null && !answer1.equals("")) userQuestions.put(Constants.Q1, question1); userAnswers.put(Constants.A1, answer1);
 		    if(question2 != null && !question2.equals("") && answer2 != null && !answer2.equals("")) userQuestions.put(Constants.Q2, question2); userAnswers.put(Constants.A2, answer2);
 		    if(question3 != null && !question3.equals("") && answer3 != null && !answer3.equals("")) userQuestions.put(Constants.Q3, question3); userAnswers.put(Constants.A3, answer3);
@@ -465,34 +410,20 @@ public class MainServlet extends HttpServlet {
 			if(Messages.getString("PasswordChangeHelper.125").equals(PasswordChangeHelper.validateSecurityQandA(TOTAL_QUESTIONS, username, userQuestions, userAnswers))) {
 				logger.debug("security Q&A validation failed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.125"));
-//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 				return;
 			}
 			if(!PasswordChangeHelper.validateQuestionsLength(TOTAL_QUESTIONS, userQuestions, userAnswers)) {
 				logger.debug("security Q&A validation failed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.150"));
-//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 				return;
 			}
 			
 			logger.info("saving request: user provided " +  userQuestions + " " + userAnswers);
 		    saveUserStoredQna(username, userQuestions, userAnswers);
-			
-//			connect();			
-//			DAO userDAO = new DAO(connection);
-//			try {
-//				if(!userDAO.checkValidUser(username)) {
-//					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-//					resp.sendRedirect(Constants.ASK_USERID_URL);
-//					return;
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			} finally {
-//				disconnect();
-//			}
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
@@ -538,8 +469,8 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			// Security enhancement
-			Map userQuestions = new HashMap();
-			Map userAnswers =  new HashMap();
+			Map<String, String> userQuestions = new HashMap<String, String>();
+			Map<String, String> userAnswers =  new HashMap<String, String>();
 			
 			//pull all questions related to this user
 			loadUserStoredQna(username, userQuestions, userAnswers);
@@ -652,8 +583,8 @@ public class MainServlet extends HttpServlet {
 	throws ServletException, IOException {
 
 		HttpSession session = req.getSession(false);
-		Map userQuestions = (HashMap) session.getAttribute(Constants.ALL_QUESTIONS);
-		Map userAnswers = (HashMap) session.getAttribute(Constants.ALL_ANSWERS);
+		Map<?, ?> userQuestions = (HashMap<?, ?>) session.getAttribute(Constants.ALL_QUESTIONS);
+		Map<?, ?> userAnswers = (HashMap<?, ?>) session.getAttribute(Constants.ALL_ANSWERS);
 		logger.info("questions " + userQuestions != null?userQuestions.size():0 + " answers " + userAnswers.size());
 
 		String question1 = req.getParameter("question");
@@ -735,15 +666,6 @@ public class MainServlet extends HttpServlet {
 
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, "");
 			
-//			UserBean userBean = (UserBean) session.getAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE);
-//
-//			if (userBean == null || !userBean.isLoggedIn()) {
-//				//logger.info("user not logged in " + userBean.getUsername());
-//				session.invalidate();
-//				resp.sendRedirect("./jsp/loggedOut.jsp");
-//				return;
-//			}
-	
 			String username = req.getParameter("userid");
 			String oldPassword = req.getParameter("pswd");
 			String newPassword = req.getParameter("newpswd1");
@@ -809,7 +731,7 @@ public class MainServlet extends HttpServlet {
 		}		
 	}
 
-	private boolean loadUserStoredQna(String username, Map userQuestions, Map userAnswers) {
+	private boolean loadUserStoredQna(String username, Map<String, String> userQuestions, Map<String, String> userAnswers) {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
 		boolean retVal = false;
 		try {
