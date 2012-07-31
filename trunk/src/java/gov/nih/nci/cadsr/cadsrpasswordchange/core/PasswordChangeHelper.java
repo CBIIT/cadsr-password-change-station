@@ -1,9 +1,6 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
-import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 public class PasswordChangeHelper {
 
