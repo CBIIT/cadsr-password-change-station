@@ -6,7 +6,7 @@
 <html>
     <head>
 
-        <title>caDSR Password Change Station</title>
+        <title><%=Constants.RESET_TITLE %></title>
 
 		<div style="position:absolute;">
  			<a href="#skip">

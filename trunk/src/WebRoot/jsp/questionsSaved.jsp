@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title>caDSR Password Change Station - password changed</title>
+        <title><%=Constants.RESET_TITLE %> - questions saved</title>
         <html:base />
         <meta http-equiv="Content-Language" content="en-us">
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=WINDOWS-1252">
