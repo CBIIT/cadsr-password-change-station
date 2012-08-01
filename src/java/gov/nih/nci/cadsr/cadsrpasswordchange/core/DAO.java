@@ -139,7 +139,7 @@ public class DAO implements AbstractDao {
 			// can't use parameters with PreparedStatement and "alter user", create a single string
 	        // (must quote password to retain capitalization for verification function)
 	        //String alterUser = "alter user ? identified by \"?\" replace \"?\";
-			String alterUser = "alter user " + user + " identified by \"" + password + "\" replace " + "\"" + newPassword + "\"";
+			String alterUser = "alter user " + user + " identified by \"" + newPassword + "\" replace " + "\"" + password + "\"";
 	        stmt = conn.prepareStatement(alterUser);
 	        //stmt.setString(1, user);	//this is not an oversight, it just didn't work for some reason at runtime (missing user or role or invalid column index)
             //stmt.setString(2, password);
