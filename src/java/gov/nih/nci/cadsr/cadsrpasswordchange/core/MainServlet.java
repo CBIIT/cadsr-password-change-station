@@ -1,7 +1,9 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -20,7 +23,7 @@ public class MainServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(MainServlet.class.getName());
-	private static Connection connection = null;
+//	private static Connection connection = null;
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
 
@@ -29,12 +32,11 @@ public class MainServlet extends HttpServlet {
     	
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
-    		if(connection == null) {
+//    		if(connection == null) {
             	datasource = ConnectionUtil.getDS(DAO._jndiSystem);
             	dao = new DAO(datasource);
-        	
             	logger.info("Connected to database");
-    		}
+//    		}
         	isConnectionException = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -197,25 +199,28 @@ public class MainServlet extends HttpServlet {
 		}
 		catch (Throwable theException) {
 			logger.error(theException);
-		}		
-			
-			
-			
+		}
 	}
 
 	private void saveUserStoredQna(String username, Map<String, String> userQuestions, Map<String, String> userAnswers) {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
+		try {
 		qna.setUaName(username);
 		qna.setQuestion1((String)userQuestions.get(Constants.Q1));
-		qna.setAnswer1((String)userAnswers.get(Constants.A1));
+		qna.setAnswer1(CommonUtil.encode((String)userAnswers.get(Constants.A1)));
 		qna.setQuestion2((String)userQuestions.get(Constants.Q2));
-		qna.setAnswer2((String)userAnswers.get(Constants.A2));
+		qna.setAnswer2(CommonUtil.encode((String)userAnswers.get(Constants.A2)));
 		qna.setQuestion3((String)userQuestions.get(Constants.Q3));
-		qna.setAnswer3((String)userAnswers.get(Constants.A3));
+		qna.setAnswer3(CommonUtil.encode((String)userAnswers.get(Constants.A3)));
+		} catch (GeneralSecurityException e1) {
+			e1.printStackTrace();
+		}
 
 		try {
-			connect();			
+			connect();
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
+
+			connect();			
 			if(oldQna == null) {
 				dao.insert(qna);
 			} else {
@@ -324,14 +329,16 @@ public class MainServlet extends HttpServlet {
 		logger.info("doSaveQuestions");
 		
 		try {
-			HttpSession session = req.getSession(false);
-			if (session == null) {
-				logger.debug("null session");
-				// this shouldn't happen, make the user start over
-				resp.sendRedirect("./jsp/loggedOut.jsp");
-				return;
-			}
-
+			req.getSession().invalidate();	//invalid session everytime
+			HttpSession session = req.getSession(true);
+//			HttpSession session = req.getSession(false);
+//			if (session == null) {
+//				logger.debug("null session");
+//				// this shouldn't happen, make the user start over
+//				resp.sendRedirect("./jsp/loggedOut.jsp");
+//				return;
+//			}
+			
 			// Security enhancement
 			int paramCount = 0;
 			String question1 = req.getParameter("question1");
@@ -572,7 +579,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected boolean validateQuestions(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws Exception {
 
 		HttpSession session = req.getSession(false);
 		Map<?, ?> userQuestions = (HashMap<?, ?>) session.getAttribute(Constants.ALL_QUESTIONS);
@@ -586,10 +593,13 @@ public class MainServlet extends HttpServlet {
 		
 		boolean validated = false;
 		//get user's stored answer related to the question selected
-		String correctAnswer = (String)userAnswers.get(answerIndex);
-		if(correctAnswer != null && correctAnswer.equals(answer1)) {
-			validated = true;
-		}
+		String expectedAnswer = CommonUtil.decode((String)userAnswers.get(answerIndex));
+//		if(correctAnswer != null && correctAnswer.equals(answer1)) {
+//			validated = true;
+//		}
+		String providedAnswer = CommonUtil.pad(answer1, DAO.MAX_ANSWER_LENGTH);
+		
+		validated = expectedAnswer.equals(providedAnswer);
 		
 		return validated;
 	}

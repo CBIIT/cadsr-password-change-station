@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -13,7 +14,16 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 
 public class DAO implements AbstractDao {
-	
+
+	public static int MAX_ANSWER_LENGTH = 500;
+	private static OracleObfuscation x;
+	static {
+		try {
+			x = new OracleObfuscation("$_12345&");
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+	}
     public static String _jndiUser = "java:/jdbc/caDSR";
     public static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
 	private Connection conn;
@@ -24,7 +34,7 @@ public class DAO implements AbstractDao {
 
     protected static final String PK_CONDITION = "ua_name=?";
 
-    private static final String SQL_INSERT = "INSERT INTO SBREXT.USER_SECURITY_QUESTIONS (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
     private Logger logger = Logger.getLogger(DAO.class);
 
@@ -45,10 +55,11 @@ public class DAO implements AbstractDao {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
+	        if(conn == null) {
 			DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
 	        logger.debug("got DataSource for " + _jndiSystem);
 	        conn = ds.getConnection();
-
+	        }
 	        logger.debug("connected");
 			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
 			stmt.setString(1, username);
@@ -181,10 +192,12 @@ public class DAO implements AbstractDao {
 
             logger.debug("findByPrimaryKey sql : " + sql);
 
+	        if(conn == null) {
             DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
 	        logger.debug("got DataSource for " + _jndiSystem);
         	
 	        conn = ds.getConnection();
+	        }
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
 			rs = pstmt.executeQuery();
@@ -194,11 +207,11 @@ public class DAO implements AbstractDao {
 				q = new UserSecurityQuestion();
 				q.setUaName(rs.getString("ua_name"));
 				q.setQuestion1(rs.getString("question1"));
-				q.setAnswer1(rs.getString("answer1"));
+				q.setAnswer1(decode(rs.getString("answer1")));
 				q.setQuestion2(rs.getString("question2"));
-				q.setAnswer2(rs.getString("answer2"));
+				q.setAnswer2(decode(rs.getString("answer2")));
 				q.setQuestion3(rs.getString("question3"));
-				q.setAnswer3(rs.getString("answer3"));
+				q.setAnswer3(decode(rs.getString("answer3")));
 				//q.setDateModified(new Timestamp());
 			}
 			logger.debug("findByPrimaryKey: " + count + " q " + q); 			
@@ -226,11 +239,13 @@ public class DAO implements AbstractDao {
         try {
             sql = "select * from " + QUESTION_TABLE_NAME;
 
+	        if(conn == null) {
             DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
 	        logger.debug("got DataSource for " + _jndiSystem);
         	
 	        conn = ds.getConnection();
-        	
+	        }
+	        
             PreparedStatement pstmt = conn.prepareStatement( sql );
 			rs = pstmt.executeQuery();
 			UserSecurityQuestion q = null;
@@ -238,11 +253,11 @@ public class DAO implements AbstractDao {
 				q = new UserSecurityQuestion();
 				q.setUaName(rs.getString("ua_name"));
 				q.setQuestion1(rs.getString("question1"));
-				q.setAnswer1(rs.getString("answer1"));
+				q.setAnswer1(decode(rs.getString("answer1")));
 				q.setQuestion2(rs.getString("question2"));
-				q.setAnswer2(rs.getString("answer2"));
+				q.setAnswer2(decode(rs.getString("answer2")));
 				q.setQuestion3(rs.getString("question3"));
-				q.setAnswer3(rs.getString("answer3"));
+				q.setAnswer3(decode(rs.getString("answer3")));
 				//q.setDateModified(new Timestamp());
 				qList.add(q);
 			}
@@ -276,11 +291,13 @@ public class DAO implements AbstractDao {
         PreparedStatement stmt = null;
 
         try {
+	        if(conn == null) {
         	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
 	        logger.debug("got DataSource for " + _jndiSystem);
         	
 	        conn = ds.getConnection();
-            stmt = conn.prepareStatement( SQL_INSERT );
+	        }
+	        stmt = conn.prepareStatement( SQL_INSERT );
 
             if ( dto.getUaName() == null ) {
                 throw new Exception("Value of column 'ua_name' cannot be null");
@@ -297,9 +314,9 @@ public class DAO implements AbstractDao {
             if ( dto.getAnswer1() == null ) {
                 throw new Exception("Value of column 'answer1' cannot be null");
             }
-            checkMaxLength( "answer1", dto.getAnswer1(), 500 );
+//            checkMaxLength( "answer1", dto.getAnswer1(), 500 );
             stmt.setString( 3, dto.getAnswer1() );
-
+            
             if ( dto.getQuestion2() == null ) {
                 throw new Exception("Value of column 'question2' cannot be null");
             }
@@ -309,7 +326,7 @@ public class DAO implements AbstractDao {
             if ( dto.getAnswer2() == null ) {
                 throw new Exception("Value of column 'answer2' cannot be null");
             }
-            checkMaxLength( "answer2", dto.getAnswer2(), 500 );
+//            checkMaxLength( "answer2", dto.getAnswer2(), 500 );
             stmt.setString( 5, dto.getAnswer2() );
 
             if ( dto.getQuestion3() == null ) {
@@ -321,7 +338,7 @@ public class DAO implements AbstractDao {
             if ( dto.getAnswer3() == null ) {
                 throw new Exception("Value of column 'answer3' cannot be null");
             }
-            checkMaxLength( "answer3", dto.getAnswer3(), 500 );
+//            checkMaxLength( "answer3", dto.getAnswer3(), 500 );
             stmt.setString( 7, dto.getAnswer3() );
 
             if ( dto.getDateModified() == null ) {
@@ -365,7 +382,7 @@ public class DAO implements AbstractDao {
                 sb.append( ", " );
             }
 
-            checkMaxLength( "answer1", dto.getAnswer1(), 500 );
+//            checkMaxLength( "answer1", dto.getAnswer1(), 500 );
             sb.append( "answer1=?" );
             params.add( dto.getAnswer1());
         }
@@ -385,7 +402,7 @@ public class DAO implements AbstractDao {
                 sb.append( ", " );
             }
 
-            checkMaxLength( "answer2", dto.getAnswer2(), 500 );
+//            checkMaxLength( "answer2", dto.getAnswer2(), 500 );
             sb.append( "answer2=?" );
             params.add( dto.getAnswer2());
         }
@@ -405,7 +422,7 @@ public class DAO implements AbstractDao {
                 sb.append( ", " );
             }
 
-            checkMaxLength( "answer3", dto.getAnswer3(), 500 );
+//            checkMaxLength( "answer3", dto.getAnswer3(), 500 );
             sb.append( "answer3=?" );
             params.add( dto.getAnswer3());
         }
@@ -436,10 +453,12 @@ public class DAO implements AbstractDao {
 
         try {
             if (params != null && params.length > 0) {
+    	        if(conn == null) {
             	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
     	        logger.debug("got DataSource for " + _jndiSystem);
             	
     	        conn = ds.getConnection();
+    	        }
                 PreparedStatement pstmt = conn.prepareStatement( sql );
                 stmt = pstmt;
 
@@ -477,16 +496,23 @@ public class DAO implements AbstractDao {
         return "UPDATE " + QUESTION_TABLE_NAME + " SET " + setstring;
     }
     
-    
-    private UserSecurityQuestion fetch( ResultSet rs ) throws SQLException {
+    private String encode(String text) {
+    	return text;
+    }
+
+    private String decode(String text) {
+    	return text;
+    }
+
+    private UserSecurityQuestion fetch( ResultSet rs ) throws Exception {
         UserSecurityQuestion dto = new UserSecurityQuestion();
         dto.setUaName( rs.getString( 1 ));
         dto.setQuestion1( rs.getString( 2 ));
-        dto.setAnswer1( rs.getString( 3 ));
+        dto.setAnswer1( decode(rs.getString( 3 )));
         dto.setQuestion2( rs.getString( 4 ));
-        dto.setAnswer2( rs.getString( 5 ));
+        dto.setAnswer2( decode(rs.getString( 5 )));
         dto.setQuestion3( rs.getString( 6 ));
-        dto.setAnswer3( rs.getString( 7 ));
+        dto.setAnswer3( decode(rs.getString( 7 )));
         dto.setDateModified( rs.getDate( 8 ));
 
         return dto;

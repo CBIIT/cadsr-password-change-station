@@ -14,3 +14,7 @@ grant select, insert, update, delete on sbrext.user_security_questions to cadsrp
 /
 grant select on sbr.user_accounts_view to cadsrpasswordchange
 /
+grant execute on sbrext.encrypt to cadsrpasswordchange
+/
+grant execute on sbrext.decrypt to cadsrpasswordchange
+/
