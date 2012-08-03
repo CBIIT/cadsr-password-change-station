@@ -35,7 +35,7 @@
 		
 		<copy tofile="src/WebRoot/WEB-INF/Owasp.CsrfGuard.properties" filtering="false">
 		  <fileset file="src/conf/Owasp.CsrfGuard.properties" /> 
-		</copy>		
+		</copy>
 
 		<copy tofile="src/WebRoot/WEB-INF/classes/messages.properties" filtering="true">
 		  <fileset file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" /> 
@@ -102,6 +102,10 @@
 		
 		<copy tofile="src/WebRoot/WEB-INF/lib/commons-lang3-3.1.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/commons-lang3-3.1.jar" />
+		</copy>
+
+		<copy tofile="src/WebRoot/WEB-INF/lib/commons-codec-1.6.jar" filtering="false" verbose="true">
+		  <fileset file="src/lib/commons-codec-1.6.jar" />
 		</copy>
 
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 

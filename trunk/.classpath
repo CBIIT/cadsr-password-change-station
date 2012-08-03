@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="src/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="src/lib/standard-1.0.jar"/>
 	<classpathentry kind="lib" path="src/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="src/lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="output" path="src/WebRoot/WEB-INF/classes"/>
 </classpath>

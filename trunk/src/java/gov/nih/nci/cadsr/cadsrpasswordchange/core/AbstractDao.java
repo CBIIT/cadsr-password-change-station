@@ -13,8 +13,8 @@ public interface AbstractDao {
      * Finds a record.
      * @throws Exception 
      */
-    public UserSecurityQuestion findByUaName( String uaName ) throws Exception;
     
+    public UserSecurityQuestion findByUaName( String uaName ) throws Exception;
     /**
      * Finds records ordered by ua_name.
      * @throws Exception 

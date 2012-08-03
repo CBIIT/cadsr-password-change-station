@@ -272,9 +272,9 @@ public class TestPasswordReset {
 			for (UserSecurityQuestion e : results) {
 				System.out.println("User [" + e.getUaName() + "] updated ["
 						+ new Date() + "] question1 [" + e.getQuestion1()
-						+ "] answer1 [" + new String(x.decrypt(Hex.decodeHex(e.getAnswer1().toCharArray()))) + "]" + "] question2 [" + e.getQuestion2()
-						+ "] answer2 [" + new String(x.decrypt(Hex.decodeHex(e.getAnswer2().toCharArray()))) + "]" + "] question3 [" + e.getQuestion3()
-						+ "] answer3 [" + new String(x.decrypt(Hex.decodeHex(e.getAnswer3().toCharArray()))) + "]");
+						+ "] answer1 [" + CommonUtil.decode(e.getAnswer1()) + "]" + "] question2 [" + e.getQuestion2()
+						+ "] answer2 [" + CommonUtil.decode(e.getAnswer2()) + "]" + "] question3 [" + e.getQuestion3()
+						+ "] answer3 [" + CommonUtil.decode(e.getAnswer3()) + "]");
 			}
 		} else {
 			System.out.println("no question");
