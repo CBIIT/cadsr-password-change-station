@@ -5,29 +5,52 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.AbstractDao;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.DAO;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordChangeHelper;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.Result;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.ResultCode;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.*;
 
+import org.apache.commons.codec.binary.Hex;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestPasswordReset {
 
-//	private static Connection connection = null;
+	// private static Connection connection = null;
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
-    public static String ADMIN_ID = "cadsrpasswordchange";
-    public static String ADMIN_PASSWORD = "cadsrpasswordchange";
+	public static String ADMIN_ID = "cadsrpasswordchange";
+	public static String ADMIN_PASSWORD = "cadsrpasswordchange";
+	public static String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
+	private static OracleObfuscation x;
+	static {
+		try {
+			x = new OracleObfuscation("$_12345&");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	@Test
+	@Before
+	public void setUp() {
+	}
+
+	@After
+	public void tearDown() {
+	}
+	
+	// @Test
 	public void testBadUserNameInLogin() {
 		String username = "@hongj"; // bad
 		String password = "test123";
@@ -36,7 +59,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testBadPasswordInLogin() {
 		String username = "chongj";
 		String password = "@7esT123"; // bad
@@ -45,7 +68,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testBadUserIdInChangePassword() {
 		String username = "@hongj"; // bad
 		String oldPassword = "test123";
@@ -59,7 +82,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testBadOldPasswordInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "@7esT123"; // bad
@@ -73,7 +96,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testBadNewPasswordInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -87,7 +110,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testNewPasswordNotMatchingInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -101,7 +124,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testLoginIdNotMatchingInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -115,7 +138,7 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	// @Test
 	public void testNewRequestedPasswordNotMatchingInChangePassword() {
 		String username = "chongj";
 		String oldPassword = "test123";
@@ -129,12 +152,13 @@ public class TestPasswordReset {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	public static Connection getConnection(String username, String password) throws Exception {
+	public static Connection getConnection(String username, String password)
+			throws Exception {
 		String dbtype = "oracle";
 		String dbserver = "137.187.181.4";
 		String dbname = "DSRDEV";
-//		String username = "root";
-//		String password = "root";
+		// String username = "root";
+		// String password = "root";
 		int port = 1551;
 		ConnectionUtil cu = new ConnectionUtil();
 		cu.setUserName(username);
@@ -146,47 +170,180 @@ public class TestPasswordReset {
 		Connection conn = cu.getConnection();
 		return conn;
 	}
-	
-	@Test
-	public void testPasswordReset() {
-		String username = "GUEST";
-		String newPassword = "GUEST";
-		Result returned = null;
-        try {
-        	Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-        	dao = new DAO(conn);
-        	returned = dao.resetPassword(username, newPassword);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-        Result expected = new Result(ResultCode.PASSWORD_CHANGED);
-		assertEquals(expected.getResultCode(), returned.getResultCode());
-	}
 
-	@Test
+	// @Test
+	// public void testPasswordReset() {
+	// String username = "GUEST";
+	// String newPassword = "GUEST";
+	// Result returned = null;
+	// try {
+	// Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+	// dao = new DAO(conn);
+	// returned = dao.resetPassword(username, newPassword);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// Result expected = new Result(ResultCode.PASSWORD_CHANGED);
+	// assertEquals(expected.getResultCode(), returned.getResultCode());
+	// }
+
+	// @Test
 	public void testPasswordChange() {
 		String username = "GUEST";
 		String oldPassword = "GUEST";
 		String newPassword = "test@Lie777";
 		Result returned = null;
-        try {
-        	Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-        	dao = new DAO(conn);
-        	returned = dao.changePassword(username, oldPassword, newPassword);
+		try {
+			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			returned = dao.changePassword(username, oldPassword, newPassword);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        Result expected = new Result(ResultCode.PASSWORD_CHANGED);
+		Result expected = new Result(ResultCode.PASSWORD_CHANGED);
 		assertNotSame(expected.getResultCode(), returned.getResultCode());
 	}
 
-	/*
-	--asign profile to an existing user
-	alter user SCOTT profile "cadsr_user"
-	/
-	--expire the users password to force the user to change it:
-	alter user SCOTT password expire
-	/
-	*/
+	public byte[] toBytes(InputStream in) throws Exception {
+		OutputStream out = null;
+		// Read bytes, decrypt, and write them out.
+		int bufferSize = 2048;
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int nRead;
+		byte[] data = new byte[bufferSize];
 
+		while ((nRead = in.read(data, 0, data.length)) != -1) {
+		  buffer.write(data, 0, nRead);
+		}
+
+		buffer.flush();
+
+		return buffer.toByteArray();		
+	}
+
+	//@Test
+	public void testEncryptionDecryptionWithOracleFunctions() {
+		//TBD - this approach is currently not used, we had issue with "java.sql.SQLException: ORA-28232: invalid input length for obfuscation toolkit
+		//ORA-06512: at "SYS.DBMS_OBFUSCATION_TOOLKIT_FFI", line 84
+		//ORA-06512: at "SYS.DBMS_OBFUSCATION_TOOLKIT", line 255
+		//ORA-06512: at "SBREXT.DECRYPT", line 7"
+		//while invoking the database functions
+		String key = "1234567890123456";
+		String text = "testtest";	//data has to be in a multiples of 8 bytes
+		String encryptedText = null;
+		byte[] encryptedBytes = null;
+		String decryptedText = null;
+		byte[] decryptedBytes = null;
+		PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ByteArrayInputStream in = null;
+        try {
+        	Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			String sql = "select sbrext.encrypt('"+key+"', ?) from dual";
+			stmt = conn.prepareStatement(sql);
+			stmt.setBytes(1, text.getBytes());
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+//				encryptedText = rs.getString(1);
+				in = (ByteArrayInputStream) rs.getBinaryStream(1);
+				encryptedBytes = toBytes(in);
+			}
+			
+			String sql2 = "select sbrext.decrypt('"+key+"', ?) from dual";
+			stmt = conn.prepareStatement(sql2);
+			stmt.setBytes(1, encryptedBytes);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+//				decryptedText = rs.getString(1);
+				in = (ByteArrayInputStream) rs.getBinaryStream(1);
+				decryptedBytes = toBytes(in);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        assertEquals(text.getBytes(), decryptedBytes);
+	}
+
+	private void showUserSecurityQuestionList() throws Exception {
+		Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+		dao = new DAO(conn);
+		UserSecurityQuestion[] results = dao.findAll();
+		if (results.length > 0) {
+			for (UserSecurityQuestion e : results) {
+				System.out.println("User [" + e.getUaName() + "] updated ["
+						+ new Date() + "] question1 [" + e.getQuestion1()
+						+ "] answer1 [" + new String(x.decrypt(Hex.decodeHex(e.getAnswer1().toCharArray()))) + "]" + "] question2 [" + e.getQuestion2()
+						+ "] answer2 [" + new String(x.decrypt(Hex.decodeHex(e.getAnswer2().toCharArray()))) + "]" + "] question3 [" + e.getQuestion3()
+						+ "] answer3 [" + new String(x.decrypt(Hex.decodeHex(e.getAnswer3().toCharArray()))) + "]");
+			}
+		} else {
+			System.out.println("no question");
+		}
+	}
+
+	@Test
+	public void testUserSecurityQuestionSave() throws Exception {
+		UserSecurityQuestion qna = new UserSecurityQuestion();
+		qna.setUaName(USER_ID);
+		qna.setQuestion1("question 1 from dao");
+//		qna.setAnswer1(new String(Hex.encodeHex(x.encrypt((CommonUtil.pad("answer for question 1 of dao", DAO.MAX_ANSWER_LENGTH).getBytes())))));
+		qna.setAnswer1(CommonUtil.encode("answer for question 1 of dao"));
+		qna.setQuestion2("question 2 from dao");
+//		qna.setAnswer2(new String(Hex.encodeHex(x.encrypt((CommonUtil.pad("answer for question 2 of dao", DAO.MAX_ANSWER_LENGTH).getBytes())))));
+		qna.setAnswer2(CommonUtil.encode("answer for question 2 of dao"));
+		qna.setQuestion3("question 3 from dao");
+//		qna.setAnswer3(new String(Hex.encodeHex(x.encrypt((CommonUtil.pad("answer for question 3 of dao", DAO.MAX_ANSWER_LENGTH).getBytes())))));
+		qna.setAnswer3(CommonUtil.encode("answer for question 3 of dao"));
+		try {
+			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			UserSecurityQuestion qna1 = dao.findByPrimaryKey(USER_ID);
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			if(qna1 == null) {
+				dao.insert(qna);
+			} else {
+				dao.update(USER_ID, qna);
+			}
+			showUserSecurityQuestionList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+	
+	@Test
+	public void testUserSecurityQuestionUpdate() {
+		UserSecurityQuestion qna = new UserSecurityQuestion();
+		try {
+			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			qna = dao.findByUaName(USER_ID);
+			if(qna == null) {
+				throw new Exception("No questions found. Have it been setup?");
+			}
+			qna.setQuestion2("question 2 from dao *updated*");
+//			qna.setAnswer2(new String(Hex.encodeHex(x.encrypt((CommonUtil.pad("answer for question 2 of dao *updated*", DAO.MAX_ANSWER_LENGTH).getBytes())))));
+			qna.setAnswer2(CommonUtil.encode("answer for question 2 of dao"));
+			//dao.update(qna.getId(), qna);
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			dao.update(qna.getUaName(), qna);
+			showUserSecurityQuestionList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+	
+	//@Test
+	public void testEncryptionDecryptionWithJavaCrypto() {
+
+	}
+
+	/*
+	 * --asign profile to an existing user alter user SCOTT profile "cadsr_user"
+	 * / --expire the users password to force the user to change it: alter user
+	 * SCOTT password expire /
+	 */
 }
