@@ -15,15 +15,15 @@ import org.apache.log4j.Logger;
 
 public class DAO implements AbstractDao {
 
-	public static int MAX_ANSWER_LENGTH = 500;
-	private static OracleObfuscation x;
-	static {
-		try {
-			x = new OracleObfuscation("$_12345&");
-		} catch (GeneralSecurityException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static String SECRET_WORD = "$_12345&";
+//	private static OracleObfuscation x;
+//	static {
+//		try {
+//			x = new OracleObfuscation(SECRET_WORD);
+//		} catch (GeneralSecurityException e) {
+//			e.printStackTrace();
+//		}
+//	}
     public static String _jndiUser = "java:/jdbc/caDSR";
     public static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
 	private Connection conn;
