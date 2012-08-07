@@ -76,7 +76,7 @@ public class DAO implements AbstractDao {
         finally {
             if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
 	    }
 		
 		
@@ -166,7 +166,7 @@ public class DAO implements AbstractDao {
 				result = ConnectionUtil.decode(ex);
 		} finally {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
 		}
 
        logger.info("returning ResultCode " + result.getResultCode().toString());        
@@ -222,7 +222,7 @@ public class DAO implements AbstractDao {
         finally {
             if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
         }
         return q;
     }
@@ -268,7 +268,7 @@ public class DAO implements AbstractDao {
         finally {
             if (rs != null) try { rs.close(); } catch (SQLException e) {}
             if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
         }
         return toArray(qList);
     }
@@ -353,7 +353,7 @@ public class DAO implements AbstractDao {
         }
         finally {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
         }
     }
 
@@ -477,7 +477,7 @@ public class DAO implements AbstractDao {
         }
         finally {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
         }
     }
     
@@ -558,9 +558,53 @@ public class DAO implements AbstractDao {
 					result = ConnectionUtil.decode(ex);
 		} finally {
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
 		}
 
        return result;
-	}	
+	}
+	
+	/**
+	 * This should be moved into a common utility class.
+	 * @param toolName
+	 * @param property
+	 * @return
+	 */
+	public String getToolProperty(String toolName, String property) {
+
+		logger.info("accessing sbrext.tool_options_view_ext table, toolName '" + toolName + "', property '" + property + "'");
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String value = null;
+		
+		try {
+	        if(conn == null) {				
+	        	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+	        	
+		        conn = ds.getConnection();
+	        }
+	        logger.debug("connected");
+
+			stmt = conn.prepareStatement("select value from sbrext.tool_options_view_ext where Tool_name = ? and Property = ?");
+			stmt.setString(1, toolName);
+			stmt.setString(2, property);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				//assuming all user Ids are unique/no duplicate
+				value = rs.getString("value");
+				logger.info ("getToolProperty: toolName '" + toolName + "', property '" + property + "' value '" + value + "'");			
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.debug(ex.getMessage());
+		} finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+		}
+
+       return value;
+	}
 }
