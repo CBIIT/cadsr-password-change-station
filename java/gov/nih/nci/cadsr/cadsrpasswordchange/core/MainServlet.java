@@ -595,11 +595,13 @@ public class MainServlet extends HttpServlet {
 		
 		boolean validated = false;
 		//get user's stored answer related to the question selected
-		String expectedAnswer = CommonUtil.decode((String)userAnswers.get(answerIndex));
-//		if(correctAnswer != null && correctAnswer.equals(answer1)) {
+		String expectedAnswer = (String)userAnswers.get(answerIndex);	//md5 approach
+//		String expectedAnswer = CommonUtil.decode((String)userAnswers.get(answerIndex));	//encryption approach
+//		if(correctAnswer != null && correctAnswer.equals(answer1)) {	//plain text
 //			validated = true;
 //		}
-		String providedAnswer = CommonUtil.pad(answer1, DAO.MAX_ANSWER_LENGTH);
+//		String providedAnswer = CommonUtil.pad(answer1, DAO.MAX_ANSWER_LENGTH);		//encryption approach
+		String providedAnswer = CommonUtil.encode(answer1);
 		
 		validated = expectedAnswer.equals(providedAnswer);
 		
