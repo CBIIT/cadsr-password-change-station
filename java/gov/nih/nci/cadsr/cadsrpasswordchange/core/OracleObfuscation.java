@@ -87,7 +87,7 @@ public class OracleObfuscation {
 																	// random
 																	// pick for
 																	// testing
-		String text = CommonUtil.pad("BB", DAO.MAX_ANSWER_LENGTH);	//args[0];
+		String text = CommonUtil.pad("BB", Constants.MAX_ANSWER_LENGTH);	//args[0];
 
 		byte[] encrypted = x.encrypt(text.getBytes());
 		String encoded = new String(Hex.encodeHex(encrypted));

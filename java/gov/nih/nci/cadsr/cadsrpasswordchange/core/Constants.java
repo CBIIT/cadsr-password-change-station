@@ -2,6 +2,7 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 public class Constants {
 
+	public static int MAX_ANSWER_LENGTH = 500;
 	public static final String TOOL_NAME = "PasswordChangeStation";
 	public static final String HELP_LINK_PROPERTY = "HELP.ROOT";
 	public static final String LOGO_LINK_PROPERTY = "LOGO.ROOT";
