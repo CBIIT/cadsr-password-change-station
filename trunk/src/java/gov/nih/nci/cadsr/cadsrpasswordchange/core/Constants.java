@@ -2,6 +2,9 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 public class Constants {
 
+	public static final String TOOL_NAME = "PasswordChangeStation";
+	public static final String HELP_LINK_PROPERTY = "HELP.ROOT";
+	public static final String LOGO_LINK_PROPERTY = "LOGO.ROOT";
 	public static final String APP_URI = "/cadsrpasswordchange";
 	public static final String SERVLET_URI = "";	//jboss
 	public static final String LANDING_URL = APP_URI + "/jsp/login.jsp";

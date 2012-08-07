@@ -47,5 +47,7 @@ public interface AbstractDao {
 	public Result changePassword(String user, String password, String newPassword);
 
 	public Result resetPassword(String username, String newPassword);
+	
+	public String getToolProperty(String toolName, String property);
 
 }
