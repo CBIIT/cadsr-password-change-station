@@ -212,7 +212,7 @@ public class DAO implements AbstractDao {
 				q.setAnswer2(decode(rs.getString("answer2")));
 				q.setQuestion3(rs.getString("question3"));
 				q.setAnswer3(decode(rs.getString("answer3")));
-				//q.setDateModified(new Timestamp());
+				q.setDateModified(rs.getDate("date_modified"));
 			}
 			logger.debug("findByPrimaryKey: " + count + " q " + q); 			
         }
@@ -258,7 +258,7 @@ public class DAO implements AbstractDao {
 				q.setAnswer2(decode(rs.getString("answer2")));
 				q.setQuestion3(rs.getString("question3"));
 				q.setAnswer3(decode(rs.getString("answer3")));
-				//q.setDateModified(new Timestamp());
+				q.setDateModified(rs.getDate("date_modified"));
 				qList.add(q);
 			}
         }
