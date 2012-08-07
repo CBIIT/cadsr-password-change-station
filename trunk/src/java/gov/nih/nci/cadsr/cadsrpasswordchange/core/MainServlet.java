@@ -202,7 +202,7 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-	private void saveUserStoredQna(String username, Map<String, String> userQuestions, Map<String, String> userAnswers) {
+	private void saveUserStoredQna(String username, Map<String, String> userQuestions, Map<String, String> userAnswers) throws Exception {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
 		try {
 		qna.setUaName(username);
@@ -218,13 +218,15 @@ public class MainServlet extends HttpServlet {
 
 		try {
 			connect();
+			DAO dao = new DAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 
 			connect();			
+			DAO dao1 = new DAO(datasource);
 			if(oldQna == null) {
-				dao.insert(qna);
+				dao1.insert(qna);
 			} else {
-				dao.update(username, qna);
+				dao1.update(username, qna);
 			}
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
@@ -738,6 +740,7 @@ public class MainServlet extends HttpServlet {
 		boolean retVal = false;
 		try {
 			connect();
+			DAO dao = new DAO(datasource);
 			qna = dao.findByUaName(username);
 			if(qna != null) {
 				userQuestions.put(Constants.Q1, qna.getQuestion1());
@@ -767,7 +770,7 @@ public class MainServlet extends HttpServlet {
 			
 			PropertyHelper.setHELP_LINK(HELP_LINK);
 			PropertyHelper.setLOGO_LINK(LOGO_LINK);
-			disconnect();
+//			disconnect();
 		}
 	}
 	

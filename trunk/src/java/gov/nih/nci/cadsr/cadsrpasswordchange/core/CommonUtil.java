@@ -34,17 +34,18 @@ public class CommonUtil {
 		return retVal;
 	}
 		
-	public static String encode(String text) throws GeneralSecurityException {
+	public static String encode(String text) throws Exception {
 		if(text != null) {
-			text = new String(Hex.encodeHex(x.encrypt(CommonUtil.pad(text, DAO.MAX_ANSWER_LENGTH).getBytes())));
+//			text = new String(Hex.encodeHex(x.encrypt(CommonUtil.pad(text, DAO.MAX_ANSWER_LENGTH).getBytes())));
+			text = AeSimpleMD5.MD5(text);		
 		}
     	return text;
     }
 
-	public static String decode(String text) throws GeneralSecurityException, DecoderException {
-		if(text != null) {
-			text = new String(x.decrypt(Hex.decodeHex(text.toCharArray())));
-		}
+	public static String decode(String text) {
+//		if(text != null) {
+//			text = new String(x.decrypt(Hex.decodeHex(text.toCharArray())));
+//		}
     	return text;
     }
 	
