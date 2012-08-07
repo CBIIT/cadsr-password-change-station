@@ -18,3 +18,5 @@ grant execute on sbrext.encrypt to cadsrpasswordchange
 /
 grant execute on sbrext.decrypt to cadsrpasswordchange
 /
+grant select on sbrext.tool_options_view_ext to cadsrpasswordchange
+/
