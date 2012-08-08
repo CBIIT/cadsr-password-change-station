@@ -372,6 +372,20 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 			
+			//DoS attack using string length overflow
+			if(!CommonUtil.truncate(answer1, Constants.MAX_ANSWER_LENGTH).equals(answer1) ||
+					!CommonUtil.truncate(answer2, Constants.MAX_ANSWER_LENGTH).equals(answer2) ||
+					!CommonUtil.truncate(answer3, Constants.MAX_ANSWER_LENGTH).equals(answer3) ||
+					!CommonUtil.truncate(question1, Constants.MAX_ANSWER_LENGTH).equals(question1) ||
+					!CommonUtil.truncate(question2, Constants.MAX_ANSWER_LENGTH).equals(question2) ||
+					!CommonUtil.truncate(question3, Constants.MAX_ANSWER_LENGTH).equals(question3)) {
+				logger.debug("invalid answer(s) length during questions/answers save");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.112"));
+//				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+				return;
+			}
+			
 			connect();
 			DAO loginDAO = new DAO(datasource);
 			userBean = loginDAO.checkValidUser(username, password);

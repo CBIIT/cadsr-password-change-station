@@ -6,6 +6,7 @@ import java.security.GeneralSecurityException;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 
 public class CommonUtil {
 
@@ -66,4 +67,8 @@ public class CommonUtil {
 		return sw.toString();
 
 	}
+	
+	public static String truncate(String text, int maxLength) {
+		 return StringUtils.abbreviate(text, maxLength);		
+	}	
 }
