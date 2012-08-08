@@ -395,7 +395,11 @@ public class MainServlet extends HttpServlet {
 			logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
 			if (!userBean.isLoggedIn()) {
 				logger.debug("auth failed during questions/answers save");
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+				if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+				} else {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+				}
 				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 				return;
@@ -709,11 +713,11 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 
-			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
-			}					
+//			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
+//				resp.sendRedirect("./jsp/changePassword.jsp");
+//				return;
+//			}					
 
 			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid"));
@@ -721,8 +725,8 @@ public class MainServlet extends HttpServlet {
 				resp.sendRedirect("./jsp/changePassword.jsp");				
 				return;
 			}
-
 			if(Messages.getString("PasswordChangeHelper.8").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				
 				logger.debug("new password mis-typed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.8"));
 				resp.sendRedirect("./jsp/changePassword.jsp");
