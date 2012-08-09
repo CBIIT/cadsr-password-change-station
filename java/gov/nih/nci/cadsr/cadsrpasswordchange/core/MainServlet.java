@@ -804,9 +804,8 @@ public class MainServlet extends HttpServlet {
 			PropertyHelper.setHELP_LINK(HELP_LINK);
 			PropertyHelper.setLOGO_LINK(LOGO_LINK);
 			
-			//just for test
-			PropertyHelper.setEMAIL_ID(dao.getToolProperty(Constants.TOOL_NAME, "TEST.EMAIL.ID"));
-			PropertyHelper.setEMAIL_PWD(dao.getToolProperty(Constants.TOOL_NAME, "TEST.EMAIL.PWD"));
+			PropertyHelper.setEMAIL_ID(dao.getToolProperty("SENTINEL", "EMAIL.HOST.USER"));
+			PropertyHelper.setEMAIL_PWD(dao.getToolProperty("SENTINEL", "EMAIL.HOST.PSWD"));
 			
 //			disconnect();
 		}
@@ -833,7 +832,7 @@ public class MainServlet extends HttpServlet {
 		}
 		
 		 // define the job and tie it to our HelloJob class
-		JobDetail job = newJob(MyJob.class)
+		JobDetail job = newJob(NotificationJob.class)
 			    .withIdentity("job1", "group1")
 			    .build();
 		
