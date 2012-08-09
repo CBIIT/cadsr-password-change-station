@@ -100,6 +100,10 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<listener-class>org.owasp.csrfguard.CsrfGuardListener</listener-class>
 	</listener>
 
+	<listener>
+	  	<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+	</listener>
+	
 	<filter>
 		<filter-name>CSRFGuard</filter-name>
 		<filter-class>org.owasp.csrfguard.CsrfGuardFilter</filter-class>
