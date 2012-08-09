@@ -1,5 +1,18 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import static org.quartz.TriggerBuilder.*;
+import static org.quartz.SimpleScheduleBuilder.*;
+import static org.quartz.DateBuilder.*;
+import static org.quartz.JobBuilder.newJob;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
+import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.JobDetail;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
@@ -809,5 +822,38 @@ public class MainServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		logger.debug("init(ServletConfig config)");
+		
+		SchedulerFactory sf = new StdSchedulerFactory();
+		Scheduler sched = null;
+		try {
+			sched = sf.getScheduler();
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		 // define the job and tie it to our HelloJob class
+		JobDetail job = newJob(MyJob.class)
+			    .withIdentity("job1", "group1")
+			    .build();
+		
+        // Trigger the job to run now, and then repeat every 40 seconds
+        Trigger trigger = newTrigger()
+            .withIdentity("trigger1", "group1")
+            .startNow()
+            .withSchedule(simpleSchedule()
+                    .withIntervalInSeconds(40)
+                    .repeatForever())            
+            .build();
+        
+        // Tell quartz to schedule the job using our trigger
+        try {
+			sched.scheduleJob(job, trigger);
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
+		
 }
