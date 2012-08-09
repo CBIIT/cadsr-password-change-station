@@ -631,18 +631,18 @@ public class DAO implements AbstractDao {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement("SELECT electronic_mail_address, username, account_status, expiry_date, lock_date FROM dba_users a, sbr.user_accounts_view b WHERE a.username = b.ua_name and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?");
-//			stmt = conn.prepareStatement("SELECT username, account_status, expiry_date, lock_date FROM dba_users where EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?");
+//			stmt = conn.prepareStatement("SELECT electronic_mail_address, username, account_status, expiry_date, lock_date FROM dba_users a, sbr.user_accounts_view b WHERE a.username = b.ua_name and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?");
+			stmt = conn.prepareStatement("SELECT username, account_status, expiry_date, lock_date FROM dba_users where EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?");
 //			stmt = conn.prepareStatement("SELECT electronic_mail_address FROM sbr.user_accounts_view");
 			stmt.setInt(1, withinDays);
 			rs = stmt.executeQuery();
 			if(rs.next()) {
 				User user = new User();
-				user.setElectronic_mail_address(rs.getString("electronic_mail_address"));
-				user.setUsername(rs.getString("username"));
-				user.setAccount_status(rs.getString("account_status"));
-				user.setExpiry_date(rs.getString("expiry_date"));
-				user.setLock_date(rs.getString("lock_date"));
+//				user.setElectronic_mail_address(rs.getString("electronic_mail_address"));
+//				user.setUsername(rs.getString("username"));
+//				user.setAccount_status(rs.getString("account_status"));
+//				user.setExpiry_date(rs.getString("expiry_date"));
+//				user.setLock_date(rs.getString("lock_date"));
 				logger.info ("getRecipientList: mail_address '" + user.getElectronic_mail_address() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiry_date() + "'");
 				arr.add(user);
 			}
