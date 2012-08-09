@@ -1,5 +1,7 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import java.util.List;
+
 public interface AbstractDao {
 
     /**
@@ -49,5 +51,7 @@ public interface AbstractDao {
 	public Result resetPassword(String username, String newPassword);
 	
 	public String getToolProperty(String toolName, String property);
+	
+	public List<User> getPasswordExpiringList(int withinDays);
 
 }

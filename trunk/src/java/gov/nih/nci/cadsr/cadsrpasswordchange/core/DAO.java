@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -606,5 +607,54 @@ public class DAO implements AbstractDao {
 		}
 
        return value;
+	}
+
+	/**
+	 * Method to retrieve all the user's with password which are expiring within the days specified in the passed in number.
+	 * @param withinDays
+	 * @return
+	 */
+	public List<User> getPasswordExpiringList(int withinDays) {
+
+		logger.info("getRecipientList entered");
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String value = null;
+		List arr = new ArrayList();
+		try {
+	        if(conn == null) {				
+	        	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+	        	
+		        conn = ds.getConnection();
+	        }
+	        logger.debug("connected");
+
+			stmt = conn.prepareStatement("SELECT electronic_mail_address, username, account_status, expiry_date, lock_date FROM dba_users a, sbr.user_accounts_view b WHERE a.username = b.ua_name and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?");
+//			stmt = conn.prepareStatement("SELECT username, account_status, expiry_date, lock_date FROM dba_users where EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?");
+//			stmt = conn.prepareStatement("SELECT electronic_mail_address FROM sbr.user_accounts_view");
+			stmt.setInt(1, withinDays);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				User user = new User();
+				user.setElectronic_mail_address(rs.getString("electronic_mail_address"));
+				user.setUsername(rs.getString("username"));
+				user.setAccount_status(rs.getString("account_status"));
+				user.setExpiry_date(rs.getString("expiry_date"));
+				user.setLock_date(rs.getString("lock_date"));
+				logger.info ("getRecipientList: mail_address '" + user.getElectronic_mail_address() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiry_date() + "'");
+				arr.add(user);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.debug(ex.getMessage());
+		} finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
+        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+		}
+
+       return arr;
 	}
 }
