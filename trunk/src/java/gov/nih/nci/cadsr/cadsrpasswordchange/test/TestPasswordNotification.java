@@ -30,8 +30,8 @@ public class TestPasswordNotification {
 
 	private static DataSource datasource = null;
 	private static AbstractDao dao;
-	public static String ADMIN_ID = "sbrext";
-	public static String ADMIN_PASSWORD = "jjuser";
+	public static String ADMIN_ID = "cadsrpasswordchange";
+	public static String ADMIN_PASSWORD = "cadsrpasswordchange";
 	public static String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
