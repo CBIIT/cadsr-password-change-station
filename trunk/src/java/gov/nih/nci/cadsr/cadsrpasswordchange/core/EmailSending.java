@@ -39,8 +39,8 @@ public class EmailSending {
 		props.put("mail.smtp.auth", "false");
 		// props.put("mail.smtp.debug", "true");
 		props.put("mail.smtp.socketFactory.port", emailPortNumber);
-		props.put("mail.smtp.socketFactory.class",
-				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.ssl.enable", "false");
+//		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 	}
 
