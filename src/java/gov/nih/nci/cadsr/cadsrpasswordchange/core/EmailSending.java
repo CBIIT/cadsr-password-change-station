@@ -34,7 +34,7 @@ public class EmailSending {
 		props.put("mail.smtp.user", senderEmailId);
 		props.put("mail.smtp.host", emailHostName);
 		props.put("mail.smtp.port", emailPortNumber);
-		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.starttls.enable", "false");
 //		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.auth", "false");
 		// props.put("mail.smtp.debug", "true");
