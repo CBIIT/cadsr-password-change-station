@@ -83,5 +83,17 @@ SELECT mail_address, username, account_status, expiry_date, lock_date FROM dba_u
 desc user_accounts;
 
 select * from user_accounts-- where mail_address is null;
+
+create profile "cadsr_test_2_days" limit
+password_life_time 2
+password_grace_time 0
+password_reuse_max 24
+password_reuse_time 1
+failed_login_attempts 6
+password_lock_time 60/1440
+password_verify_function password_verify_casdr_user
+/
+alter user TEST112 profile "cadsr_test_2_days"
+/
 	 */
 }
