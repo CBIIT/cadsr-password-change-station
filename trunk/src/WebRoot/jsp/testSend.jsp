@@ -25,7 +25,7 @@
 
 <%
 EmailSending ms = new EmailSending("warzeld@mail.nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f",
-		"mailfwd.nih.gov", "465", "James.Tan@nih.gov", "caDSR Password Expiration Notice", "Hello");
+		"mailfwd.nih.gov", "25", "James.Tan@nih.gov", "caDSR Password Expiration Notice", "Hello");
 ms.send();
 %>
 		<center> Email sent. </center>
