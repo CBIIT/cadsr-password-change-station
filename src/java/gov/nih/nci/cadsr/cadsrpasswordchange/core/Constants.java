@@ -47,4 +47,19 @@ public class Constants {
 "    </ul><tt>" +
 "    </tt></td>" +
 "</table>";
+	
+    /**
+     * The name of the datasource url.
+     */
+    public static final String _DSURL = "DSurl";
+    
+    /**
+     * The name of the default datasource access account.
+     */
+    public static final String _DSUSER = "DSusername";
+    
+    /**
+     * The password for the default datasource access account.
+     */
+    public static final String _DSPSWD = "DSpassword";	
 }
