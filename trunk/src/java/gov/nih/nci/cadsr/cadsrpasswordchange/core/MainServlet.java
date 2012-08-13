@@ -758,7 +758,7 @@ public class MainServlet extends HttpServlet {
 			if (!userBean.isLoggedIn()) {
 				String errorMessage1 = userBean.getResult().getMessage();
 				logger.debug ("errorMessage " + errorMessage1);
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage1);
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 				resp.sendRedirect("./jsp/changePassword.jsp");
 			}
 			connect();
