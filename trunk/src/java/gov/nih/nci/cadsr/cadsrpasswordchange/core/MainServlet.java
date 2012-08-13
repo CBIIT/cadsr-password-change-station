@@ -747,6 +747,20 @@ public class MainServlet extends HttpServlet {
 			}
 
 			logger.debug("username " + username);
+			UserBean userBean = null;			
+			connect();
+			DAO loginDAO = new DAO(datasource);
+			userBean = loginDAO.checkValidUser(username, oldPassword);
+			disconnect();
+			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
+			logger.debug ("validUser " + userBean.isLoggedIn());
+			logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
+			if (!userBean.isLoggedIn()) {
+				String errorMessage1 = userBean.getResult().getMessage();
+				logger.debug ("errorMessage " + errorMessage1);
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage1);
+				resp.sendRedirect("./jsp/changePassword.jsp");
+			}
 			connect();
 			DAO changeDAO = new DAO(datasource);
 			Result passwordChangeResult = changeDAO.changePassword(username, oldPassword, newPassword);

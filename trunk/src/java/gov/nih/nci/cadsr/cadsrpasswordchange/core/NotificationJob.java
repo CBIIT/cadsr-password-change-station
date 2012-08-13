@@ -7,10 +7,10 @@ import org.quartz.*;
 @DisallowConcurrentExecution
 public class NotificationJob implements Job {
 
-	private static Logger log = Logger.getLogger(NotificationJob.class.getName());
-	private static NotifyPassword np = new NotifyPassword();
+//	private static Logger log = Logger.getLogger(NotificationJob.class.getName());
+//	private static NotifyPassword np = new NotifyPassword();
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		np.doAll();
+//		np.doAll("config.xml");
 	}
 }
