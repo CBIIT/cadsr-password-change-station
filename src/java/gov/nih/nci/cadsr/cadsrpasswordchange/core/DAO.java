@@ -50,7 +50,10 @@ public class DAO implements AbstractDao {
 	public boolean checkValidUser(String username) throws Exception {
 		boolean retVal = false;
 		
-		logger.info ("1 checkValidUser user: " + username);
+		logger.info ("checkValidUser(username) user: " + username);
+		if(username == null) {
+			throw new Exception("Username can not be NULL or empty.");
+		}
 				
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -63,12 +66,11 @@ public class DAO implements AbstractDao {
 	        }
 	        logger.debug("connected");
 			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
-			stmt.setString(1, username);
+			stmt.setString(1, username.toUpperCase());
 			rs = stmt.executeQuery();
 			if(rs.next()) {
 				//assuming all user Ids are unique/no duplicate
 				retVal = true;
-				logger.info ("5 checkValidUser user: " + username);				
 			}
 	    } catch (Exception e) {
 	    	e.printStackTrace();
@@ -109,7 +111,6 @@ public class DAO implements AbstractDao {
 			if (result.getResultCode() == ResultCode.EXPIRED) {
 				userBean.setLoggedIn(true);
 				logger.debug("considering expired password acceptable login");
-				
 			}
 			
 			userBean.setResult(result);
@@ -126,7 +127,6 @@ public class DAO implements AbstractDao {
         logger.info("returning isLoggedIn " + userBean.isLoggedIn());        
         return userBean;
 	}
-	
 
 	public Result changePassword(String user, String password, String newPassword) {
 
