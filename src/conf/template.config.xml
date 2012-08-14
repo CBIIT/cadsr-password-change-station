@@ -11,5 +11,6 @@
         <entry key="DSurl">@database.url@</entry>
         <entry key="DSusername">@database.user@</entry>
         <entry key="DSpassword">@database.password@</entry>
+        <entry key="notifactionDays">14,7,4</entry>
 
 </properties>

@@ -61,5 +61,11 @@ public class Constants {
     /**
      * The password for the default datasource access account.
      */
-    public static final String _DSPSWD = "DSpassword";	
+    public static final String _DSPSWD = "DSpassword";
+    
+    //=== notifications status flags
+    public static final String SUCCESS = "sucess";
+    public static final String FAILED = "failed";
+    
+    
 }

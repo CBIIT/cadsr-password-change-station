@@ -13,6 +13,7 @@ import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -60,8 +61,8 @@ public class TestPasswordNotification {
 		Connection conn = cu.getConnection();
 		return conn;
 	}
-	
-	@Test
+
+//	@Test
 	public void testUserListWithPasswordExpiring() {
 		Connection conn = null;
 		List u = null;
@@ -69,6 +70,40 @@ public class TestPasswordNotification {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
 			dao = new DAO(conn);
 			u = dao.getPasswordExpiringList(60);
+			showUserList(u);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+	
+	private void showUserList(List<User> results) throws Exception {
+		Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+		dao = new DAO(conn);
+		if (results.size() > 0) {
+			for (User e : results) {
+				System.out.println("User [" + e.getUsername() + "] password updated ["
+						+ e.getPasswordChangedDate() + "] email [" + e.getElectronicMailAddress()
+						+ "] expiry date [" + e.getExpiryDate() + "]");
+			}
+		} else {
+			System.out.println("no user");
+		}
+	}
+
+	@Test
+	public void testUserStatusUpdateWithPasswordExpiring() {
+		Connection conn = null;
+		List<User>l = new ArrayList();
+		try {
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			User user = new User();
+			user.setUsername(USER_ID);
+			user.setDelivery_status(Constants.SUCCESS);
+			dao.updateQueue(user);
+			l.add(user);
+			showUserList(l);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -1,19 +1,26 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import java.sql.Date;
+
 public class User {
 
-	private String electronic_mail_address;
+	private String electronicMailAddress;
 	private String username;
-	private String account_status;
-	private String expiry_date;
-	private String lock_date;
-
-	public String getElectronic_mail_address() {
-		return electronic_mail_address;
+	private String accountStatus;
+	private Date expiryDate;
+	private Date lockDate;
+	private Date passwordChangedDate;
+	private Date dateModified;
+	private int attemptedCount;
+	private String processing_type;
+	private String delivery_status;
+	
+	public String getElectronicMailAddress() {
+		return electronicMailAddress;
 	}
 
-	public void setElectronic_mail_address(String electronic_mail_address) {
-		this.electronic_mail_address = electronic_mail_address;
+	public void setElectronicMailAddress(String electronic_mail_address) {
+		this.electronicMailAddress = electronic_mail_address;
 	}
 
 	public String getUsername() {
@@ -24,28 +31,68 @@ public class User {
 		this.username = username;
 	}
 
-	public String getAccount_status() {
-		return account_status;
+	public String getAccountStatus() {
+		return accountStatus;
 	}
 
-	public void setAccount_status(String account_status) {
-		this.account_status = account_status;
+	public void setAccountStatus(String account_status) {
+		this.accountStatus = account_status;
 	}
 
-	public String getExpiry_date() {
-		return expiry_date;
+	public Date getExpiryDate() {
+		return expiryDate;
 	}
 
-	public void setExpiry_date(String expiry_date) {
-		this.expiry_date = expiry_date;
+	public void setExpiryDate(Date expiry_date) {
+		this.expiryDate = expiry_date;
 	}
 
-	public String getLock_date() {
-		return lock_date;
+	public Date getLockDate() {
+		return lockDate;
 	}
 
-	public void setLock_date(String lock_date) {
-		this.lock_date = lock_date;
+	public void setLockDate(Date lock_date) {
+		this.lockDate = lock_date;
+	}
+
+	public Date getPasswordChangedDate() {
+		return passwordChangedDate;
+	}
+
+	public void setPasswordChangedDate(Date password_changed_date) {
+		this.passwordChangedDate = password_changed_date;
+	}
+
+	public Date getDateModified() {
+		return dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
+	}
+
+	public int getAttemptedCount() {
+		return attemptedCount;
+	}
+
+	public void setAttemptedCount(int attemptedCount) {
+		this.attemptedCount = attemptedCount;
+	}
+
+	public String getProcessing_type() {
+		return processing_type;
+	}
+
+	public void setProcessing_type(String processing_type) {
+		this.processing_type = processing_type;
+	}
+
+	public String getDelivery_status() {
+		return delivery_status;
+	}
+
+	public void setDelivery_status(String delivery_status) {
+		this.delivery_status = delivery_status;
 	}
 
 }
