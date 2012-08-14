@@ -54,4 +54,6 @@ public interface AbstractDao {
 	
 	public List<User> getPasswordExpiringList(int withinDays);
 
+	public void updateQueue(User user) throws Exception;
+
 }

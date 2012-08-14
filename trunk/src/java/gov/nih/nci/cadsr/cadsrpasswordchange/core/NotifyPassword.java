@@ -108,11 +108,16 @@ public class NotifyPassword {
 				List u4 = null;
 				dao = new DAO(_conn);
 				u14 = dao.getPasswordExpiringList(14);
-				u7 = dao.getPasswordExpiringList(7);
-				u4 = dao.getPasswordExpiringList(4);
-
+				updateQueue(u14);
+				sendEmail(u14, 14);
 				updateStatus(handleEmailNotification(u14));
+				u7 = dao.getPasswordExpiringList(7);
+				updateQueue(u7);
+				sendEmail(u14, 7);
 				updateStatus(handleEmailNotification(u7));
+				u4 = dao.getPasswordExpiringList(4);
+				updateQueue(u4);
+				sendEmail(u14, 4);
 				updateStatus(handleEmailNotification(u4));
 			} else {
 				_logger.info("-Not able to send, email not setup in the database?-");
@@ -130,6 +135,15 @@ public class NotifyPassword {
         }
 	}
 
+	/**
+	 * Add or update the queue with the outgoing email.
+	 * 
+	 * @return success/failed list
+	 */
+	private void updateQueue(List<User>users) {
+
+	}
+	
 	/**
 	 * Send the email.
 	 * 
@@ -149,9 +163,10 @@ public class NotifyPassword {
 
 	}
 	
-	private void sendEmail(String emailAddress, int daysLeft) {
+	private void sendEmail(List<User> users, int daysLeft) {
 		emailSubject = "caDSR Password Expiration Notice";
 		emailBody = "Your password is about to expire in " + daysLeft + ". Please login to Password Change Station or call NCI Helpdesk to change your password.";
+		String emailAddress = "";
 		EmailSending ms = new EmailSending("warzeld@mail.nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f",
 				"mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
 	}
