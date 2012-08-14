@@ -20,7 +20,3 @@ grant select on sbr.user_accounts_view to cadsrpasswordchange
 --/
 grant select on sbrext.tool_options_view_ext to cadsrpasswordchange
 /
-grant select, insert, update, delete on sbrext.PASSWORD_NOTIFICATION to cadsrpasswordchange
-/
-grant select on dba_users to cadsrpasswordchange
-/
