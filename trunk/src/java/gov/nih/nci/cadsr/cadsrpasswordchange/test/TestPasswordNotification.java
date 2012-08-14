@@ -101,6 +101,7 @@ public class TestPasswordNotification {
 			User user = new User();
 			user.setUsername(USER_ID);
 			user.setDelivery_status(Constants.SUCCESS);
+			user.setDateModified(new java.sql.Date(new Date().getTime()));
 			dao.updateQueue(user);
 			l.add(user);
 			showUserList(l);

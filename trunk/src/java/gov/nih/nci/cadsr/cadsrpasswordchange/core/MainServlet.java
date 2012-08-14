@@ -666,6 +666,8 @@ public class MainServlet extends HttpServlet {
 			logger.debug("changing request: " + question1 + "=" + answer1 + " " +question2 + "=" + answer2 + " " +question3 + "=" + answer3);
 		
 			logger.debug("username " + username);
+			//check locked state here
+
 			connect();
 			DAO changeDAO = new DAO(datasource);
 			Result passwordChangeResult = changeDAO.resetPassword(username, newPassword);
