@@ -120,6 +120,10 @@
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>
 
+        <copy tofile="${dist.dir}/bin/config.xml" filtering="true">
+            <fileset file="src/conf/template.config.xml" />
+        </copy>
+
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountName@" value="${systemAccountName}"/>
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
 	</target>
