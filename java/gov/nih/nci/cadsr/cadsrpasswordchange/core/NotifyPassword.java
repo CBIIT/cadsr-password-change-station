@@ -3,6 +3,9 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,6 +25,8 @@ public class NotifyPassword {
     private String              _dsurl;
     private String              _user;
     private String              _pswd;
+    private String              _processingNotificationDays;
+    
 
     /**
      * Open a single simple connection to the database. No pooling is necessary.
@@ -93,36 +98,21 @@ public class NotifyPassword {
         _pswd = _propList.getProperty(Constants._DSPSWD);
         if (_pswd == null)
             _logger.error("Missing " + Constants._DSPSWD + " in " + propFile_);
+
+        _processingNotificationDays = _propList.getProperty(Constants.NOTIFICATION_TYPE);
+        if (_processingNotificationDays == null)
+            _logger.error("Missing " + Constants.NOTIFICATION_TYPE + " in " + propFile_);
     }
     
 	public void doAll(String propFile_) throws Exception {
         loadProp(propFile_);
-        open();
 		
 		try {
-			if (PropertyHelper.getEMAIL_ID() != null
-					&& PropertyHelper.getEMAIL_PWD() != null) {
-				_logger.debug("quartz=." + count++ + ".");
-				List u14 = null;
-				List u7 = null;
-				List u4 = null;
-				dao = new DAO(_conn);
-				u14 = dao.getPasswordExpiringList(14);
-				updateQueue(u14);
-				sendEmail(u14, 14);
-				updateStatus(handleEmailNotification(u14));
-				u7 = dao.getPasswordExpiringList(7);
-				updateQueue(u7);
-				sendEmail(u14, 7);
-				updateStatus(handleEmailNotification(u7));
-				u4 = dao.getPasswordExpiringList(4);
-				updateQueue(u4);
-				sendEmail(u14, 4);
-				updateStatus(handleEmailNotification(u4));
-			} else {
-				_logger.info("-Not able to send, email not setup in the database?-");
+			List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
+			for (String t : types) {
+				process(Integer.valueOf(t).intValue());
 			}
-
+			_logger.debug("quartz=." + count++ + ".");
 		} catch (Exception e) {
 			//e.printStackTrace();
 			_logger.error(CommonUtil.toString(e));
@@ -135,42 +125,81 @@ public class NotifyPassword {
         }
 	}
 
+	private void process(int days) throws Exception {
+		List<User> recipients = null;
+        open();
+		dao = new DAO(_conn);
+		recipients = dao.getPasswordExpiringList(days);
+		if (recipients != null && recipients.size() > 0) {
+			for (User u : recipients) {
+				if(u != null) {
+					_logger.info("Processing user [" + u.getUsername() + "] attempted [" + u.getAttemptedCount() + "] type [" + u.getProcessingType() + "] password updated ["
+							+ u.getPasswordChangedDate() + "] email [" + u.getElectronicMailAddress()
+							+ "] expiry date [" + u.getExpiryDate() + "]");
+					saveIntoQueue(u, days);
+					if(sendEmail(u, days)) {
+						updateStatus(u, Constants.SUCCESS, days);
+					} else {
+						updateStatus(u, Constants.FAILED, days);
+					}
+				}
+			}
+		} else {
+			_logger.debug("No user for notification of " + days + " found");
+		}
+	}
+
 	/**
 	 * Add or update the queue with the outgoing email.
 	 * 
 	 * @return success/failed list
+	 * @throws Exception 
 	 */
-	private void updateQueue(List<User>users) {
-
+	private void saveIntoQueue(User user, int daysLeft) throws Exception {
+        open();
+		dao = new DAO(_conn);
+		dao.updateQueue(user);
 	}
 	
+	private boolean sendEmail(User user, int daysLeft) throws Exception {
+		emailSubject = "caDSR Password Expiration Notice";
+		emailBody = "Your password is about to expire in " + daysLeft + ". Please login to Password Change Station or call NCI Helpdesk to change your password.";
+		String emailAddress = user.getElectronicMailAddress();
+		EmailSending ms = new EmailSending("do-no-reply@mail.nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
+		return ms.send();
+	}
+
 	/**
-	 * Send the email.
-	 * 
-	 * @return success/failed list
+	 * Method to make sure the latest processing details is reflected with the passed user.
+	 * @param user
+	 * @return
+	 * @throws Exception 
 	 */
-	private List<User> handleEmailNotification(List<User>users) {
-
-		return null;
+	private User refresh(User user) throws Exception {
+        open();
+		dao = new DAO(_conn);
+		return dao.loadQueue(user);
 	}
-	
+
 	/**
 	 * Update the status of the delivery, sent or not sent.
 	 * 
 	 * @param users list of users affected
+	 * @throws Exception 
 	 */
-	private void updateStatus(List<User>users) {
+	private void updateStatus(User user, String status, int daysLeft) throws Exception {
+		user = refresh(user);
+		int currentCount = user.getAttemptedCount();
+		String lastType = user.getProcessingType()!=null?user.getProcessingType():" ";
+        open();
+		dao = new DAO(_conn);
+		user.setAttemptedCount(currentCount++);
+		user.setProcessingType(lastType + daysLeft);
+		user.setDeliveryStatus(status);
+		user.setDateModified(new java.sql.Date(new Date().getTime()));
+		dao.updateQueue(user);
+	}
 
-	}
-	
-	private void sendEmail(List<User> users, int daysLeft) {
-		emailSubject = "caDSR Password Expiration Notice";
-		emailBody = "Your password is about to expire in " + daysLeft + ". Please login to Password Change Station or call NCI Helpdesk to change your password.";
-		String emailAddress = "";
-		EmailSending ms = new EmailSending("warzeld@mail.nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f",
-				"mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
-	}
-	
 	public static void main(String[] args) {
         if (args.length != 1)
         {
