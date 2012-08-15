@@ -78,8 +78,6 @@ public class TestPasswordNotification {
 	}
 	
 	private void showUserList(List<User> results) throws Exception {
-		Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-		dao = new DAO(conn);
 		if (results.size() > 0) {
 			for (User e : results) {
 				if(e != null) {
@@ -103,7 +101,7 @@ public class TestPasswordNotification {
 			User user = new User();
 			user.setUsername(USER_ID);
 			user.setAttemptedCount(1);
-			user.setProcessingType(7);
+			user.setProcessingType(user.getProcessingType()!=null?user.getProcessingType():" " + "14");
 			user.setDeliveryStatus(Constants.SUCCESS);
 			user.setDateModified(new java.sql.Date(new Date().getTime()));
 			dao.updateQueue(user);
@@ -137,7 +135,7 @@ public class TestPasswordNotification {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testRemoveUserQueueForPasswordExpiring() {
 		Connection conn = null;
 		List<User>l = new ArrayList();

@@ -46,8 +46,9 @@ public class EmailSending {
 
 	SecurityManager security = System.getSecurityManager();
 
-	public void send() throws Exception {
-
+	public boolean send() throws Exception {
+		boolean ret = false;
+		
 		Authenticator auth = new SMTPAuthenticator();
 		Session session = Session.getInstance(props, auth);
 		// session.setDebug(true);
@@ -58,6 +59,10 @@ public class EmailSending {
 		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 				recieverEmailId));
 		Transport.send(msg);
+		
+		ret = true;
+		
+		return ret;
 	}
 
 	private class SMTPAuthenticator extends javax.mail.Authenticator {

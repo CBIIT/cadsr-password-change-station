@@ -12,7 +12,7 @@ public class User {
 	private Date passwordChangedDate;
 	private Date dateModified;
 	private int attemptedCount;
-	private long processingType;
+	private String processingType;
 	private String deliveryStatus;
 
 	public String getElectronicMailAddress() {
@@ -79,11 +79,11 @@ public class User {
 		this.attemptedCount = attemptedCount;
 	}
 
-	public long getProcessingType() {
+	public String getProcessingType() {
 		return processingType;
 	}
 
-	public void setProcessingType(long processing_type) {
+	public void setProcessingType(String processing_type) {
 		this.processingType = processing_type;
 	}
 
