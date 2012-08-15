@@ -703,7 +703,7 @@ public class DAO implements AbstractDao {
 			if(found) {
 				user.setDateModified(rs.getDate("DATE_MODIFIED"));
 				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
-				user.setProcessingType(rs.getLong("PROCESSING_TYPE"));
+				user.setProcessingType(rs.getString("PROCESSING_TYPE"));
 				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
 				ret = user;
 			}
@@ -763,7 +763,7 @@ public class DAO implements AbstractDao {
 			stmt.setString(1, user.getUsername().toUpperCase());
 			stmt.setDate(2, user.getDateModified());
 			stmt.setInt(3, user.getAttemptedCount());
-			stmt.setLong(4, user.getProcessingType());
+			stmt.setString(4, user.getProcessingType());
 			stmt.setString(5, user.getDeliveryStatus());
 			stmt.executeUpdate();
 		} catch (Exception ex) {
