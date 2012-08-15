@@ -12,9 +12,9 @@ public class User {
 	private Date passwordChangedDate;
 	private Date dateModified;
 	private int attemptedCount;
-	private String processing_type;
-	private String delivery_status;
-	
+	private long processingType;
+	private String deliveryStatus;
+
 	public String getElectronicMailAddress() {
 		return electronicMailAddress;
 	}
@@ -79,20 +79,20 @@ public class User {
 		this.attemptedCount = attemptedCount;
 	}
 
-	public String getProcessing_type() {
-		return processing_type;
+	public long getProcessingType() {
+		return processingType;
 	}
 
-	public void setProcessing_type(String processing_type) {
-		this.processing_type = processing_type;
+	public void setProcessingType(long processing_type) {
+		this.processingType = processing_type;
 	}
 
-	public String getDelivery_status() {
-		return delivery_status;
+	public String getDeliveryStatus() {
+		return deliveryStatus;
 	}
 
-	public void setDelivery_status(String delivery_status) {
-		this.delivery_status = delivery_status;
+	public void setDeliveryStatus(String delivery_status) {
+		this.deliveryStatus = delivery_status;
 	}
 
 }

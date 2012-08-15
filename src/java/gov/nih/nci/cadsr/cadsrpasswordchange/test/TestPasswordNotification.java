@@ -82,9 +82,11 @@ public class TestPasswordNotification {
 		dao = new DAO(conn);
 		if (results.size() > 0) {
 			for (User e : results) {
-				System.out.println("User [" + e.getUsername() + "] password updated ["
+				if(e != null) {
+				System.out.println("User [" + e.getUsername() + "] attempted [" + e.getAttemptedCount() + "] type [" + e.getProcessingType() + "] password updated ["
 						+ e.getPasswordChangedDate() + "] email [" + e.getElectronicMailAddress()
 						+ "] expiry date [" + e.getExpiryDate() + "]");
+				}
 			}
 		} else {
 			System.out.println("no user");
@@ -100,7 +102,9 @@ public class TestPasswordNotification {
 			dao = new DAO(conn);
 			User user = new User();
 			user.setUsername(USER_ID);
-			user.setDelivery_status(Constants.SUCCESS);
+			user.setAttemptedCount(1);
+			user.setProcessingType(7);
+			user.setDeliveryStatus(Constants.SUCCESS);
 			user.setDateModified(new java.sql.Date(new Date().getTime()));
 			dao.updateQueue(user);
 			l.add(user);
@@ -111,7 +115,47 @@ public class TestPasswordNotification {
 		}
 	}
 	
-	/*
+	@Test
+	public void testLoadUserQueueForPasswordExpiring() {
+		Connection conn = null;
+		List<User>l = new ArrayList();
+		try {
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			User user = new User();
+			user.setUsername(USER_ID);
+			user = dao.loadQueue(user);
+			if(user != null) {
+				l.add(user);
+				showUserList(l);
+			} else {
+				System.out.println("User " + USER_ID + " does not exists in queue");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+	
+	@Test
+	public void testRemoveUserQueueForPasswordExpiring() {
+		Connection conn = null;
+		List<User>l = new ArrayList();
+		try {
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			User user = new User();
+			user.setUsername(USER_ID);
+			dao.removeQueue(user);
+			l.add(user);
+			showUserList(l);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+
+/*
 select username, expiry_date, account_status from dba_users where expiry_date < sysdate+2 and expiry_date < sysdate+60 and account_status IN ( 'OPEN', 'EXPIRED(GRACE)' ) order by account_status, expiry_date, username
 
 SELECT mail_address, username, account_status, expiry_date, lock_date FROM dba_users a, user_accounts b WHERE a.username = b.ua_name and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+60;
@@ -131,5 +175,5 @@ password_verify_function password_verify_casdr_user
 /
 alter user TEST112 profile "cadsr_test_2_days"
 /
-	 */
+*/
 }

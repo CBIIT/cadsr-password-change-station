@@ -16,15 +16,6 @@ import org.apache.log4j.Logger;
 
 public class DAO implements AbstractDao {
 
-//	public static String SECRET_WORD = "$_12345&";
-//	private static OracleObfuscation x;
-//	static {
-//		try {
-//			x = new OracleObfuscation(SECRET_WORD);
-//		} catch (GeneralSecurityException e) {
-//			e.printStackTrace();
-//		}
-//	}
     public static String _jndiUser = "java:/jdbc/caDSR";
     public static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
 	private Connection conn;
@@ -73,13 +64,12 @@ public class DAO implements AbstractDao {
 				retVal = true;
 			}
 	    } catch (Exception e) {
-	    	e.printStackTrace();
 	    	logger.debug(e.getMessage());
         }
         finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 	    }
 		
 		
@@ -166,8 +156,8 @@ public class DAO implements AbstractDao {
 			else
 				result = ConnectionUtil.decode(ex);
 		} finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
        logger.info("returning ResultCode " + result.getResultCode().toString());        
@@ -221,9 +211,9 @@ public class DAO implements AbstractDao {
             throw new Exception( e );
         }
         finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return q;
     }
@@ -267,9 +257,9 @@ public class DAO implements AbstractDao {
             throw new Exception( e );
         }
         finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) {} }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return toArray(qList);
     }
@@ -353,8 +343,8 @@ public class DAO implements AbstractDao {
             throw new Exception( e );
         }
         finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
     }
 
@@ -477,8 +467,8 @@ public class DAO implements AbstractDao {
             throw new Exception( e );
         }
         finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
     }
     
@@ -551,15 +541,14 @@ public class DAO implements AbstractDao {
 			stmt.execute();
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.debug(ex.getMessage());
 				if (isConnectionException)
 					result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
 				else
 					result = ConnectionUtil.decode(ex);
 		} finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
        return result;
@@ -598,12 +587,11 @@ public class DAO implements AbstractDao {
 				logger.info ("getToolProperty: toolName '" + toolName + "', property '" + property + "' value '" + value + "'");			
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.debug(ex.getMessage());
 		} finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
        return value;
@@ -666,25 +654,135 @@ public class DAO implements AbstractDao {
 				arr.add(user);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.debug(ex.getMessage());
 		} finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
        return arr;
 	}
 
 	/**
-	 * Method to update a password expiration queue specific to a user.
+	 * Method to populate queue information specific to a user for password expiring notification.
+	 * @param user
+	 * @return populated user if found; otherwise null is returned
+	 * @throws Exception
+	 */
+	public User loadQueue(User user) throws Exception {
+
+		logger.info("getQueue entered");
+		if(user == null || user.getUsername() == null) {
+			throw new Exception("User or user's name can not be NULL or empty.");
+		}
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String value = null;
+		List arr = new ArrayList();
+		User ret = null;
+		try {
+	        if(conn == null) {				
+	        	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+	        	
+		        conn = ds.getConnection();
+	        }
+	        logger.debug("connected");
+
+			stmt = conn.prepareStatement("select * from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
+			stmt.setString(1, user.getUsername().toUpperCase());
+			rs = stmt.executeQuery();
+			boolean found = false;
+			if(rs.next()) {
+				//assuming all user Ids are unique/no duplicate
+				found = true;
+				logger.debug ("getQueue user found: " + user.getUsername());
+			}
+			if(found) {
+				user.setDateModified(rs.getDate("DATE_MODIFIED"));
+				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
+				user.setProcessingType(rs.getLong("PROCESSING_TYPE"));
+				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
+				ret = user;
+			}
+		} catch (Exception ex) {
+			logger.debug(ex.getMessage());
+		} finally {
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
+		}
+		
+		return ret;
+	}
+
+	/**
+	 * Method to insert/update a password expiration queue specific to a user.
 	 * @param user the user (to be) notified
 	 * @throws Exception 
 	 */
 	public void updateQueue(User user) throws Exception {
 
 		logger.info("updateQueue entered");
+		if(user == null || user.getUsername() == null) {
+			throw new Exception("User or user's name can not be NULL or empty.");
+		}
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String value = null;
+		List arr = new ArrayList();
+		try {
+	        if(conn == null) {
+	        	DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+		        conn = ds.getConnection();
+	        }
+	        logger.debug("connected");
+
+			stmt = conn.prepareStatement("select * from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
+			stmt.setString(1, user.getUsername().toUpperCase());
+			rs = stmt.executeQuery();
+			boolean found = false;
+			if(rs.next()) {
+				//assuming all user Ids are unique/no duplicate
+				found = true;
+				logger.debug ("updateQueue user found: " + user.getUsername());
+			}
+			if(!found) {
+				logger.debug ("updateQueue user not found: " + user.getUsername());
+				stmt = conn.prepareStatement("insert into SBREXT.PASSWORD_NOTIFICATION (ua_name, date_modified, attempted_count, processing_type, delivery_status) values(?,?,?,?,?)");
+				logger.debug ("updateQueue new queue");
+			} else {
+				logger.debug ("updateQueue user found: " + user.getUsername());
+				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set ua_name = ?, date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ?");
+				logger.debug ("updateQueue existing queue");
+			}
+			stmt.setString(1, user.getUsername().toUpperCase());
+			stmt.setDate(2, user.getDateModified());
+			stmt.setInt(3, user.getAttemptedCount());
+			stmt.setLong(4, user.getProcessingType());
+			stmt.setString(5, user.getDeliveryStatus());
+			stmt.executeUpdate();
+		} catch (Exception ex) {
+			logger.debug(ex.getMessage());
+		} finally {
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
+		}
+	}
+
+	/**
+	 * Method to delete a queue specific to a user.
+	 * @param user the user (to be) notified
+	 * @throws Exception 
+	 */
+	public void removeQueue(User user) throws Exception {
+
+		logger.info("removeQueue entered");
 		if(user == null || user.getUsername() == null) {
 			throw new Exception("User or user's name can not be NULL or empty.");
 		}
@@ -702,35 +800,19 @@ public class DAO implements AbstractDao {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement("select * from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
+			stmt = conn.prepareStatement("delete from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
-			boolean found = false;
-			if(rs.next()) {
-				//assuming all user Ids are unique/no duplicate
-				found = true;
-				logger.debug ("updateQueue user found: " + user.getUsername());
-			}
-			if(!found) {
-				stmt = conn.prepareStatement("insert into SBREXT.PASSWORD_NOTIFICATION (ua_name, date_modified, attempted_count, processing_type, delivery_status) values(?,?,?,?,?)");
-				logger.debug ("updateQueue new queue");
-			} else {
-				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set ua_name = ?, date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ?");
-				logger.debug ("updateQueue existing queue");
-			}
-			stmt.setString(1, user.getUsername().toUpperCase());
-			stmt.setDate(2, user.getDateModified());
-			stmt.setInt(3, user.getAttemptedCount());
-			stmt.setString(4, user.getProcessing_type());
-			stmt.setString(5, user.getDelivery_status());
+			logger.debug ("removeQueue user : " + user.getUsername() + " queue removed");
+			stmt = conn.prepareStatement("alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"");
 			stmt.executeUpdate();
+			logger.debug ("updateQueue cadsr_user profile reapplied");
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.debug(ex.getMessage());
 		} finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); }
-        	if (conn != null) try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 	}
 	
