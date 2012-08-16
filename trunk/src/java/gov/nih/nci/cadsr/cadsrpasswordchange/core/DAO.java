@@ -125,7 +125,7 @@ public class DAO implements AbstractDao {
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
 		PreparedStatement stmt = null;
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
-		
+
 		try {
 	        if(conn == null) {
 				DataSource ds = ConnectionUtil.getDS(DAO._jndiSystem);
