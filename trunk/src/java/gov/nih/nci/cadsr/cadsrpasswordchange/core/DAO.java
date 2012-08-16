@@ -46,7 +46,7 @@ public class DAO implements AbstractDao {
 			throw new Exception("Username can not be NULL or empty.");
 		}
 				
-		Connection conn = null;
+//		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -87,7 +87,7 @@ public class DAO implements AbstractDao {
 
 		UserBean userBean = new UserBean(username);
 		
-		Connection conn = null;
+//		Connection conn = null;
 		try {
 	        conn = datasource.getConnection(username, password);
 	        logger.debug("connected");	        
