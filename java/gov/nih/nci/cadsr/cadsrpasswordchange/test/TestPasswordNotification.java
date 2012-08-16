@@ -103,7 +103,7 @@ public class TestPasswordNotification {
 			User user = new User();
 			user.setUsername(USER_ID);
 			user.setAttemptedCount(1);
-			user.setProcessingType(user.getProcessingType()!=null?user.getProcessingType():" " + "14");
+			user.setProcessingType("14");
 			user.setDeliveryStatus(Constants.SUCCESS);
 			user.setDateModified(new java.sql.Date(new Date().getTime()));
 			dao.updateQueue(user);
