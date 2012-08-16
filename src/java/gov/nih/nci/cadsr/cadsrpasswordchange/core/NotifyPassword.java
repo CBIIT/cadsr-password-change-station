@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 public class NotifyPassword {
 
-	private static Logger _logger = Logger.getLogger(NotifyPassword.class);
+	private static org.apache.log4j.Logger _logger = org.apache.log4j.Logger.getLogger(NotifyPassword.class);
 	private static int count = 0;
 	private static AbstractDao dao;
 	public static String emailSubject;
