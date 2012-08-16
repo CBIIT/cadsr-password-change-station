@@ -27,6 +27,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+
 public class TestPasswordNotification {
 
 	private static DataSource datasource = null;
@@ -91,7 +93,7 @@ public class TestPasswordNotification {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testUserStatusUpdateWithPasswordExpiring() {
 		Connection conn = null;
 		List<User>l = new ArrayList();
@@ -113,7 +115,7 @@ public class TestPasswordNotification {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testLoadUserQueueForPasswordExpiring() {
 		Connection conn = null;
 		List<User>l = new ArrayList();
@@ -153,6 +155,35 @@ public class TestPasswordNotification {
 		}
 	}
 
+	@Test
+	public void testLastPasswordChangedDateInDaysFromNow() {
+		Connection conn = null;
+		List<User>l = new ArrayList();
+		try {
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new DAO(conn);
+			User user = new User();
+			user.setUsername(USER_ID);
+//			user.setUsername("TEST113");
+			user = dao.loadQueue(user);
+			l.add(user);
+			showUserList(l);
+			Date startDate = user.getPasswordChangedDate();
+			if(startDate == null) {
+				System.out.println("The password change has never been changed or password change date is empty");
+			} else {
+				Calendar start = Calendar.getInstance();
+				start.setTime(startDate);
+//				System.out.println("It has been " + CommonUtil.daysBetween(start, Calendar.getInstance()) + " day(s) since the password change");
+				System.out.println("It has been " + CommonUtil.calculateDays(startDate, new Date()) + " day(s) since the password change");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+	
+	
 /*
 select username, expiry_date, account_status from dba_users where expiry_date < sysdate+2 and expiry_date < sysdate+60 and account_status IN ( 'OPEN', 'EXPIRED(GRACE)' ) order by account_status, expiry_date, username
 
@@ -172,6 +203,10 @@ password_lock_time 60/1440
 password_verify_function password_verify_casdr_user
 /
 alter user TEST112 profile "cadsr_test_2_days"
+/
+alter user TEST113 profile "cadsr_test_2_days"
+/
+alter user TEST113 identified by Te$t1235 password expire;
 /
 */
 }
