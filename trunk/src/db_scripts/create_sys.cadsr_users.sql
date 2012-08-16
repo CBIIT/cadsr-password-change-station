@@ -1,12 +1,11 @@
---login is as sys dba
+--login is as sys
 
 DROP VIEW CADSR_USERS;
-
+ 
 CREATE OR REPLACE FORCE VIEW CADSR_USERS
 (
    USERNAME,
    USER_ID,
-   PASSWORD,
    ACCOUNT_STATUS,
    LOCK_DATE,
    EXPIRY_DATE,
@@ -21,7 +20,6 @@ CREATE OR REPLACE FORCE VIEW CADSR_USERS
 AS
    SELECT d."USERNAME",
           d."USER_ID",
-          d."PASSWORD",
           d."ACCOUNT_STATUS",
           d."LOCK_DATE",
           d."EXPIRY_DATE",
@@ -34,10 +32,9 @@ AS
           u.ptime
      FROM sys.user$ u, sys.dba_users d
     WHERE d.username = u.name AND d.default_tablespace = 'USERS';
-
-
+ 
 DROP SYNONYM CADSRPASSWORDCHANGE.CADSR_USERS;
-
+ 
 CREATE OR REPLACE SYNONYM CADSRPASSWORDCHANGE.CADSR_USERS FOR CADSR_USERS;
-
+ 
 GRANT SELECT ON CADSR_USERS TO CADSRPASSWORDCHANGE;
