@@ -3,6 +3,8 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -18,9 +20,10 @@ public class CommonUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Pad the String up to the specified length passed.
+	 * 
 	 * @param text
 	 * @param length
 	 * @return
@@ -28,28 +31,30 @@ public class CommonUtil {
 	public static String pad(String text, int length) {
 		String retVal = text;
 
-		if(text != null) {
-			retVal = String.format("%"+ (length - 4)+"s", text).replace(' ', '*');	//final string must be a multiples of 8 bytes
+		if (text != null) {
+			retVal = String.format("%" + (length - 4) + "s", text).replace(' ',
+					'*'); // final string must be a multiples of 8 bytes
 		}
-		
+
 		return retVal;
 	}
-		
+
 	public static String encode(String text) throws Exception {
-		if(text != null) {
-//			text = new String(Hex.encodeHex(x.encrypt(CommonUtil.pad(text, DAO.MAX_ANSWER_LENGTH).getBytes())));
-			text = AeSimpleMD5.MD5(text);		
+		if (text != null) {
+			// text = new String(Hex.encodeHex(x.encrypt(CommonUtil.pad(text,
+			// DAO.MAX_ANSWER_LENGTH).getBytes())));
+			text = AeSimpleMD5.MD5(text);
 		}
-    	return text;
-    }
+		return text;
+	}
 
 	public static String decode(String text) {
-//		if(text != null) {
-//			text = new String(x.decrypt(Hex.decodeHex(text.toCharArray())));
-//		}
-    	return text;
-    }
-	
+		// if(text != null) {
+		// text = new String(x.decrypt(Hex.decodeHex(text.toCharArray())));
+		// }
+		return text;
+	}
+
 	public static String toString(Throwable theException) {
 		// Create a StringWriter and a PrintWriter both of these object
 		// will be used to convert the data in the stack trace to a string.
@@ -67,8 +72,26 @@ public class CommonUtil {
 		return sw.toString();
 
 	}
-	
+
 	public static String truncate(String text, int maxLength) {
-		 return StringUtils.abbreviate(text, maxLength);		
-	}	
+		return StringUtils.abbreviate(text, maxLength);
+	}
+
+	/*
+	 * Get the time difference between start and end dates (in days).
+	 * @reference http://stackoverflow.com/questions/3491679/how-to-calculate-difference-between-two-dates-using-java
+	 */
+//	public static long daysBetween(Calendar startDate, Calendar endDate) {
+//		Calendar date = (Calendar) startDate.clone();
+//		long daysBetween = 0;
+//		while (date.before(endDate)) {
+//			date.add(Calendar.DAY_OF_MONTH, 1);
+//			daysBetween++;
+//		}
+//		return daysBetween;
+//	}
+	public static long calculateDays(Date dateEarly, Date dateLater) {  
+		   return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);  
+	}
+	
 }
