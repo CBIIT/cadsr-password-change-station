@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -139,11 +140,15 @@ public class NotifyPassword {
 					_logger.info("Processing user [" + u.getUsername() + "] attempted [" + u.getAttemptedCount() + "] type [" + u.getProcessingType() + "] password updated ["
 							+ u.getPasswordChangedDate() + "] email [" + u.getElectronicMailAddress()
 							+ "] expiry date [" + u.getExpiryDate() + "]");
-					saveIntoQueue(u, days);
-					if(sendEmail(u, days)) {
-						updateStatus(u, Constants.SUCCESS, days);
+					if(isNotificationValid(u, days, size, index)) {
+						saveIntoQueue(u, days);
+						if(sendEmail(u, days)) {
+							updateStatus(u, Constants.SUCCESS, days);
+						} else {
+							updateStatus(u, Constants.FAILED, days);
+						}
 					} else {
-						updateStatus(u, Constants.FAILED, days);
+						_logger.info("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
 					}
 				}
 			}
@@ -161,6 +166,7 @@ public class NotifyPassword {
 	private void saveIntoQueue(User user, int daysLeft) throws Exception {
         open();
 		dao = new DAO(_conn);
+		user.setProcessingType(String.valueOf(daysLeft));
 		dao.updateQueue(user);
 	}
 	
@@ -193,26 +199,57 @@ public class NotifyPassword {
 	private void updateStatus(User user, String status, int daysLeft) throws Exception {
 		user = refresh(user);
 		int currentCount = user.getAttemptedCount();
-		String lastType = user.getProcessingType()!=null?user.getProcessingType():" ";
         open();
 		dao = new DAO(_conn);
 		user.setAttemptedCount(currentCount++);
-		user.setProcessingType(lastType + daysLeft);
+		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
 		user.setDateModified(new java.sql.Date(new Date().getTime()));
 		dao.updateQueue(user);
 	}
 
-	private boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) {
+	private boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) throws Exception {
 		boolean ret = false;
 		boolean daysCondition = false;
 		boolean deliveryStatus = false;
-		
-		if(totalNotificationTypes != currentNotificationIndex) {
-			
+		String processedType = null;
+		int attempted = -1;
+		String status = null;
+		long daysSincePasswordChange = -1;
+
+		Date startDate = user.getPasswordChangedDate();
+		if(startDate == null) {
+			throw new Exception("Not able to determine what is the password changed date or password change date is empty");
+		}
+		daysSincePasswordChange = CommonUtil.calculateDays(startDate, new Date());
+
+		if(daysSincePasswordChange != 0) {	//not recently changed
+			if(totalNotificationTypes != currentNotificationIndex) {
+					//not the last type - send only once
+					if(user.getDeliveryStatus() == null && user.getProcessingType() == null) {
+						//has not been processed at all
+						ret = true;
+					} else 
+					if(user.getDeliveryStatus().equals(Constants.FAILED)) {
+						//processed but failed
+						ret = true;
+					} else 
+					if(!user.getProcessingType().equals(String.valueOf(daysLeft))) {
+						//it is different type of notification
+						ret = true;
+					}
+			} else {
+				//the last notification type
+				Calendar start = Calendar.getInstance();
+				start.setTime(startDate);
+				_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change");
+				if(daysSincePasswordChange >= 1) {
+					ret = true;
+				}
+			}
 		}
 		
-		return false;
+		return ret;
 	}
 	
 	public static void main(String[] args) {
