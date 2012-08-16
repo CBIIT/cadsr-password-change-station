@@ -695,7 +695,7 @@ public class DAO implements AbstractDao {
 
 			stmt = conn.prepareStatement(
 					"select" +
-					"   electronic_mail_address," +
+					"   c.electronic_mail_address," +
 					"   a.USERNAME," +
 					"   a.ACCOUNT_STATUS," +
 					"   a.EXPIRY_DATE," +
@@ -706,7 +706,8 @@ public class DAO implements AbstractDao {
 					"   b.PROCESSING_TYPE," +
 					"   b.DELIVERY_STATUS" +
 					" from" +
-					" SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c where a.username = b.UA_NAME and b.UA_NAME = c.UA_NAME and b.UA_NAME = ?"
+					" SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c" +
+					" where a.username = b.UA_NAME(+) and a.username = c.UA_NAME and a.username = ?"
 			);
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();

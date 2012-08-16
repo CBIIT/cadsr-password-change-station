@@ -109,8 +109,11 @@ public class NotifyPassword {
 		
 		try {
 			List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
+			int size = types.size();
+			int index = 1;
 			for (String t : types) {
-				process(Integer.valueOf(t).intValue());
+				process(Integer.valueOf(t).intValue(), size, index);
+				index++;
 			}
 			_logger.debug("quartz=." + count++ + ".");
 		} catch (Exception e) {
@@ -125,7 +128,7 @@ public class NotifyPassword {
         }
 	}
 
-	private void process(int days) throws Exception {
+	private void process(int days, int size, int index) throws Exception {
 		List<User> recipients = null;
         open();
 		dao = new DAO(_conn);
@@ -200,6 +203,18 @@ public class NotifyPassword {
 		dao.updateQueue(user);
 	}
 
+	private boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) {
+		boolean ret = false;
+		boolean daysCondition = false;
+		boolean deliveryStatus = false;
+		
+		if(totalNotificationTypes != currentNotificationIndex) {
+			
+		}
+		
+		return false;
+	}
+	
 	public static void main(String[] args) {
         if (args.length != 1)
         {
