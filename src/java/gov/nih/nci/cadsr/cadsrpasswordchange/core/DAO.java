@@ -151,10 +151,11 @@ public class DAO implements AbstractDao {
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
-			if (isConnectionException)
+			if (isConnectionException) {
 				result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
-			else
+			} else {
 				result = ConnectionUtil.decode(ex);
+			}
 		} finally {
             if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
@@ -542,10 +543,11 @@ public class DAO implements AbstractDao {
 			result = new Result(ResultCode.PASSWORD_CHANGED);
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
-				if (isConnectionException)
+				if (isConnectionException) {
 					result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
-				else
+				} else {
 					result = ConnectionUtil.decode(ex);
+				}
 		} finally {
             if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
@@ -691,7 +693,21 @@ public class DAO implements AbstractDao {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement("select * from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
+			stmt = conn.prepareStatement(
+					"select" +
+					"   electronic_mail_address," +
+					"   a.USERNAME," +
+					"   a.ACCOUNT_STATUS," +
+					"   a.EXPIRY_DATE," +
+					"   a.LOCK_DATE," +
+					"   a.PTIME, " +
+					"   b.DATE_MODIFIED," +
+					"   b.ATTEMPTED_COUNT," +
+					"   b.PROCESSING_TYPE," +
+					"   b.DELIVERY_STATUS" +
+					" from" +
+					" SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c where a.username = b.UA_NAME and b.UA_NAME = c.UA_NAME and b.UA_NAME = ?"
+			);
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			boolean found = false;
@@ -701,6 +717,11 @@ public class DAO implements AbstractDao {
 				logger.debug ("getQueue user found: " + user.getUsername());
 			}
 			if(found) {
+				user.setElectronicMailAddress(rs.getString("electronic_mail_address"));
+				user.setAccountStatus(rs.getString("ACCOUNT_STATUS"));
+				user.setExpiryDate(rs.getDate("EXPIRY_DATE"));
+				user.setLockDate(rs.getDate("LOCK_DATE"));
+				user.setPasswordChangedDate(rs.getDate("PTIME"));
 				user.setDateModified(rs.getDate("DATE_MODIFIED"));
 				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
 				user.setProcessingType(rs.getString("PROCESSING_TYPE"));

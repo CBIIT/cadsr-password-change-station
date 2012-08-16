@@ -83,7 +83,7 @@ public class TestPasswordNotification {
 				if(e != null) {
 				System.out.println("User [" + e.getUsername() + "] attempted [" + e.getAttemptedCount() + "] type [" + e.getProcessingType() + "] password updated ["
 						+ e.getPasswordChangedDate() + "] email [" + e.getElectronicMailAddress()
-						+ "] expiry date [" + e.getExpiryDate() + "]");
+						+ "] expiry date [" + e.getExpiryDate() + "] password changed date [" + e.getPasswordChangedDate() + "]");
 				}
 			}
 		} else {
