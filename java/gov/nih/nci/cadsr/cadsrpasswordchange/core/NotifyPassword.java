@@ -240,12 +240,14 @@ public class NotifyPassword {
 						ret = true;
 					}
 			} else {
-				//the last notification type
-				Calendar start = Calendar.getInstance();
-				start.setTime(startDate);
-				_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change");
-				if(daysSincePasswordChange >= 1) {
-					ret = true;
+				if(daysLeft != Constants.DEACTIVATED_VALUE) {
+					//the last notification type
+					Calendar start = Calendar.getInstance();
+					start.setTime(startDate);
+					_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change");
+					if(daysSincePasswordChange >= 1) {
+						ret = true;
+					}
 				}
 			}
 		} else 
