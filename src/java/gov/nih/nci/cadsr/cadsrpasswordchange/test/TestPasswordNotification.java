@@ -1,33 +1,25 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.AbstractDao;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.CommonUtil;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.DAO;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.User;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.GeneralSecurityException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.*;
-
-import org.apache.commons.codec.binary.Hex;
+import org.joda.time.DateTimeUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Calendar;
 
 public class TestPasswordNotification {
 
@@ -155,7 +147,7 @@ public class TestPasswordNotification {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testLastPasswordChangedDateInDaysFromNow() {
 		Connection conn = null;
 		List<User>l = new ArrayList();
@@ -183,6 +175,16 @@ public class TestPasswordNotification {
 		}
 	}
 	
+	@Test
+	public void testJodaTimeChange() {
+		long millis = 86400000;	//a day
+	    DateTimeUtils.setCurrentMillisOffset(millis);
+	    long realToday = System.currentTimeMillis();
+	    long fakeToday = DateTimeUtils.currentTimeMillis();
+
+	    System.out.println("Today is " + realToday + " Fake today is " + fakeToday);
+	    assertTrue((realToday - fakeToday) < 0);
+	}
 	
 /*
 select username, expiry_date, account_status from dba_users where expiry_date < sysdate+2 and expiry_date < sysdate+60 and account_status IN ( 'OPEN', 'EXPIRED(GRACE)' ) order by account_status, expiry_date, username
