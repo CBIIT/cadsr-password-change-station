@@ -219,11 +219,11 @@ public class NotifyPassword {
 
 		Date startDate = user.getPasswordChangedDate();
 		if(startDate == null) {
-			throw new Exception("Not able to determine what is the password changed date or password change date is empty");
+			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
 		daysSincePasswordChange = CommonUtil.calculateDays(startDate, new Date());
 
-		if(daysSincePasswordChange != 0) {	//not recently changed
+		if(daysSincePasswordChange != 0) {	//not recently changed (today)
 			if(totalNotificationTypes != currentNotificationIndex) {
 					//not the last type - send only once
 					if(user.getDeliveryStatus() == null && user.getProcessingType() == null) {
@@ -247,6 +247,11 @@ public class NotifyPassword {
 					ret = true;
 				}
 			}
+		} else 
+		if(daysSincePasswordChange == 0) {	//reset everything if changed today
+	        open();
+			dao = new DAO(_conn);
+			dao.removeQueue(user);
 		}
 		
 		return ret;
