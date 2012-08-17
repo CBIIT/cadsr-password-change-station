@@ -13,6 +13,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeUtils;
 
 public class DAO implements AbstractDao {
 
@@ -334,7 +335,7 @@ public class DAO implements AbstractDao {
             stmt.setString( 7, dto.getAnswer3() );
 
             if ( dto.getDateModified() == null ) {
-                dto.setDateModified( new Date( System.currentTimeMillis()));
+                dto.setDateModified( new Date(DateTimeUtils.currentTimeMillis()) );
             }
             stmt.setDate( 8, dto.getDateModified() );
 
