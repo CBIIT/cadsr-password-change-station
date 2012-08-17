@@ -64,6 +64,7 @@ public class Constants {
     public static final String _DSPSWD = "DSpassword";
     
     //=== notifications status flags
+    public static final int DEACTIVATED_VALUE = 0;
     public static final String NOTIFICATION_TYPE = "notifactionDays";
     public static final String SUCCESS = "sucess";
     public static final String FAILED = "failed";
