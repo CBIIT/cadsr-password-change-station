@@ -13,6 +13,7 @@ import java.util.Properties;
 import oracle.jdbc.pool.OracleDataSource;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeUtils;
 
 public class NotifyPassword {
 
@@ -204,11 +205,11 @@ public class NotifyPassword {
 		user.setAttemptedCount(currentCount++);
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
-		user.setDateModified(new java.sql.Date(new Date().getTime()));
+		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
 		dao.updateQueue(user);
 	}
 
-	private boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) throws Exception {
+	public boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) throws Exception {
 		boolean ret = false;
 		boolean daysCondition = false;
 		boolean deliveryStatus = false;
@@ -221,7 +222,7 @@ public class NotifyPassword {
 		if(startDate == null) {
 			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
-		daysSincePasswordChange = CommonUtil.calculateDays(startDate, new Date());
+		daysSincePasswordChange = CommonUtil.calculateDays(startDate, new Date(DateTimeUtils.currentTimeMillis()));
 
 		if(daysSincePasswordChange != 0) {	//not recently changed (today)
 			if(totalNotificationTypes != currentNotificationIndex) {

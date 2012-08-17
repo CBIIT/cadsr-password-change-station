@@ -61,7 +61,7 @@
 
 
 	<!-- Build entire project -->
-	<target name="project" depends="clean,prepare,compile,dist,build-jar" />
+	<target name="project" depends="clean,prepare,compile, dist" />
 
 
 	<!-- Create binary distribution -->
@@ -107,7 +107,12 @@
 		<copy tofile="src/WebRoot/WEB-INF/lib/commons-codec-1.6.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/commons-codec-1.6.jar" />
 		</copy>
-<!--	
+
+		<copy tofile="src/WebRoot/WEB-INF/lib/joda-time-1.6.2.jar" filtering="false" verbose="true">
+		  <fileset file="src/lib/joda-time-1.6.2.jar" />
+		</copy>
+
+<!-- begin - the following will be removed once the test is over -->		
 		<copy tofile="src/WebRoot/WEB-INF/lib/quartz-2.1.5.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/quartz-2.1.5.jar" />
 		</copy>
@@ -117,7 +122,8 @@
 		<copy tofile="src/WebRoot/WEB-INF/lib/slf4j-log4j12-1.6.1.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/slf4j-log4j12-1.6.1.jar" />
 		</copy>
--->
+<!-- end - the following will be removed once the test is over -->		
+		
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>
 
@@ -128,34 +134,6 @@
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountName@" value="${systemAccountName}"/>
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
 	</target>
-
-    <target name="build-jar" depends="dist" description="Build the project JAR files.">
-        <echo>Building distributable JAR files for Password Expiration Notification</echo>
-        <delete file="${dist.dir}/bin/cadsrnotifypassword.jar" />
-        <jar destfile="${dist.dir}/bin/cadsrnotifypassword.jar">
-            <fileset dir="${classes.dir}">
-                <include name="gov/nih/nci/cadsr/cadsrpasswordchange/**/*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="Anthill"/>
-                <attribute name="Main-Class" value="gov/nih/nci/cadsr/cadsrpasswordchange/core/NotifyPassword"/>
-                <section name="gov/nih/nci/cadsr/cadsrpasswordchange/core/">
-                    <attribute name="Specification-Title" value="caDSR Password Expiration Notification Tool" />
-                    <attribute name="Specification-Version" value="${appl.release}" />
-                    <attribute name="Specification-Vendor" value="NCI" />
-                    <attribute name="Implementation-Title" value="caDSR Password Expiration Notification Tool" />
-                    <attribute name="Implementation-Version" value="${appl.version}" />
-                    <attribute name="Implementation-Vendor" value="NCI" />
-                </section>
-            </manifest>
-        </jar>
-		<copy tofile="${dist.dir}/bin/log4j-1.2.13.jar" filtering="false" verbose="true">
-		  <fileset file="src/lib/log4j-1.2.13.jar" />
-		</copy>
-		<copy tofile="${dist.dir}/bin/ojdbc14.jar" filtering="false" verbose="true">
-		  <fileset file="src/lib/ojdbc14.jar" />
-		</copy>
-    </target>
 
 	<!-- Build project and create distribution-->
 	<target name="all" depends="project" />
