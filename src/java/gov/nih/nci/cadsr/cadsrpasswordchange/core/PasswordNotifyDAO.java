@@ -22,6 +22,22 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	private Connection conn;
 	private DataSource datasource;
 
+    protected static final String SELECT_SQL = 
+			"select" +
+			"   c.electronic_mail_address," +
+			"   a.USERNAME," +
+			"   a.ACCOUNT_STATUS," +
+			"   a.EXPIRY_DATE," +
+			"   a.LOCK_DATE," +
+			"   a.PTIME, " +
+			"   b.DATE_MODIFIED," +
+			"   b.ATTEMPTED_COUNT," +
+			"   b.PROCESSING_TYPE," +
+			"   b.DELIVERY_STATUS" +
+			" from" +
+			" SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c" +
+			" where a.username = b.UA_NAME(+) and a.username = c.UA_NAME";
+	
 	private Logger logger = Logger.getLogger(PasswordNotifyDAO.class);
 
     public PasswordNotifyDAO(DataSource datasource) {
@@ -51,26 +67,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement(
-				"select " +
-				"   electronic_mail_address," +
-				"   PTIME," +
-				"   PROFILE," +
-				"   USERNAME," +
-				"   USER_ID," +
-				"   PASSWORD," +
-				"   ACCOUNT_STATUS," +
-				"   LOCK_DATE," +
-				"   EXPIRY_DATE," +
-				"   DEFAULT_TABLESPACE," +
-				"   TEMPORARY_TABLESPACE," +
-				"   CREATED," +
-				"   INITIAL_RSRC_CONSUMER_GROUP," +
-				"   EXTERNAL_NAME" +
-				" " +
-				"from sys.CADSR_USERS a, sbr.user_accounts_view b WHERE a.username = b.ua_name" +
-				" " +
-				"and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?"
+			stmt = conn.prepareStatement(SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?"
 			);
 			stmt.setInt(1, withinDays);
 			rs = stmt.executeQuery();
@@ -82,6 +79,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setExpiryDate(rs.getDate("expiry_date"));
 				user.setLockDate(rs.getDate("lock_date"));
 				user.setPasswordChangedDate(rs.getDate("ptime"));
+				user.setDateModified(rs.getDate("DATE_MODIFIED"));
 				logger.info ("getRecipientList: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 				arr.add(user);
 			}
@@ -120,22 +118,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement(
-					"select" +
-					"   c.electronic_mail_address," +
-					"   a.USERNAME," +
-					"   a.ACCOUNT_STATUS," +
-					"   a.EXPIRY_DATE," +
-					"   a.LOCK_DATE," +
-					"   a.PTIME, " +
-					"   b.DATE_MODIFIED," +
-					"   b.ATTEMPTED_COUNT," +
-					"   b.PROCESSING_TYPE," +
-					"   b.DELIVERY_STATUS" +
-					" from" +
-					" SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c" +
-					" where a.username = b.UA_NAME(+) and a.username = c.UA_NAME and a.username = ?"
-			);
+			stmt = conn.prepareStatement(SELECT_SQL + " and a.username = ?");
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			boolean found = false;

@@ -1,22 +1,17 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.NotifyPassword;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordChange;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.CommonUtil;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotifyDAO;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.NotifyPassword;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotify;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotifyDAO;
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -215,9 +210,10 @@ public class TestPasswordNotification {
 		user.setLockDate(null);	//not locked
 	    DateTimeUtils.setCurrentMillisOffset(-millis*(howManyDaysAgo));	//changed since a while back
 		user.setPasswordChangedDate(new java.sql.Date(DateTimeUtils.currentTimeMillis()));
-		System.out.println("getExpiredUser: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 		//reset the time back
 	    DateTimeUtils.setCurrentMillisOffset(0);
+		user.setDateModified(new java.sql.Date(DateTimeUtils.currentTimeMillis()));
+		System.out.println("getExpiredUser: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 		
 		return user;
 	}
@@ -249,6 +245,7 @@ public class TestPasswordNotification {
 			if(daysLeft > 10) {
 				arr.add(getExpiredUser("user10", "k40733@rtrtr.com", daysLeft, 61));
 				arr.add(getExpiredUser("user20", "k40733@rtrtr.com", daysLeft, 61));
+				arr.add(getExpiredUser("user30", "k40733@rtrtr.com", 7, 11));	//abnomoly - password changed 11 days back
 				arr.add(getExpiredUser("user30", "k40733@rtrtr.com", 5, 3));	//abnomoly - password changed 3 days back
 				arr.add(getExpiredUser("user40", "k40733@rtrtr.com", 90, 0));	//abnomoly - password changed just today
 			} else
@@ -314,7 +311,7 @@ public class TestPasswordNotification {
 				} else {
 					System.out.println("testNotifications: isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
 				}
-				assertEquals(u.getDeliveryStatus(), Constants.SUCCESS);
+				assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
 			}
 		}
 	}
