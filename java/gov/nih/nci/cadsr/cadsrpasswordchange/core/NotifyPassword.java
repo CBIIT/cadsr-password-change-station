@@ -20,7 +20,6 @@ import org.joda.time.DateTimeUtils;
 public class NotifyPassword {
 
 	private static org.apache.log4j.Logger _logger = org.apache.log4j.Logger.getLogger(NotifyPassword.class);
-	private static int count = 0;
 	private static PasswordNotify dao;
 	public static String emailSubject;
 	public static String emailBody;
@@ -31,6 +30,9 @@ public class NotifyPassword {
     private String              _pswd;
     private String              _processingNotificationDays;
     
+    public NotifyPassword(Connection conn) {
+    	this._conn = conn;
+    }
 
     /**
      * Open a single simple connection to the database. No pooling is necessary.
@@ -119,7 +121,7 @@ public class NotifyPassword {
 				process(Integer.valueOf(t).intValue(), size, index);
 				index++;
 			}
-			_logger.debug("quartz=." + count++ + ".");
+			_logger.debug(".doAll.");
 		} catch (Exception e) {
 			//e.printStackTrace();
 			_logger.error(CommonUtil.toString(e));
@@ -162,9 +164,6 @@ public class NotifyPassword {
 
 	/**
 	 * Add or update the queue with the outgoing email.
-	 * 
-	 * @return success/failed list
-	 * @throws Exception 
 	 */
 	private void saveIntoQueue(User user, int daysLeft) throws Exception {
         open();
@@ -269,7 +268,7 @@ public class NotifyPassword {
             return;
         }
 		
-		NotifyPassword np = new NotifyPassword();
+		NotifyPassword np = new NotifyPassword(null);
 
 		try {
 			_logger.info("");

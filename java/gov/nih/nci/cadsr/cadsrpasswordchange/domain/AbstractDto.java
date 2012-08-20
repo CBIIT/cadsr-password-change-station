@@ -26,8 +26,6 @@ public abstract class AbstractDto implements java.io.Serializable {
 
         contentToString( sb );
 
-        // Class.getSimpleName() is not supported by GWT yet (v 1.6.4)
-        // so we must compute it :
         String name = getClass().getName();
         name = name.substring( name.lastIndexOf( '.' ) + 1 );
 

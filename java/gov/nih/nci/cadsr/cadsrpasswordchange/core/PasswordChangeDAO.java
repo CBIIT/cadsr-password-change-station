@@ -2,7 +2,6 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
-import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -49,7 +47,6 @@ public class PasswordChangeDAO implements PasswordChange {
 			throw new Exception("Username can not be NULL or empty.");
 		}
 				
-//		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -90,7 +87,6 @@ public class PasswordChangeDAO implements PasswordChange {
 
 		UserBean userBean = new UserBean(username);
 		
-//		Connection conn = null;
 		try {
 	        conn = datasource.getConnection(username, password);
 	        logger.debug("connected");	        
@@ -309,7 +305,6 @@ public class PasswordChangeDAO implements PasswordChange {
             if ( dto.getAnswer1() == null ) {
                 throw new Exception("Value of column 'answer1' cannot be null");
             }
-//            checkMaxLength( "answer1", dto.getAnswer1(), 500 );
             stmt.setString( 3, dto.getAnswer1() );
             
             if ( dto.getQuestion2() == null ) {
@@ -321,7 +316,6 @@ public class PasswordChangeDAO implements PasswordChange {
             if ( dto.getAnswer2() == null ) {
                 throw new Exception("Value of column 'answer2' cannot be null");
             }
-//            checkMaxLength( "answer2", dto.getAnswer2(), 500 );
             stmt.setString( 5, dto.getAnswer2() );
 
             if ( dto.getQuestion3() == null ) {
@@ -333,7 +327,6 @@ public class PasswordChangeDAO implements PasswordChange {
             if ( dto.getAnswer3() == null ) {
                 throw new Exception("Value of column 'answer3' cannot be null");
             }
-//            checkMaxLength( "answer3", dto.getAnswer3(), 500 );
             stmt.setString( 7, dto.getAnswer3() );
 
             if ( dto.getDateModified() == null ) {
@@ -377,7 +370,6 @@ public class PasswordChangeDAO implements PasswordChange {
                 sb.append( ", " );
             }
 
-//            checkMaxLength( "answer1", dto.getAnswer1(), 500 );
             sb.append( "answer1=?" );
             params.add( dto.getAnswer1());
         }
@@ -397,7 +389,6 @@ public class PasswordChangeDAO implements PasswordChange {
                 sb.append( ", " );
             }
 
-//            checkMaxLength( "answer2", dto.getAnswer2(), 500 );
             sb.append( "answer2=?" );
             params.add( dto.getAnswer2());
         }
@@ -417,7 +408,6 @@ public class PasswordChangeDAO implements PasswordChange {
                 sb.append( ", " );
             }
 
-//            checkMaxLength( "answer3", dto.getAnswer3(), 500 );
             sb.append( "answer3=?" );
             params.add( dto.getAnswer3());
         }
