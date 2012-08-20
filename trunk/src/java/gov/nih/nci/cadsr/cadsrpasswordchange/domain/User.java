@@ -95,4 +95,15 @@ public class User {
 		this.deliveryStatus = delivery_status;
 	}
 
+	@Override
+	public String toString() {
+		return "User [electronicMailAddress=" + electronicMailAddress
+				+ ", username=" + username + ", accountStatus=" + accountStatus
+				+ ", expiryDate=" + expiryDate + ", lockDate=" + lockDate
+				+ ", passwordChangedDate=" + passwordChangedDate
+				+ ", dateModified=" + dateModified + ", attemptedCount="
+				+ attemptedCount + ", processingType=" + processingType
+				+ ", deliveryStatus=" + deliveryStatus + "]";
+	}
+
 }
