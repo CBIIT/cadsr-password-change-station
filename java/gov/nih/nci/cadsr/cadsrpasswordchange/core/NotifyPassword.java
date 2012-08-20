@@ -154,6 +154,8 @@ public class NotifyPassword {
 						}
 					} else {
 						_logger.info("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
+						updateStatus(u, null, days);
+						_logger.debug("date updated for user " + u);
 					}
 				}
 			}
@@ -219,13 +221,13 @@ public class NotifyPassword {
 		String status = null;
 		long daysSincePasswordChange = -1;
 
-		Date startDate = user.getPasswordChangedDate();
-		if(startDate == null) {
+		java.sql.Date passwordChangedDate = user.getPasswordChangedDate();
+		if(passwordChangedDate == null) {
 			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
-		daysSincePasswordChange = CommonUtil.calculateDays(startDate, new Date(DateTimeUtils.currentTimeMillis()));
+		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
 
-		if(daysSincePasswordChange != 0) {	//not recently changed (today)
+		if(daysSincePasswordChange != 0 && passwordChangedDate.before(user.getDateModified())) {	//not recently changed (today)
 			if(totalNotificationTypes != currentNotificationIndex) {
 					//not the last type - send only once
 					if(user.getDeliveryStatus() == null && user.getProcessingType() == null) {
@@ -244,7 +246,7 @@ public class NotifyPassword {
 				if(daysLeft != Constants.DEACTIVATED_VALUE) {
 					//the last notification type
 					Calendar start = Calendar.getInstance();
-					start.setTime(startDate);
+					start.setTime(passwordChangedDate);
 					_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change");
 					if(daysSincePasswordChange >= 1) {
 						ret = true;
@@ -252,7 +254,7 @@ public class NotifyPassword {
 				}
 			}
 		} else 
-		if(daysSincePasswordChange == 0) {	//reset everything if changed today
+		if(daysSincePasswordChange == 0 || passwordChangedDate.after(user.getDateModified())) {	//reset everything if changed today OR if changed after the last check point
 	        open();
 			dao = new PasswordNotifyDAO(_conn);
 			dao.removeQueue(user);
