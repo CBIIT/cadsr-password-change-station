@@ -1,8 +1,10 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
+
 import java.util.List;
 
-public interface AbstractDao {
+public interface PasswordChange {
 
     /**
      * Finds a record identified by its primary key.
@@ -51,13 +53,5 @@ public interface AbstractDao {
 	public Result resetPassword(String username, String newPassword);
 	
 	public String getToolProperty(String toolName, String property);
-	
-	public List<User> getPasswordExpiringList(int withinDays);
-
-	public User loadQueue(User user) throws Exception;
-	
-	public void updateQueue(User user) throws Exception;
-
-	public void removeQueue(User user) throws Exception;
 
 }

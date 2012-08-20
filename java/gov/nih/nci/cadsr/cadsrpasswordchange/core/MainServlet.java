@@ -13,6 +13,8 @@ import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.JobDetail;
 
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
@@ -38,7 +40,7 @@ public class MainServlet extends HttpServlet {
 	private static Logger logger = Logger.getLogger(MainServlet.class.getName());
 //	private static Connection connection = null;
 	private static DataSource datasource = null;
-	private static AbstractDao dao;
+	private static PasswordChange dao;
 	private static String HELP_LINK;
 	private static String LOGO_LINK;
 
@@ -48,8 +50,8 @@ public class MainServlet extends HttpServlet {
 		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
 //    		if(connection == null) {
-            	datasource = ConnectionUtil.getDS(DAO._jndiSystem);
-            	dao = new DAO(datasource);
+            	datasource = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+            	dao = new PasswordChangeDAO(datasource);
             	logger.info("Connected to database");
 //    		}
         	isConnectionException = false;
@@ -231,11 +233,11 @@ public class MainServlet extends HttpServlet {
 
 		try {
 			connect();
-			DAO dao = new DAO(datasource);
+			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 
 			connect();			
-			DAO dao1 = new DAO(datasource);
+			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
 			if(oldQna == null) {
 				dao1.insert(qna);
 			} else {
@@ -308,7 +310,7 @@ public class MainServlet extends HttpServlet {
 			}
 
 			connect();
-			DAO loginDAO = new DAO(datasource);
+			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
 			userBean = loginDAO.checkValidUser(username, password);
 			disconnect();
 			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
@@ -400,7 +402,7 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			connect();
-			DAO loginDAO = new DAO(datasource);
+			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
 			userBean = loginDAO.checkValidUser(username, password);
 			disconnect();
 			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
@@ -487,7 +489,7 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);
 			
 			connect();
-			DAO userDAO = new DAO(datasource);
+			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 			try {
 				if(!userDAO.checkValidUser(username)) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
@@ -669,7 +671,7 @@ public class MainServlet extends HttpServlet {
 			//check locked state here
 
 			connect();
-			DAO changeDAO = new DAO(datasource);
+			PasswordChangeDAO changeDAO = new PasswordChangeDAO(datasource);
 			Result passwordChangeResult = changeDAO.resetPassword(username, newPassword);
 			disconnect();
 
@@ -764,7 +766,7 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);
 			UserBean userBean = null;			
 			connect();
-			DAO loginDAO = new DAO(datasource);
+			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
 			userBean = loginDAO.checkValidUser(username, oldPassword);
 			disconnect();
 			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
@@ -783,7 +785,7 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			connect();
-			DAO changeDAO = new DAO(datasource);
+			PasswordChangeDAO changeDAO = new PasswordChangeDAO(datasource);
 			Result passwordChangeResult = changeDAO.changePassword(username, oldPassword, newPassword);
 			disconnect();
 
@@ -808,7 +810,7 @@ public class MainServlet extends HttpServlet {
 		boolean retVal = false;
 		try {
 			connect();
-			DAO dao = new DAO(datasource);
+			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
 			qna = dao.findByUaName(username);
 			if(qna != null) {
 				userQuestions.put(Constants.Q1, qna.getQuestion1());
@@ -831,7 +833,7 @@ public class MainServlet extends HttpServlet {
 	public static void initProperties() {
 		if(HELP_LINK == null) {
 			connect();
-			DAO dao = new DAO(datasource);
+			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
 			
 			HELP_LINK = dao.getToolProperty(Constants.TOOL_NAME, Constants.HELP_LINK_PROPERTY);
 			LOGO_LINK = dao.getToolProperty(Constants.TOOL_NAME, Constants.LOGO_LINK_PROPERTY);
@@ -856,38 +858,6 @@ public class MainServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		logger.debug("init(ServletConfig config)");
-		
-		SchedulerFactory sf = new StdSchedulerFactory();
-		Scheduler sched = null;
-		try {
-			sched = sf.getScheduler();
-		} catch (SchedulerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		 // define the job and tie it to our HelloJob class
-		JobDetail job = newJob(NotificationJob.class)
-			    .withIdentity("job1", "group1")
-			    .build();
-		
-        // Trigger the job to run now, and then repeat every 40 seconds
-        Trigger trigger = newTrigger()
-            .withIdentity("trigger1", "group1")
-            .startNow()
-            .withSchedule(simpleSchedule()
-                    .withIntervalInSeconds(40)
-                    .repeatForever())            
-            .build();
-        
-        // Tell quartz to schedule the job using our trigger
-        try {
-			sched.scheduleJob(job, trigger);
-		} catch (SchedulerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 		
 }

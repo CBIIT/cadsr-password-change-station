@@ -1,4 +1,4 @@
-package gov.nih.nci.cadsr.cadsrpasswordchange.core;
+package gov.nih.nci.cadsr.cadsrpasswordchange.domain;
 
 import java.sql.Date;
 

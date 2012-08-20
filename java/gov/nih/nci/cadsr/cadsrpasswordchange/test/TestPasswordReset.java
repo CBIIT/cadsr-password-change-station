@@ -19,6 +19,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.*;
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
 import org.apache.commons.codec.binary.Hex;
 import org.junit.After;
@@ -29,7 +30,7 @@ public class TestPasswordReset {
 
 	// private static Connection connection = null;
 	private static DataSource datasource = null;
-	private static AbstractDao dao;
+	private static PasswordChange dao;
 	public static String ADMIN_ID = "cadsrpasswordchange";
 	public static String ADMIN_PASSWORD = "cadsrpasswordchange";
 	public static String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
@@ -195,7 +196,7 @@ public class TestPasswordReset {
 		Result returned = null;
 		try {
 			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordChangeDAO(conn);
 			returned = dao.changePassword(username, oldPassword, newPassword);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -266,7 +267,7 @@ public class TestPasswordReset {
 
 	private void showUserSecurityQuestionList() throws Exception {
 		Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-		dao = new DAO(conn);
+		dao = new PasswordChangeDAO(conn);
 		UserSecurityQuestion[] results = dao.findAll();
 		if (results.length > 0) {
 			for (UserSecurityQuestion e : results) {
@@ -296,10 +297,10 @@ public class TestPasswordReset {
 		qna.setAnswer3(CommonUtil.encode("answer for question 3 of dao"));
 		try {
 			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordChangeDAO(conn);
 			UserSecurityQuestion qna1 = dao.findByPrimaryKey(USER_ID);
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordChangeDAO(conn);
 			if(qna1 == null) {
 				dao.insert(qna);
 			} else {
@@ -317,7 +318,7 @@ public class TestPasswordReset {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
 		try {
 			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordChangeDAO(conn);
 			qna = dao.findByUaName(USER_ID);
 			if(qna == null) {
 				throw new Exception("No questions found. Have it been setup?");
@@ -327,7 +328,7 @@ public class TestPasswordReset {
 			qna.setAnswer2(CommonUtil.encode("answer for question 2 of dao"));
 			//dao.update(qna.getId(), qna);
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordChangeDAO(conn);
 			dao.update(qna.getUaName(), qna);
 			showUserSecurityQuestionList();
 		} catch (Exception e) {
