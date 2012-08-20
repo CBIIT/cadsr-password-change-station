@@ -1,5 +1,7 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
+
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,7 +21,7 @@ public class NotifyPassword {
 
 	private static org.apache.log4j.Logger _logger = org.apache.log4j.Logger.getLogger(NotifyPassword.class);
 	private static int count = 0;
-	private static AbstractDao dao;
+	private static PasswordNotify dao;
 	public static String emailSubject;
 	public static String emailBody;
     private Properties          _propList;
@@ -133,7 +135,7 @@ public class NotifyPassword {
 	private void process(int days, int size, int index) throws Exception {
 		List<User> recipients = null;
         open();
-		dao = new DAO(_conn);
+		dao = new PasswordNotifyDAO(_conn);
 		recipients = dao.getPasswordExpiringList(days);
 		if (recipients != null && recipients.size() > 0) {
 			for (User u : recipients) {
@@ -166,7 +168,7 @@ public class NotifyPassword {
 	 */
 	private void saveIntoQueue(User user, int daysLeft) throws Exception {
         open();
-		dao = new DAO(_conn);
+		dao = new PasswordNotifyDAO(_conn);
 		user.setProcessingType(String.valueOf(daysLeft));
 		dao.updateQueue(user);
 	}
@@ -187,7 +189,7 @@ public class NotifyPassword {
 	 */
 	private User refresh(User user) throws Exception {
         open();
-		dao = new DAO(_conn);
+		dao = new PasswordNotifyDAO(_conn);
 		return dao.loadQueue(user);
 	}
 
@@ -201,7 +203,7 @@ public class NotifyPassword {
 		user = refresh(user);
 		int currentCount = user.getAttemptedCount();
         open();
-		dao = new DAO(_conn);
+		dao = new PasswordNotifyDAO(_conn);
 		user.setAttemptedCount(currentCount++);
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
@@ -253,7 +255,7 @@ public class NotifyPassword {
 		} else 
 		if(daysSincePasswordChange == 0) {	//reset everything if changed today
 	        open();
-			dao = new DAO(_conn);
+			dao = new PasswordNotifyDAO(_conn);
 			dao.removeQueue(user);
 		}
 		

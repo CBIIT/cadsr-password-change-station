@@ -1,12 +1,13 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.test;
 
 import static org.junit.Assert.assertTrue;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.AbstractDao;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordChange;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.CommonUtil;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.DAO;
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.User;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotifyDAO;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotify;
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import org.junit.Test;
 public class TestPasswordNotification {
 
 	private static DataSource datasource = null;
-	private static AbstractDao dao;
+	private static PasswordNotify dao;
 	public static String ADMIN_ID = "cadsrpasswordchange";
 	public static String ADMIN_PASSWORD = "cadsrpasswordchange";
 	public static String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
@@ -62,7 +63,7 @@ public class TestPasswordNotification {
 		List u = null;
 		try {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordNotifyDAO(conn);
 			u = dao.getPasswordExpiringList(60);
 			showUserList(u);
 		} catch (Exception e) {
@@ -91,7 +92,7 @@ public class TestPasswordNotification {
 		List<User>l = new ArrayList();
 		try {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordNotifyDAO(conn);
 			User user = new User();
 			user.setUsername(USER_ID);
 			user.setAttemptedCount(1);
@@ -113,7 +114,7 @@ public class TestPasswordNotification {
 		List<User>l = new ArrayList();
 		try {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordNotifyDAO(conn);
 			User user = new User();
 			user.setUsername(USER_ID);
 			user = dao.loadQueue(user);
@@ -135,7 +136,7 @@ public class TestPasswordNotification {
 		List<User>l = new ArrayList();
 		try {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordNotifyDAO(conn);
 			User user = new User();
 			user.setUsername(USER_ID);
 			dao.removeQueue(user);
@@ -153,7 +154,7 @@ public class TestPasswordNotification {
 		List<User>l = new ArrayList();
 		try {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
-			dao = new DAO(conn);
+			dao = new PasswordNotifyDAO(conn);
 			User user = new User();
 			user.setUsername(USER_ID);
 //			user.setUsername("TEST113");
