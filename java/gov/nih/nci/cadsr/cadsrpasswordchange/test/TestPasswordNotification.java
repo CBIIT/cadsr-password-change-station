@@ -229,30 +229,31 @@ public class TestPasswordNotification {
 		String value = null;
 		List arr = new ArrayList();
 		try {
-			if(daysLeft > 30) {
-				arr.add(getExpiredUser("user1000", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user2000", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user3000", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user4000", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user5000", "k40733@rtrtr.com", daysLeft, 61));
-			} else
-			if(daysLeft > 20) {
-				arr.add(getExpiredUser("user100", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user200", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user300", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user400", "k40733@rtrtr.com", daysLeft, 61));
-			} else
+//			if(daysLeft > 30) {
+//				arr.add(getExpiredUser("user1000", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user2000", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user3000", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user4000", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user5000", "k40733@rtrtr.com", daysLeft, 61));
+//			} else
+//			if(daysLeft > 20) {
+//				arr.add(getExpiredUser("user100", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user200", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user300", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user400", "k40733@rtrtr.com", daysLeft, 61));
+//			} else
 			if(daysLeft > 10) {
 				arr.add(getExpiredUser("user10", "k40733@rtrtr.com", daysLeft, 61));
 				arr.add(getExpiredUser("user20", "k40733@rtrtr.com", daysLeft, 61));
 				arr.add(getExpiredUser("user30", "k40733@rtrtr.com", 7, 11));	//abnomoly - password changed 11 days back
-				arr.add(getExpiredUser("user40", "k40733@rtrtr.com", 5, 3));	//abnomoly - password changed 3 days back
-				arr.add(getExpiredUser("user50", "k40733@rtrtr.com", 90, 0));	//abnomoly - password changed just today
-			} else
-			if(daysLeft > 3) {
-				arr.add(getExpiredUser("user1", "k40733@rtrtr.com", daysLeft, 61));
-				arr.add(getExpiredUser("user2", "k40733@rtrtr.com", 1, 0));	//abnomoly - password changed just today
-			}
+				arr.add(getExpiredUser("user30", "k40733@rtrtr.com", 5, 3));	//abnomoly - password changed 3 days back
+				arr.add(getExpiredUser("user40", "k40733@rtrtr.com", 90, 0));	//abnomoly - password changed just today
+			} 
+//			else
+//			if(daysLeft > 3) {
+//				arr.add(getExpiredUser("user1", "k40733@rtrtr.com", daysLeft, 61));
+//				arr.add(getExpiredUser("user2", "k40733@rtrtr.com", 1, 0));	//abnomoly - password changed just today
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -282,7 +283,7 @@ public class TestPasswordNotification {
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
 		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
-		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
+//		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
 	}
 
 	@Test
@@ -309,24 +310,21 @@ public class TestPasswordNotification {
 						updateStatus(u, Constants.FAILED, days);
 					}
 				} else {
-					System.out.println("testNotifications: isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
-				}
-				if(index == 1) {
-					assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
-				} else
-				if(index == 2) {
-					assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
-				} else
-				if(index == 3) {
-					assertEquals(null, u.getDeliveryStatus());
-				} else
-				if(index == 4) {
-					assertEquals(null, u.getDeliveryStatus());
-				} else
-				if(index == 5) {
-					assertEquals(null, u.getDeliveryStatus());
+//					System.out.println("testNotifications: isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
+					updateStatus(u, null, days);
 				}
 			}
+		}
+
+		int count = 1;
+		for (User u : recipients) {
+			if(count >0 && count < 3) {
+				assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
+			} else {
+//				assertEquals(null, u.getDeliveryStatus());
+			}
+			System.out.println("testNotifications: " + u.getDeliveryStatus() + " user " + u);
+			count++;
 		}
 	}
 
