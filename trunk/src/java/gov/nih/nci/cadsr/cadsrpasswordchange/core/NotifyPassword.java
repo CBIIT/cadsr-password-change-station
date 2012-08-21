@@ -227,7 +227,7 @@ public class NotifyPassword {
 		}
 		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
 
-		if(daysSincePasswordChange != 0 && passwordChangedDate.before(user.getDateModified())) {	//not recently changed (today)
+		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
 			if(totalNotificationTypes != currentNotificationIndex) {
 					//not the last type - send only once
 					if(user.getDeliveryStatus() == null && user.getProcessingType() == null) {
@@ -254,7 +254,7 @@ public class NotifyPassword {
 				}
 			}
 		} else 
-		if(daysSincePasswordChange == 0 || passwordChangedDate.after(user.getDateModified())) {	//reset everything if changed today OR if changed after the last check point
+		if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
 	        open();
 			dao = new PasswordNotifyDAO(_conn);
 			dao.removeQueue(user);
@@ -263,6 +263,14 @@ public class NotifyPassword {
 		return ret;
 	}
 	
+	private boolean isChangedRecently(int daysLeft, long daysSincePasswordChange) {
+		boolean ret = false;
+		if(daysSincePasswordChange <= daysLeft) {
+			ret = true;
+		}
+		return ret;
+	}
+
 	public static void main(String[] args) {
         if (args.length != 1)
         {
