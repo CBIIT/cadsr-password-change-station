@@ -246,8 +246,8 @@ public class TestPasswordNotification {
 				arr.add(getExpiredUser("user10", "k40733@rtrtr.com", daysLeft, 61));
 				arr.add(getExpiredUser("user20", "k40733@rtrtr.com", daysLeft, 61));
 				arr.add(getExpiredUser("user30", "k40733@rtrtr.com", 7, 11));	//abnomoly - password changed 11 days back
-				arr.add(getExpiredUser("user30", "k40733@rtrtr.com", 5, 3));	//abnomoly - password changed 3 days back
-				arr.add(getExpiredUser("user40", "k40733@rtrtr.com", 90, 0));	//abnomoly - password changed just today
+				arr.add(getExpiredUser("user40", "k40733@rtrtr.com", 5, 3));	//abnomoly - password changed 3 days back
+				arr.add(getExpiredUser("user50", "k40733@rtrtr.com", 90, 0));	//abnomoly - password changed just today
 			} else
 			if(daysLeft > 3) {
 				arr.add(getExpiredUser("user1", "k40733@rtrtr.com", daysLeft, 61));
@@ -311,7 +311,21 @@ public class TestPasswordNotification {
 				} else {
 					System.out.println("testNotifications: isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
 				}
-				assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
+				if(index == 1) {
+					assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
+				} else
+				if(index == 2) {
+					assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
+				} else
+				if(index == 3) {
+					assertEquals(null, u.getDeliveryStatus());
+				} else
+				if(index == 4) {
+					assertEquals(null, u.getDeliveryStatus());
+				} else
+				if(index == 5) {
+					assertEquals(null, u.getDeliveryStatus());
+				}
 			}
 		}
 	}
