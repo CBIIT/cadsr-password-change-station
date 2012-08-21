@@ -59,9 +59,31 @@
 		<mkdir dir="src/WebRoot/WEB-INF/lib" />
 	</target>
 
-
+    <target name="-build-jar" depends="dist" description="Build the notification JAR file.">
+        <echo>Building distributable JAR files ...</echo>
+        <delete file="${dist.dir}/bin/cadsrnotifypassword.jar" />
+        <jar destfile="${dist.dir}/bin/cadsrnotifypassword.jar">
+            <fileset dir="${classes.dir}">
+                <include name="gov/**/*.properties" />
+                <include name="gov/**/*.class" />
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="Anthill"/>
+                <attribute name="Main-Class" value="gov.nih.nci.cadsr.cadsrpasswordchange.core/NotifyPassword"/>
+                <section name="gov/nih/nci/cadsr/cadsrpasswordchange/core/">
+                    <attribute name="Specification-Title" value="caDSR Password Expiration Notification Tool" />
+                    <attribute name="Specification-Version" value="${appl.release}" />
+                    <attribute name="Specification-Vendor" value="NCI" />
+                    <attribute name="Implementation-Title" value="caDSR Password Expiration Notification Tool" />
+                    <attribute name="Implementation-Version" value="${appl.version}" />
+                    <attribute name="Implementation-Vendor" value="NCI" />
+                </section>
+            </manifest>
+        </jar>
+	</target>
+        
 	<!-- Build entire project -->
-	<target name="project" depends="clean,prepare,compile, dist" />
+	<target name="project" depends="clean,prepare,compile, dist, -build-jar" />
 
 
 	<!-- Create binary distribution -->
