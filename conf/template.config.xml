@@ -11,6 +11,5 @@
         <entry key="DSurl">@connectionUrl@</entry>
         <entry key="DSusername">@systemAccountName@</entry>
         <entry key="DSpassword">@systemAccountPassword@</entry>
-        <entry key="notifactionDays">14,7,4</entry>
 
 </properties>
