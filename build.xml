@@ -80,6 +80,12 @@
                 </section>
             </manifest>
         </jar>
+		<copy tofile="${dist.dir}/bin/ojdbc14.jar" filtering="true" verbose="true">
+		  <fileset file="src/lib/ojdbc14.jar" />
+		</copy>
+		<copy tofile="${dist.dir}/bin/log4j-1.2.13.jar" filtering="true" verbose="true">
+		  <fileset file="src/lib/log4j-1.2.13.jar" />
+		</copy>
 	</target>
         
 	<!-- Build entire project -->
