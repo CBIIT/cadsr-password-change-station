@@ -1,5 +1,7 @@
 --run as sbrext
 
+insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.NOTIFY_TYPE', '14,7,4')
+/
 insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.ADDR', 'warzeld@mail.nih.gov')
 /
 insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.ADMIN.NAME', 'caDSR Alert Administrator')
