@@ -80,10 +80,10 @@
                 </section>
             </manifest>
         </jar>
-		<copy tofile="${dist.dir}/bin/ojdbc14.jar" filtering="true" verbose="true">
+		<copy tofile="${dist.dir}/bin/ojdbc14.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/ojdbc14.jar" />
 		</copy>
-		<copy tofile="${dist.dir}/bin/log4j-1.2.13.jar" filtering="true" verbose="true">
+		<copy tofile="${dist.dir}/bin/log4j-1.2.13.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/log4j-1.2.13.jar" />
 		</copy>
 	</target>
@@ -140,18 +140,6 @@
 		  <fileset file="src/lib/joda-time-1.6.2.jar" />
 		</copy>
 
-<!-- begin - the following will be removed once the test is over -->		
-		<copy tofile="src/WebRoot/WEB-INF/lib/quartz-2.1.5.jar" filtering="false" verbose="true">
-		  <fileset file="src/lib/quartz-2.1.5.jar" />
-		</copy>
-		<copy tofile="src/WebRoot/WEB-INF/lib/slf4j-api-1.6.1.jar" filtering="false" verbose="true">
-		  <fileset file="src/lib/slf4j-api-1.6.1.jar" />
-		</copy>
-		<copy tofile="src/WebRoot/WEB-INF/lib/slf4j-log4j12-1.6.1.jar" filtering="false" verbose="true">
-		  <fileset file="src/lib/slf4j-log4j12-1.6.1.jar" />
-		</copy>
-<!-- end - the following will be removed once the test is over -->		
-		
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>
 
