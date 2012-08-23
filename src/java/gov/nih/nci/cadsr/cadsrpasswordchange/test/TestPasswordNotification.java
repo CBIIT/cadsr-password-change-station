@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.CommonUtil;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.ConnectionUtil;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.EmailHelper;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.EmailSending;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.NotifyPassword;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotify;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotifyDAO;
@@ -94,7 +96,6 @@ public class TestPasswordNotification {
 
 //	@Test
 	public void testUserStatusUpdateWithPasswordExpiring() {
-		Connection conn = null;
 		List<User>l = new ArrayList();
 		try {
 			User user = new User();
@@ -114,7 +115,6 @@ public class TestPasswordNotification {
 	
 //	@Test
 	public void testLoadUserQueueForPasswordExpiring() {
-		Connection conn = null;
 		List<User>l = new ArrayList();
 		try {
 			User user = new User();
@@ -134,7 +134,6 @@ public class TestPasswordNotification {
 	
 //	@Test
 	public void testRemoveUserQueueForPasswordExpiring() {
-		Connection conn = null;
 		List<User>l = new ArrayList();
 		try {
 			User user = new User();
@@ -150,7 +149,6 @@ public class TestPasswordNotification {
 
 //	@Test
 	public void testLastPasswordChangedDateInDaysFromNow() {
-		Connection conn = null;
 		List<User>l = new ArrayList();
 		try {
 			User user = new User();
@@ -286,7 +284,7 @@ public class TestPasswordNotification {
 //		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
 	}
 
-	@Test
+//	@Test
 	public void testNotifications() throws Exception {
 		List<User> recipients = null;
 		NotifyPassword n = new NotifyPassword(conn);
@@ -328,7 +326,39 @@ public class TestPasswordNotification {
 		}
 	}
 
+	private boolean send(User user, int daysLeft) throws Exception {
+		String adminEmailAddress = dao.getAdminEmailAddress();
+		setUp();
+		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
+		setUp();
+		String emailBody = EmailHelper.handleDaysToken(dao.getEmailBody(), daysLeft);
+		String emailAddress = user.getElectronicMailAddress();
+		setUp();
+		String host = dao.getHostName();
+		setUp();
+		String port = dao.getHostPort();
+		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
+		return ms.send();
+	}
+
+	@Test
+	public void testEmailSending() throws Exception {
+		int daysLeft = 7;
+		User u = getExpiredUser("user10", "james.tan@nih.gov", daysLeft, 61);
+		send(u, daysLeft);
+	}
+
 /*
+update sbrext.tool_options_view_ext set value = 'Your password is about to expire in ${daysLeft} days. Please login to Password Change Station or call NCI Helpdesk to change your password.'
+where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.INTRO'
+
+update sbrext.tool_options_view_ext set value = 'caDSR Password Expiration Notice (in ${daysLeft} day(s))'
+where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.SUBJECT'
+
+select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'SENTINEL' and Property like '%EMAIL%'
+
+select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like '%EMAIL%'
+
 select username, expiry_date, account_status from dba_users where expiry_date < sysdate+2 and expiry_date < sysdate+60 and account_status IN ( 'OPEN', 'EXPIRED(GRACE)' ) order by account_status, expiry_date, username
 
 SELECT mail_address, username, account_status, expiry_date, lock_date FROM dba_users a, user_accounts b WHERE a.username = b.ua_name and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+60;
