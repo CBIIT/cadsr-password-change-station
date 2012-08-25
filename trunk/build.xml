@@ -86,6 +86,9 @@
 		<copy tofile="${dist.dir}/bin/log4j-1.2.13.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/log4j-1.2.13.jar" />
 		</copy>
+		<copy tofile="${dist.dir}/bin/log4j.properties" filtering="false" verbose="true">
+		  <fileset file="src/conf/log4j.properties" />
+		</copy>
 	</target>
         
 	<!-- Build entire project -->
