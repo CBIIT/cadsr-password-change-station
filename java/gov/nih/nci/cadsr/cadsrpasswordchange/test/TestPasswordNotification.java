@@ -382,5 +382,7 @@ alter user TEST113 profile "cadsr_test_2_days"
 /
 alter user TEST113 identified by Te$t1235 password expire;
 /
+alter user UATDEV1 profile "cadsr_user"
+/
 */
 }

@@ -341,7 +341,22 @@ public class TestPasswordReset {
 	public void testEncryptionDecryptionWithJavaCrypto() {
 
 	}
+/*
+use the admin tool to create the user
 
+alter user UATDEV1 profile "cadsr_user"
+
+select * from sbr.user_accounts_view where ua_name = 'UATDEV1'
+UA_NAME	DESCRIPTION	DATE_CREATED	CREATED_BY	DATE_MODIFIED	MODIFIED_BY	NAME	ORG_IDSEQ	TITLE	PHONE_NUMBER	FAX_NUMBER	TELEX_NUMBER	MAIL_ADDRESS	ELECTRONIC_MAIL_ADDRESS	DER_ADMIN_IND	ENABLED_IND	ALERT_IND	
+UATDEV1	<NULL>	2012-08-27 00:00:00.0	TANJ	2012-08-27 00:00:00.0	TANJ	UAT DEV TEST 1 USER	E66B9F0E-BE4D-1A5B-E034-0003BA3F9857	<NULL>	<NULL>	<NULL>	<NULL>	<NULL>	<NULL>	No	Yes	Yes	
+
+select * from sys.cadsr_users where username = 'UATDEV1'
+USERNAME	USER_ID	ACCOUNT_STATUS	LOCK_DATE	EXPIRY_DATE	DEFAULT_TABLESPACE	TEMPORARY_TABLESPACE	CREATED	PROFILE	INITIAL_RSRC_CONSUMER_GROUP	EXTERNAL_NAME	PTIME	
+UATDEV1	276	OPEN	<NULL>	2012-10-26 11:44:35.0	USERS	TEMP	2012-08-27 11:44:35.0	cadsr_user	DEFAULT_CONSUMER_GROUP	<NULL>	2012-08-27 11:44:35.0	
+
+select * from sbrext.user_security_questions where ua_name = 'UATDEV1'
+*/
+	
 	/*
 	 * --asign profile to an existing user alter user SCOTT profile "cadsr_user"
 	 * / --expire the users password to force the user to change it: alter user
