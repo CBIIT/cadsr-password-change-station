@@ -56,7 +56,7 @@ public class PasswordChangeDAO implements PasswordChange {
 	        conn = ds.getConnection();
 	        }
 	        logger.debug("connected");
-			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UA_NAME = ?");
+			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UPPER(UA_NAME) = ?");	//CADSRPASSW-15
 			stmt.setString(1, username.toUpperCase());
 			rs = stmt.executeQuery();
 			if(rs.next()) {

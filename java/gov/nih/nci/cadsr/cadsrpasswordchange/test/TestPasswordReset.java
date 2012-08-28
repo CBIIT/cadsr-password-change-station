@@ -340,9 +340,10 @@ public class TestPasswordReset {
 	
 	private String UPPERCASE_USER_ID = "TEST111";
 	private String LOWERCASE_USER_ID = "test111";
+	private String PROPERCASE_USER_ID = "Test111";
 	private String PASSWORD = "Te$t1235";
 	
-	@Test
+//	@Test
 	public void testUserIDUpperCase() {
 		boolean status = false;
 		try {
@@ -355,12 +356,26 @@ public class TestPasswordReset {
 		assertTrue(status);
 	}
 
-	@Test
+//	@Test
 	public void testUserIDLowerCase() {
 		boolean status = false;
 		try {
 			Connection conn = getConnection(LOWERCASE_USER_ID, PASSWORD);
 			status = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+		assertTrue(status);
+	}
+
+	@Test
+	public void testUserIDProperCase() {
+		boolean status = false;
+		try {
+			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new PasswordChangeDAO(conn);
+			status = dao.checkValidUser(PROPERCASE_USER_ID);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
