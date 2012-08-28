@@ -713,16 +713,16 @@ public class MainServlet extends HttpServlet {
 			String newPassword2 = req.getParameter("newpswd2");
 			
 			//begin CADSRPASSW-16
-			Map<String, String> userQuestions = new HashMap<String, String>();
-			Map<String, String> userAnswers =  new HashMap<String, String>();
-			loadUserStoredQna(username, userQuestions, userAnswers);
-			if(userQuestions.size() == 0) {
-				logger.info("no security question found");
-				String msg = Messages.getString("PasswordChangeHelper.136");
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, msg);
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
-			}
+//			Map<String, String> userQuestions = new HashMap<String, String>();
+//			Map<String, String> userAnswers =  new HashMap<String, String>();
+//			loadUserStoredQna(username, userQuestions, userAnswers);
+//			if(userQuestions.size() == 0) {
+//				logger.info("no security question found");
+//				String msg = Messages.getString("PasswordChangeHelper.136");
+//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, msg);
+//				resp.sendRedirect("./jsp/changePassword.jsp");
+//				return;
+//			}
 			//end CADSRPASSW-16
 
 			if(Messages.getString("PasswordChangeHelper.3").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
