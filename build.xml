@@ -29,7 +29,7 @@
 		<echo message="resources"/>
 		<filter token="buildDateTime" value="${DSTAMP}${TSTAMP}"/>
 
-		<copy tofile="src/WebRoot/cadsrpasswordchange.properties" filtering="true">
+		<copy tofile="src/WebRoot/WEB-INF/classes/cadsrpasswordchange.properties" filtering="true">
 		  <fileset file="src/conf/template.cadsrpasswordchange.properties" /> 
 		</copy>
 		
