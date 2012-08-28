@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -282,7 +283,7 @@ public class TestPasswordReset {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testUserSecurityQuestionSave() throws Exception {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
 		qna.setUaName(USER_ID);
@@ -313,7 +314,7 @@ public class TestPasswordReset {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testUserSecurityQuestionUpdate() {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
 		try {
@@ -337,11 +338,39 @@ public class TestPasswordReset {
 		}
 	}
 	
-	//@Test
-	public void testEncryptionDecryptionWithJavaCrypto() {
-
+	private String UPPERCASE_USER_ID = "TEST111";
+	private String LOWERCASE_USER_ID = "test111";
+	private String PASSWORD = "Te$t1235";
+	
+	@Test
+	public void testUserIDUpperCase() {
+		boolean status = false;
+		try {
+			Connection conn = getConnection(UPPERCASE_USER_ID, PASSWORD);
+			status = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+		assertTrue(status);
 	}
+
+	@Test
+	public void testUserIDLowerCase() {
+		boolean status = false;
+		try {
+			Connection conn = getConnection(LOWERCASE_USER_ID, PASSWORD);
+			status = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+		assertTrue(status);
+	}
+	
 /*
+select * from sys.dba_profiles where lower(profile) = 'cadsr_user'
+
 use the admin tool to create the user
 
 alter user UATDEV1 profile "cadsr_user"
