@@ -82,13 +82,16 @@ public class PasswordChangeDAO implements PasswordChange {
 		if(datasource == null) {
 			throw new Exception("DataSource is empty or NULL.");
 		}
+		if(username == null || password == null) {
+			throw new Exception("username and/or password is empty or NULL.");
+		}
 		
 		logger.info ("checkValidUser(username, password) user: " + username);
 
 		UserBean userBean = new UserBean(username);
 		
 		try {
-	        conn = datasource.getConnection(username, password);
+	        conn = datasource.getConnection(username.toUpperCase(), password); 	//CADSRPASSW-15 - should not matter in Oracle 10g but will help in a higher version
 	        logger.debug("connected");	        
 			userBean.setLoggedIn(true);
 			userBean.setResult(new Result(ResultCode.NOT_EXPIRED));
