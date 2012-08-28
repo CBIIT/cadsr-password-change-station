@@ -370,7 +370,7 @@ public class TestPasswordReset {
 	}
 
 	@Test
-	public void testUserIDProperCase() {
+	public void testUserIDProperCaseInSetup() {
 		boolean status = false;
 		try {
 			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
@@ -381,6 +381,20 @@ public class TestPasswordReset {
 		} finally {
 		}
 		assertTrue(status);
+	}
+
+	@Test
+	public void testUserIDProperCaseInPasswordChange() {
+		UserBean status = null;
+		try {
+			Connection conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new PasswordChangeDAO(conn);
+			status = dao.checkValidUser(PROPERCASE_USER_ID, PASSWORD);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+//		assertTrue(status.getResult().equals(ResultCode.));
 	}
 	
 /*
