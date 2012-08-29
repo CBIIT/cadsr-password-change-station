@@ -14,6 +14,7 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -341,11 +342,40 @@ public class TestPasswordNotification {
 		return ms.send();
 	}
 
-	@Test
+//	@Test
 	public void testEmailSending() throws Exception {
 		int daysLeft = 7;
 		User u = getExpiredUser("user10", "james.tan@nih.gov", daysLeft, 61);
 		send(u, daysLeft);
+	}
+
+	/**
+	 * Mockup method for NotifyPassword.doAll(String propFile_).
+	 */
+	public void doAll(String propFile_) throws Exception {
+		dao = new PasswordNotifyDAO(conn);
+		String _processingNotificationDays = dao.getProcessTypes();
+		if(_processingNotificationDays != null) {
+			try {
+				List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
+				int size = types.size();
+				int index = 1;
+				for (String t : types) {
+					index++;
+					System.out.println("Notification type " + t + " processed.");
+				}
+				System.out.println(".doAll.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Missing processing types. Please check EMAIL.NOTIFY_TYPE property value in the table sbrext.tool_options_view_ext.");
+		}
+	}
+
+	@Test
+	public void testMainLoop() throws Exception {
+		doAll(null);
 	}
 
 /*
@@ -381,8 +411,6 @@ alter user TEST112 profile "cadsr_test_2_days"
 alter user TEST113 profile "cadsr_test_2_days"
 /
 alter user TEST113 identified by Te$t1235 password expire;
-/
-alter user UATDEV1 profile "cadsr_user"
 /
 */
 }

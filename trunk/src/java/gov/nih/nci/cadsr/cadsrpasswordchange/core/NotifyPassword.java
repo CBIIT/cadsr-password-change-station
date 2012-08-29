@@ -62,7 +62,7 @@ public class NotifyPassword {
             ods.setServiceName(parts[2]);
 
             _conn = ods.getConnection(_user, _pswd);
-            _conn.setAutoCommit(false);
+            _conn.setAutoCommit(true);
             return 0;
         }
         catch (SQLException ex)
@@ -80,7 +80,7 @@ public class NotifyPassword {
     {
         _propList = new Properties();
 
-        _logger.info("\n\nLoading properties...\n\n");
+        _logger.debug("\n\nLoading properties...\n\n");
 
         try
         {
@@ -105,26 +105,31 @@ public class NotifyPassword {
         if (_pswd == null)
             _logger.error("Missing " + Constants._DSPSWD + " in " + propFile_);
 
-        _processingNotificationDays = _propList.getProperty(Constants.NOTIFICATION_TYPE);
-        if (_processingNotificationDays == null)
-            _logger.error("Missing " + Constants.NOTIFICATION_TYPE + " in " + propFile_);
     }
     
 	public void doAll(String propFile_) throws Exception {
+		_logger.debug("NotifyPassword.doAll entered ...");
         loadProp(propFile_);
-		
-		try {
-			List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
-			int size = types.size();
-			int index = 1;
-			for (String t : types) {
-				process(Integer.valueOf(t).intValue(), size, index);
-				index++;
+        open();
+		dao = new PasswordNotifyDAO(_conn);
+		_processingNotificationDays = dao.getProcessTypes();
+		if(_processingNotificationDays != null) {
+			try {
+				List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
+				int size = types.size();
+				int index = 1;
+				for (String t : types) {
+					process(Integer.valueOf(t).intValue(), size, index);
+					index++;
+					_logger.debug("Notification type " + t + " processed.");
+				}
+				_logger.debug(".doAll.");
+			} catch (Exception e) {
+				//e.printStackTrace();
+				_logger.error(CommonUtil.toString(e));
 			}
-			_logger.debug(".doAll.");
-		} catch (Exception e) {
-			//e.printStackTrace();
-			_logger.error(CommonUtil.toString(e));
+		} else {
+			_logger.error("Missing processing types. Please check EMAIL.NOTIFY_TYPE property value in the table sbrext.tool_options_view_ext.");
 		}
 		
         if (_conn != null)
@@ -132,9 +137,12 @@ public class NotifyPassword {
             _conn.close();
             _conn = null;
         }
+		_logger.debug("NotifyPassword.doAll done.");
 	}
 
 	private void process(int days, int size, int index) throws Exception {
+		_logger.debug("NotifyPassword.process entered ...");
+		
 		List<User> recipients = null;
         open();
 		dao = new PasswordNotifyDAO(_conn);
@@ -155,13 +163,15 @@ public class NotifyPassword {
 					} else {
 						_logger.info("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
 						updateStatus(u, null, days);
-						_logger.debug("date updated for user " + u);
+						_logger.debug("status date updated for user " + u);
 					}
 				}
 			}
 		} else {
-			_logger.debug("No user for notification of " + days + " found");
+			_logger.info("No user for notification of " + days + " found");
 		}
+		
+		_logger.debug("NotifyPassword.process done.");		
 	}
 
 	/**
@@ -247,10 +257,12 @@ public class NotifyPassword {
 					//the last notification type
 					Calendar start = Calendar.getInstance();
 					start.setTime(passwordChangedDate);
-					_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change");
 					if(daysSincePasswordChange >= 1) {
 						ret = true;
 					}
+					_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change, send flag is " + ret);
+				} else {
+					_logger.debug("daily notification is disabled (types = '"+ _processingNotificationDays + "').");
 				}
 			}
 		} else 
