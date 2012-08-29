@@ -34,7 +34,7 @@ public enum ResultCode {
 	PASSWORD_REUSED{
 		@Override
 		public String userMessage() {
-			return "The password cannot be reused.";
+			return "You are trying to reuse a password that you have used recently. Please try another password.";	//CADSRPASSW-26
 		}
 	},
 	INVALID_OLD_PASSWORD{
