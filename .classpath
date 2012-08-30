@@ -14,7 +14,6 @@
 	<classpathentry kind="lib" path="src/lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="src/lib/activation.jar"/>
 	<classpathentry kind="lib" path="src/lib/mail.jar"/>
-	<classpathentry kind="lib" path="src/lib/quartz-2.1.5.jar"/>
 	<classpathentry kind="lib" path="src/lib/joda-time-1.6.2.jar"/>
 	<classpathentry kind="output" path="src/WebRoot/WEB-INF/classes"/>
 </classpath>
