@@ -19,7 +19,7 @@
         <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
         <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
         <LINK href="/cadsrpasswordchange/css/cadsrpasswordchange.css" rel="stylesheet" type="text/css">
-        
+ 		<SCRIPT type="text/javascript" src="/cadsrpasswordchange/js/cadsrpasswordchange.js"></script>
 		<script language="JavaScript" type="text/JavaScript">
 		function callLogout(){
 		     document.LogoutForm.submit();
@@ -28,7 +28,7 @@
 		
     </head>
 
-	<body>
+	<body onLoad="setFocus('LoginID', 'text');">
 
 		<%
 /*		
