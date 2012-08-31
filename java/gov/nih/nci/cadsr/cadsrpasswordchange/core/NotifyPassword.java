@@ -188,7 +188,10 @@ public class NotifyPassword {
 		emailSubject = "caDSR Password Expiration Notice";
 		emailBody = "Your password is about to expire in " + daysLeft + ". Please login to Password Change Station or call NCI Helpdesk to change your password.";
 		String emailAddress = user.getElectronicMailAddress();
-		EmailSending ms = new EmailSending("do-no-reply@mail.nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
+//		EmailSending ms = new EmailSending("do-not-reply@nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
+		_logger.info("sendEmail:send to test account is true");
+		EmailSending ms = new EmailSending("xawave@gmail.com", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", "xawave@gmail.com", emailSubject, emailBody);
+		_logger.debug("sendEmail:sent");
 		return ms.send();
 	}
 
