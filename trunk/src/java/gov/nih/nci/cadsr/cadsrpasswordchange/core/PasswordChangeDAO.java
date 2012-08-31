@@ -181,8 +181,13 @@ public class PasswordChangeDAO implements PasswordChange {
         String sql = null;
         ResultSet rs = null;
         UserSecurityQuestion q = null;
+        //begin CADSRPASSW-15
+        if(uaName != null) {
+        	uaName = uaName.toUpperCase();
+        }
+        //end CADSRPASSW-15
         try {
-            sql = "select * from " + QUESTION_TABLE_NAME + " where ua_name = ?";
+            sql = "select * from " + QUESTION_TABLE_NAME + " where UPPER(ua_name) = ?";		//CADSRPASSW-15
 
             logger.debug("findByPrimaryKey sql : " + sql);
 
