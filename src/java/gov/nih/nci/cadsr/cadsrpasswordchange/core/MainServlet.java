@@ -157,8 +157,8 @@ public class MainServlet extends HttpServlet {
 		doValidateQuestion2(req, resp);
 	}
 
-	private void doQuestion1(HttpServletRequest req, HttpServletResponse resp) {
 
+	private void doQuestion1(HttpServletRequest req, HttpServletResponse resp) {
 		logger.info("doQuestion1");
 		
 		try {
@@ -601,8 +601,15 @@ public class MainServlet extends HttpServlet {
 	throws Exception {
 
 		HttpSession session = req.getSession(false);
-		Map<?, ?> userQuestions = (HashMap<?, ?>) session.getAttribute(Constants.ALL_QUESTIONS);
-		Map<?, ?> userAnswers = (HashMap<?, ?>) session.getAttribute(Constants.ALL_ANSWERS);
+//		Map<?, ?> userQuestions = (HashMap<?, ?>) session.getAttribute(Constants.ALL_QUESTIONS);
+//		Map<?, ?> userAnswers = (HashMap<?, ?>) session.getAttribute(Constants.ALL_ANSWERS);
+		//begin CADSRPASSW-43
+		Map<String, String> userQuestions = new HashMap<String, String>();
+		Map<String, String> userAnswers =  new HashMap<String, String>();
+		String username = (String)session.getAttribute(Constants.USERNAME);
+		//pull all questions related to this user
+		loadUserStoredQna(username, userQuestions, userAnswers);
+		//end CADSRPASSW-43
 		logger.info("questions " + userQuestions != null?userQuestions.size():0 + " answers " + userAnswers.size());
 
 		String question1 = req.getParameter("question");
