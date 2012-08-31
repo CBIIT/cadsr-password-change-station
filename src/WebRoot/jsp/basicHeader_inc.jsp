@@ -1,6 +1,5 @@
 <SCRIPT LANGUAGE="JavaScript1.1" SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript1.1" SRC='<html:rewrite page="/js/newWinJS.js"/>'></SCRIPT>
-<%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <tr>
     <td align="left" nowrap>
