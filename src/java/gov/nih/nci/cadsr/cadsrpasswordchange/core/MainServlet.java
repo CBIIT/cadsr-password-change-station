@@ -233,6 +233,30 @@ public class MainServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	
+	private void updateUserStoredAttemptedCount(String username) throws Exception {
+		try {
+			connect();
+			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+			UserSecurityQuestion oldQna = dao.findByUaName(username);
+			if(oldQna == null) {
+				throw new Exception("Questions have to exists before attempted count can be updated.");
+			}
+			
+			connect();
+			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
+			long count = 1;
+			if(oldQna.getAttemptedCount() != null) {
+				count = oldQna.getAttemptedCount().longValue() + 1;
+			}
+			oldQna.setAttemptedCount(new Long(count));
+			dao1.update(username, oldQna);
+			//showUserSecurityQuestionList();	//just for debug
+			disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	//Please the following method for debugging
 	/*
