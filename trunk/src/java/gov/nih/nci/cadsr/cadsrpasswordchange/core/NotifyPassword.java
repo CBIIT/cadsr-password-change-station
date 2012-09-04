@@ -57,9 +57,12 @@ public class NotifyPassword {
 
             String parts[] = _dsurl.split("[:]");
             ods.setDriverType("thin");
-            ods.setServerName(parts[0]);
-            ods.setPortNumber(Integer.parseInt(parts[1]));
-            ods.setServiceName(parts[2]);
+            _logger.debug("NotifyPassword:open before [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
+            parts[3] = parts[3].substring(1, parts[3].length());
+            _logger.info("NotifyPassword:open after [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
+            ods.setServerName(parts[3]);
+            ods.setPortNumber(Integer.parseInt(parts[4]));
+            ods.setServiceName(parts[5]);
 
             _conn = ods.getConnection(_user, _pswd);
             _conn.setAutoCommit(true);
