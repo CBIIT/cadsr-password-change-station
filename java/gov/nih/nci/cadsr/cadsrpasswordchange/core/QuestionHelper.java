@@ -11,7 +11,6 @@ public class QuestionHelper {
 		l.add("What is the name of your favorite sports team?");
 		l.add("What is the name of your favorite singer or band?");
 		l.add("What is the name of your favorite television series?");
-		l.add("What is the last name of your favorite school teacher?");
 		l.add("What is the name of your favorite restaurant?");
 		l.add("What is the name of your favorite movie?");
 		l.add("What is the name of your favorite song?");
