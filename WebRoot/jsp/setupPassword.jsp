@@ -63,7 +63,7 @@ if (session.getAttribute("username") == null) {
 		%>
 		  
 		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
-     
+
     	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
 
 		<cadsrpasswordchangetags:header showlogout="false"/>
@@ -75,7 +75,7 @@ if (session.getAttribute("username") == null) {
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>Use this screen to setup your security questions.</p>
+        				<p class=std>Warning: Security questions must be created in order to reset a password if a password is forgotten or locked.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
