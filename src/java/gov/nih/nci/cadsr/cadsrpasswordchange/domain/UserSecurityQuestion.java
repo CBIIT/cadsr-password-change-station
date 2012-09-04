@@ -27,9 +27,7 @@ public class UserSecurityQuestion extends AbstractDto {
     private String question3;
     private String answer3;
     private Date dateModified;
-    private Long attemptedCount1;
-    private Long attemptedCount2;
-    private Long attemptedCount3;
+    private Long attemptedCount;
 
     ////////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -113,28 +111,12 @@ public class UserSecurityQuestion extends AbstractDto {
         this.dateModified = _val;
     }
 
-    public Long getAttemptedCount1() {
-        return attemptedCount1;
+    public Long getAttemptedCount() {
+        return attemptedCount;
     }
 
-    public void setAttemptedCount1( Long _val) {
-        this.attemptedCount1 = _val;
-    }
-
-    public Long getAttemptedCount2() {
-        return attemptedCount2;
-    }
-
-    public void setAttemptedCount2( Long _val) {
-        this.attemptedCount2 = _val;
-    }
-
-    public Long getAttemptedCount3() {
-        return attemptedCount3;
-    }
-
-    public void setAttemptedCount3( Long _val) {
-        this.attemptedCount3 = _val;
+    public void setAttemptedCount( Long _val) {
+        this.attemptedCount = _val;
     }
 
     /**
@@ -188,20 +170,10 @@ public class UserSecurityQuestion extends AbstractDto {
         }
         else if ( _o.dateModified == null || dateModified.getTime() != _o.dateModified.getTime()) return false;
 
-        if ( attemptedCount1 == null ) {
-            if ( _o.attemptedCount1 != null ) return false;
+        if ( attemptedCount == null ) {
+            if ( _o.attemptedCount != null ) return false;
         }
-        else if ( _o.attemptedCount1 == null || attemptedCount1.longValue() != _o.attemptedCount1.longValue()) return false;
-
-        if ( attemptedCount2 == null ) {
-            if ( _o.attemptedCount2 != null ) return false;
-        }
-        else if ( _o.attemptedCount2 == null || attemptedCount2.longValue() != _o.attemptedCount2.longValue()) return false;
-
-        if ( attemptedCount3 == null ) {
-            if ( _o.attemptedCount3 != null ) return false;
-        }
-        else if ( _o.attemptedCount3 == null || attemptedCount3.longValue() != _o.attemptedCount3.longValue()) return false;
+        else if ( _o.attemptedCount == null || attemptedCount.longValue() != _o.attemptedCount.longValue()) return false;
 
         return true;
     }
@@ -220,9 +192,7 @@ public class UserSecurityQuestion extends AbstractDto {
         _ret = 29 * _ret + (question3 == null ? 0 : question3.hashCode());
         _ret = 29 * _ret + (answer3 == null ? 0 : answer3.hashCode());
         _ret = 29 * _ret + (dateModified == null ? 0 : (int)dateModified.getTime());
-        _ret = 29 * _ret + (attemptedCount1 == null ? 0 : (int)(attemptedCount1 ^ (attemptedCount1 >>> 32)));
-        _ret = 29 * _ret + (attemptedCount2 == null ? 0 : (int)(attemptedCount2 ^ (attemptedCount2 >>> 32)));
-        _ret = 29 * _ret + (attemptedCount3 == null ? 0 : (int)(attemptedCount3 ^ (attemptedCount3 >>> 32)));
+        _ret = 29 * _ret + (attemptedCount == null ? 0 : (int)(attemptedCount ^ (attemptedCount >>> 32)));
 
         return _ret;
     }
@@ -244,8 +214,6 @@ public class UserSecurityQuestion extends AbstractDto {
         append( sb, "question3", question3 );
         append( sb, "answer3", answer3 );
         append( sb, "dateModified", dateModified );
-        append( sb, "attemptedCount1", attemptedCount1 );
-        append( sb, "attemptedCount2", attemptedCount2 );
-        append( sb, "attemptedCount3", attemptedCount3 );
+        append( sb, "attemptedCount", attemptedCount );
     }
 }
