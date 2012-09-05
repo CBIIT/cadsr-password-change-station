@@ -196,17 +196,32 @@ public class NotifyPassword {
 		dao.updateQueue(user);
 	}
 	
-	private boolean sendEmail(User user, int daysLeft) throws Exception {
+	private boolean sendEmail1(User user, int daysLeft) throws Exception {
 		emailSubject = "caDSR Password Expiration Notice";
 		emailBody = "Your password is about to expire in " + daysLeft + ". Please login to Password Change Station or call NCI Helpdesk to change your password.";
 		String emailAddress = user.getElectronicMailAddress();
-//		EmailSending ms = new EmailSending("do-not-reply@nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
+		EmailSending ms = new EmailSending("do-not-reply@nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
 		_logger.info("sendEmail:send to test account is true");
-		EmailSending ms = new EmailSending("xawave@gmail.com", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", "xawave@gmail.com", emailSubject, emailBody);
 		_logger.debug("sendEmail:sent");
 		return ms.send();
 	}
 
+	private boolean sendEmail(User user, int daysLeft) throws Exception {
+        open();
+		String adminEmailAddress = dao.getAdminEmailAddress();
+        open();
+		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
+        open();
+		String emailBody = EmailHelper.handleDaysToken(dao.getEmailBody(), daysLeft);
+		String emailAddress = user.getElectronicMailAddress();
+        open();
+		String host = dao.getHostName();
+        open();
+		String port = dao.getHostPort();
+		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
+		return ms.send();
+	}
+	
 	/**
 	 * Method to make sure the latest processing details is reflected with the passed user.
 	 * @param user
