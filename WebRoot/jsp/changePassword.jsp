@@ -97,8 +97,7 @@ Your new password may only use characters from the following categories and must
 						if (errorMessage.equals("")) {
 							if (userMessage.equals("")) {
 					%>
-					<p class=std>Use this screen to change your password. You may
-						login here with an expired password.</p>
+					<p class=std>Please provide your login credentials and a new password (repeated). You may login with an expired password.</p>
 					<%
 						} else {
 					%>
@@ -155,8 +154,7 @@ Your new password may only use characters from the following categories and must
 				<tr>
 					<td colspan="2" valign="middle"><p class="bstd"
 							style="text-align: center; margin-top: 8pt; margin-bottom: 8pt"
-							id="msg">Please provide your login credentials and your
-							desired new password (repeated to avoid typos).</p></td>
+							id="msg"></p></td>
 				</tr>
 				<tr>
 					<td valign="bottom"><input type="submit" name="changePassword"
