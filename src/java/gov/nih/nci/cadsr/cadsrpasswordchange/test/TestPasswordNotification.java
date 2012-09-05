@@ -282,11 +282,12 @@ public class TestPasswordNotification {
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
 		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
-//		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
+		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
 	}
 
-//	@Test
+	@Test
 	public void testNotifications() throws Exception {
+		boolean fromDB = true;	//true = real; false = simulated
 		List<User> recipients = null;
 		NotifyPassword n = new NotifyPassword(conn);
 		int days;
@@ -295,7 +296,12 @@ public class TestPasswordNotification {
 
 		days = 14;
 		index = 1;
-		recipients = getPasswordExpiringList(days);
+		if(!fromDB) {
+			recipients = getPasswordExpiringList(days);
+		} else {
+			recipients = dao.getPasswordExpiringList(days);
+			showUserList(recipients);
+		}
 		for (User u : recipients) {
 			if(u != null) {
 				System.out.println("testNotifications: Processing user [" + u.getUsername() + "] attempted [" + u.getAttemptedCount() + "] type [" + u.getProcessingType() + "] password updated ["
@@ -373,7 +379,7 @@ public class TestPasswordNotification {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testMainLoop() throws Exception {
 		doAll(null);
 	}
@@ -413,4 +419,28 @@ alter user TEST113 profile "cadsr_test_2_days"
 alter user TEST113 identified by Te$t1235 password expire;
 /
 */
+	
+/*
+select
+			   a.created,
+			   a.profile,
+			   b.date_modified,
+			   a.EXPIRY_DATE, 
+			   a.PTIME,  
+			   a.ACCOUNT_STATUS, 
+			   c.electronic_mail_address, 
+			   a.USERNAME, 
+			   a.LOCK_DATE, 
+			   b.DATE_MODIFIED, 
+			   b.ATTEMPTED_COUNT, 
+			   b.PROCESSING_TYPE, 
+			   b.DELIVERY_STATUS 
+			 from 
+			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
+			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
+order by 
+--a.EXPIRY_DATE,
+a.PTIME  asc
+-- and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
+ */
 }
