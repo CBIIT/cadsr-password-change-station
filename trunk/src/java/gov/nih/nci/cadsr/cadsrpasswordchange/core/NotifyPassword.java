@@ -57,14 +57,22 @@ public class NotifyPassword {
 
             String parts[] = _dsurl.split("[:]");
             ods.setDriverType("thin");
-            _logger.debug("NotifyPassword:open before [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
-            parts[3] = parts[3].substring(1, parts[3].length());
-            _logger.info("NotifyPassword:open after [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
-            ods.setServerName(parts[3]);
-            ods.setPortNumber(Integer.parseInt(parts[4]));
-            ods.setServiceName(parts[5]);
-
-            _conn = ods.getConnection(_user, _pswd);
+            _logger.info("NotifyPassword v1.0 build 13");
+//            _logger.debug("NotifyPassword:open before [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
+//            parts[3] = parts[3].substring(1, parts[3].length());
+//            _logger.info("NotifyPassword:open after [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
+//            ods.setServerName(parts[3]);
+//            ods.setPortNumber(Integer.parseInt(parts[4]));
+//            ods.setServiceName(parts[5]);
+            //http://docs.oracle.com/cd/B19306_01/java.102/b14355/jdbcthin.htm
+//            String connString="jdbc:oracle:thin:@prodHost:1521:ORCL";
+            String connString=_dsurl;
+            ods.setURL(connString);
+            ods.setUser(_user);
+            ods.setPassword(_pswd);
+            _logger.info("NotifyPassword:open _dsurl[" + _dsurl + " via _user["+ _user + "]");
+            Connection conn = ods.getConnection();
+//            _conn = ods.getConnection(_user, _pswd);
             _conn.setAutoCommit(true);
             return 0;
         }
