@@ -1,11 +1,11 @@
 <%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title><%=Constants.RESET_TITLE %></title>
+        <title><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></title>
         
 		<div style="position:absolute;">
  			<a href="#skip">
@@ -56,6 +56,8 @@
 
 		<cadsrpasswordchangetags:header showlogout="true"/>
 
+		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></h3></p></td></tr></table>
+	
 		<a name="skip" id="skip"></a>
 			
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/changePassword" method="POST" focus="userid" title="Use this screen to change your password">

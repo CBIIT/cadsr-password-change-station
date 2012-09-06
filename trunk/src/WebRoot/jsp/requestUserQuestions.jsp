@@ -1,11 +1,16 @@
 <%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title><%=Constants.RESET_TITLE %></title>
+    	<%
+    		if(request.getParameter("action") != null) {
+    			request.getSession().setAttribute("action", (String)request.getParameter("action"));
+    		}
+    	%>
+        <title><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></title>
         
 		<div style="position:absolute;">
  			<a href="#skip">
@@ -56,6 +61,9 @@
     	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
 
 		<cadsrpasswordchangetags:header showlogout="false"/>
+		
+		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></h3></p></td></tr></table>
+		
 
 		<a name="skip" id="skip"></a>
 			
@@ -67,7 +75,7 @@
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>You will be prompted to answer your security questions.</p>
+        				<p class=std>You will be prompted to answer security Questions.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>

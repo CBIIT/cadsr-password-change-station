@@ -7,7 +7,7 @@
 <html>
     <head>
 
-        <title><%=Constants.RESET_TITLE %></title>
+        <title><%=Constants.RESET_TITLE%></title>
 
 		<div style="position:absolute;">
  			<a href="#skip">
@@ -29,10 +29,10 @@
       %@ include file="basicHeader_inc.jsp"%>
 	-->
 		<%
-			MainServlet.initProperties();
+//			MainServlet.initProperties();
 			String errorMessage = (String)session.getAttribute("ErrorMessage");
-  			if (errorMessage == null)
-  				errorMessage = "";
+		  			if (errorMessage == null)
+		  				errorMessage = "";
 			session.setAttribute("ErrorMessage", "");
 		%>  
 
@@ -44,11 +44,17 @@
 		<form name="LoginForm" action="/cadsrpasswordchange/login" method="POST" focus="userid" title="Use this screen to login">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
-            <% if (errorMessage.equals("")) { %>
+            <%
+            	if (errorMessage.equals("")) {
+            %>
         		<p class=std>Please click on one option to manage your account.</p>
-            <%} else { %>
+            <%
+            	} else {
+            %>
 				<strong align="center"><%=errorMessage%></strong>
-            <% } %>
+            <%
+            	}
+            %>
 
         	<table summary="Login credentials for the caDSR Password Change Station.">
             	<tr>
@@ -78,9 +84,9 @@
 		<td></td>
 		<td><center><a target="_top" href="<%=Constants.CHANGE_PASSWORD_URL%>">Change Password</a></center></td>
 		<td></td>
-		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">Forgot My Password</a></center></td>
+		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>?action=forgot">Forgot My Password</a></center></td>
 		<td></td>
-		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>">Unlock My Password</a></center></td>
+		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>?action=unlock">Unlock My Password</a></center></td>
             	</tr>
             	
         	</table>

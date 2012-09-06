@@ -61,7 +61,7 @@ public class HeaderTag extends TagSupport {
     			   + "<td align=\"left\"><a target=\"_blank\" href=\""+ PropertyHelper.getLOGO_LINK() +"\">"
     			   + "<img style=\"border: 0px solid black\" title=\"NCICB caDSR\" src=\"/cadsrpasswordchange/images/cadsrpasswordchange_banner.gif\" alt=\"Application Logo\"></a></td>"
     			   + logoutLink + helpLink + "</tr>"
-    			   + "<tr><td align=\"center\"><p class=\"ttl18\">caDSR Password Change Station</p></td></tr>"
+//    			   + "<tr><td align=\"center\"><p class=\"ttl18\">caDSR Password Change Station</p></td></tr>"
     			   + "\n</table>\n");
     	   
        } catch (Exception ex) {

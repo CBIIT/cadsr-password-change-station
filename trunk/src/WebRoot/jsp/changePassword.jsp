@@ -65,6 +65,9 @@
 		<tr>
 			<td><cadsrpasswordchangetags:header
 					showlogout="false" /> <a name="skip" id="skip"></a>
+					
+		<table><tr><td><p class=\"ttl18\"><h3 style="margin-left:300px;"><%=Constants.CHANGE_PASSWORD_TITLE %></h3></p></td></tr></table>
+					
 					<table>
 					<!--
 						<td><%=Constants.PWD_RESTRICTIONS%></td>
