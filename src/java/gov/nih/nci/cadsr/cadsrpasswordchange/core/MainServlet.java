@@ -158,7 +158,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 
-	private void doQuestion1(HttpServletRequest req, HttpServletResponse resp) throws Throwable {
+	private void doQuestion1(HttpServletRequest req, HttpServletResponse resp) {
 		logger.info("doQuestion1");
 		
 		try {
@@ -183,7 +183,7 @@ public class MainServlet extends HttpServlet {
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
-//			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
+			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
 			session.setAttribute(Constants.ALL_QUESTIONS, userQuestions);
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			
@@ -196,9 +196,8 @@ public class MainServlet extends HttpServlet {
 				req.getRequestDispatcher("./jsp/askQuestion1.jsp").forward(req, resp);
 			}
 		}
-		catch (Throwable e) {
-			logger.error(e);
-			throw e;
+		catch (Throwable theException) {
+			logger.error(theException);
 		}
 	}
 
@@ -231,29 +230,32 @@ public class MainServlet extends HttpServlet {
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
 		} catch (Exception e) {
-			logger.error(e);
-			throw e;
+			e.printStackTrace();
 		}
 	}
 	
-	private long getUserStoredAttemptedCount(String username) throws Exception {
-		long count = 0;
+	private void getUserStoredAttemptedCount(String username) throws Exception {
 		try {
 			connect();
 			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 			if(oldQna == null) {
-				throw new Exception("Questions have to exists before attempted count can be retrieved.");
+				throw new Exception("Questions have to exists before attempted count can be updated.");
 			}
 			
+			connect();
+			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
+			long count = 1;
 			if(oldQna.getAttemptedCount() != null) {
-				count = oldQna.getAttemptedCount().longValue();
+				count = oldQna.getAttemptedCount().longValue() + 1;
 			}
+			oldQna.setAttemptedCount(new Long(count));
+			dao1.update(username, oldQna);
+			//showUserSecurityQuestionList();	//just for debug
+			disconnect();
 		} catch (Exception e) {
-			logger.error(e);
-			throw e;
+			e.printStackTrace();
 		}
-		return count;
 	}
 
 	private void updateUserStoredAttemptedCount(String username) throws Exception {

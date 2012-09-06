@@ -420,6 +420,17 @@ public class PasswordChangeDAO implements PasswordChange {
             params.add( dto.getAnswer3());
         }
 
+//        if (sb.length() > 0) {
+//            sb.append( ", " );
+//        }
+//        if ( dto.getAttemptedCount() == null ) {
+//            sb.append( "attempted_count=NULL" );
+//        }
+//        else {
+//            sb.append( "attempted_count=?" );
+//            params.add( dto.getAttemptedCount());
+//        }
+        
         if (sb.length() == 0) {
             return false;
         }
