@@ -12,14 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CommonUtil {
 
-	private static OracleObfuscation x;
-	static {
-		try {
-			x = new OracleObfuscation("$_12345&");
-		} catch (GeneralSecurityException e) {
-			e.printStackTrace();
-		}
-	}
+//	private static OracleObfuscation x;
+//	static {
+//		try {
+//			x = new OracleObfuscation("$_12345&");
+//		} catch (GeneralSecurityException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Pad the String up to the specified length passed.
@@ -92,6 +92,25 @@ public class CommonUtil {
 //	}
 	public static long calculateDays(Date dateEarly, Date dateLater) {  
 		   return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);  
+	}
+	
+	public static String getPageHeader(String token) {
+		String retVal = Constants.RESET_TITLE;
+
+		if(token != null && token.equals("save")) {
+			retVal = Constants.SETUP_TITLE;
+		} else
+		if(token != null && token.equals("change")) {
+			retVal = Constants.CHANGE_PASSWORD_TITLE;
+		} else
+		if(token != null && token.equals("forgot")) {
+			retVal = Constants.FORGOT_PASSWORD_TITLE;
+		} else
+		if(token != null && token.equals("unlock")) {
+			retVal = Constants.UNLOCK_PASSWORD_TITLE;
+		}
+		
+		return retVal;
 	}
 	
 }

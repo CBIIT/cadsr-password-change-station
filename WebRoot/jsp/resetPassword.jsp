@@ -1,11 +1,11 @@
 <%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title><%=Constants.RESET_TITLE %></title>
+        <title><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></title>
         
 		<div style="position:absolute;">
  			<a href="#skip">
@@ -31,22 +31,21 @@
 	<body>
 
 		<%
-		if (session.getAttribute("username") == null) {
+			if (session.getAttribute("username") == null) {
 			// this shouldn't happen, make the user start over
 			//response.sendRedirect("./jsp/loggedOut.jsp");
 			response.sendRedirect(Constants.LOGGEDOUT_URL);
 			return;
-		}
+				}
 			String errorMessage = (String)session.getAttribute("ErrorMessage");
-  			if (errorMessage == null)
-  				errorMessage = "";
+		  			if (errorMessage == null)
+		  				errorMessage = "";
 			session.setAttribute("ErrorMessage", "");
 			
 			String userMessage = (String)session.getAttribute("UserMessage");
-  			if (userMessage == null)
-  				userMessage = "";
+		  			if (userMessage == null)
+		  				userMessage = "";
 			session.setAttribute("UserMessage", "");
-			
 		%>
 		  
 		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
@@ -55,26 +54,38 @@
 
 		<cadsrpasswordchangetags:header showlogout="false"/>
 
+		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></h3></p></td></tr></table>
+
 		<a name="skip" id="skip"></a>
 			
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/resetPassword" method="POST" focus="userid" title="Use this screen to change your password">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
-            <% if (errorMessage.equals("")) {
-            		if (userMessage.equals("")) { %>
+            <%
+            	if (errorMessage.equals("")) {
+                        		if (userMessage.equals("")) {
+            %>
         				<p class=std>Use this screen to change your password.</p>
-        			<%} else { %>
+        			<%
+        				} else {
+        			%>
         				<p class=std><%=userMessage%></p>
-        			<%} %>
-            <%} else { %>
+        			<%
+        				}
+        			%>
+            <%
+            	} else {
+            %>
 					<strong align="center"><%=errorMessage%></strong>
-            <%} %>          
+            <%
+            	}
+            %>          
 		</td>
         	
         	<table summary="Login credentials and new password to change password.">
             <tr>
                 <!--<td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>-->
-                <td valign="middle"><input id="LoginID" type="hidden" name="userid" value="<%=session.getAttribute(Constants.USERNAME) %>" style="width: 3.75in" class="std" readonly="readonly"></td>
+                <td valign="middle"><input id="LoginID" type="hidden" name="userid" value="<%=session.getAttribute(Constants.USERNAME)%>" style="width: 3.75in" class="std" readonly="readonly"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="NewPassword" class=bstd>New Password:</p></td>
