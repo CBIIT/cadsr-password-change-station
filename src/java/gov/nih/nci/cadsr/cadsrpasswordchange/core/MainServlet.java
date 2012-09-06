@@ -183,7 +183,7 @@ public class MainServlet extends HttpServlet {
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
-			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
+//			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
 			session.setAttribute(Constants.ALL_QUESTIONS, userQuestions);
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			
