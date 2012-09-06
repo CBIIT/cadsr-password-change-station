@@ -1,6 +1,6 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.tags;
 
-import gov.nih.nci.cadsr.cadsrpasswordchange.core.MainServlet;
+import gov.nih.nci.cadsr.cadsrpasswordchange.core.MainServletNPE;
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.PropertyHelper;
 
 import javax.servlet.jsp.JspException;
