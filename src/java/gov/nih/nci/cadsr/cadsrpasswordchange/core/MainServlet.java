@@ -543,12 +543,21 @@ public class MainServlet extends HttpServlet {
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
 			session.setAttribute(Constants.USERNAME, username);
+			session.removeAttribute(Constants.Q1);
 			session.setAttribute(Constants.Q1, userQuestions.get(Constants.Q1));
+			session.removeAttribute(Constants.Q2);
 			session.setAttribute(Constants.Q2, userQuestions.get(Constants.Q2));
+			session.removeAttribute(Constants.Q3);
 			session.setAttribute(Constants.Q3, userQuestions.get(Constants.Q3));			
 
+			session.removeAttribute(Constants.ALL_QUESTIONS);
+			logger.debug("questions removed from session.");
 			session.setAttribute(Constants.ALL_QUESTIONS, userQuestions);
+			logger.debug("questions saved in session.");
+			session.removeAttribute(Constants.ALL_ANSWERS);
+			logger.debug("answers removed from session.");
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
+			logger.debug("answers saved in session.");
 			
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
@@ -564,6 +573,13 @@ public class MainServlet extends HttpServlet {
 		}		
 	}
 
+//	private void clearCache(HttpServletRequest req) {
+//		HttpSession session = req.getSession(false);
+//
+//		if(session != null) {
+//		}
+//	}
+	
 	protected void doValidateQuestion1(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException {
 		logger.info("doValidateQuestion 1");
