@@ -83,7 +83,7 @@
                 <td valign="middle"><input id="answer" type="password" name="answer" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             	<input id="answer" type="hidden" name="answerIndex" value="answer3">            
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer security question 3.</p></td>
+                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer your security question 3.</p></td>
             </tr><tr>
                 <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2">
                 <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
