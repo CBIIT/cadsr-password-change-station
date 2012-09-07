@@ -378,15 +378,15 @@ public class MainServlet extends HttpServlet {
 		logger.info("doSaveQuestions");
 		
 		try {
-			req.getSession().invalidate();	//invalid session everytime
-			HttpSession session = req.getSession(true);
-//			HttpSession session = req.getSession(false);
-//			if (session == null) {
-//				logger.debug("null session");
-//				// this shouldn't happen, make the user start over
-//				resp.sendRedirect("./jsp/loggedOut.jsp");
-//				return;
-//			}
+//			req.getSession().invalidate();	//invalid session everytime
+//			HttpSession session = req.getSession(true);
+			HttpSession session = req.getSession(false);	//caDSR Password Change Station CADSRPASSW-43 Reset security questions/answers are the same
+			if (session == null) {
+				logger.debug("null session");
+				// this shouldn't happen, make the user start over
+				resp.sendRedirect("./jsp/loggedOut.jsp");
+				return;
+			}
 			
 			// Security enhancement
 			int paramCount = 0;
