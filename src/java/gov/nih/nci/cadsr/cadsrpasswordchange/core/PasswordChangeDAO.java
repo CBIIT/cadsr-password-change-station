@@ -23,11 +23,11 @@ public class PasswordChangeDAO implements PasswordChange {
 	private DataSource datasource;
     private static final String  QUESTION_TABLE_NAME = "SBREXT.USER_SECURITY_QUESTIONS";
 
-    protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified";
+    protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified, attempted_count";
 
     protected static final String PK_CONDITION = "ua_name=?";
 
-    private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified,attempted_count) VALUES (?,?,?,?,?,?,?,?,?)";
 
     private Logger logger = Logger.getLogger(PasswordChangeDAO.class);
 
@@ -420,17 +420,18 @@ public class PasswordChangeDAO implements PasswordChange {
             params.add( dto.getAnswer3());
         }
 
-//        if (sb.length() > 0) {
-//            sb.append( ", " );
-//        }
-//        if ( dto.getAttemptedCount() == null ) {
-//            sb.append( "attempted_count=NULL" );
-//        }
-//        else {
-//            sb.append( "attempted_count=?" );
-//            params.add( dto.getAttemptedCount());
-//        }
-        
+        if (sb.length() > 0) {
+            sb.append( ", " );
+        }
+        if ( dto.getAttemptedCount() == null ) {
+            sb.append( "attempted_count=NULL" );
+        }
+        else {
+            sb.append( "attempted_count=?" );
+            params.add( dto.getAttemptedCount());
+        }
+        logger.info("PasswordChangeDAO:update attempted_count = " + dto.getAttemptedCount());
+
         if (sb.length() == 0) {
             return false;
         }

@@ -14,12 +14,15 @@ import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import gov.nih.nci.cadsr.cadsrpasswordchange.core.*;
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
 import org.apache.commons.codec.binary.Hex;
@@ -369,7 +372,7 @@ public class TestPasswordReset {
 		assertTrue(status);
 	}
 
-	@Test
+//	@Test
 	public void testUserIDProperCaseInSetup() {
 		boolean status = false;
 		try {
@@ -383,7 +386,7 @@ public class TestPasswordReset {
 		assertTrue(status);
 	}
 
-	@Test
+//	@Test
 	public void testUserIDProperCaseInPasswordChange() {
 		UserBean status = null;
 		try {
@@ -395,6 +398,29 @@ public class TestPasswordReset {
 		} finally {
 		}
 //		assertTrue(status.getResult().equals(ResultCode.));
+	}
+	
+	@Test
+	public void testUserAttemptedCountUpdate() {
+		Connection conn = null;
+		String userID = "TEST112";
+		try {
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new PasswordChangeDAO(conn);
+			UserSecurityQuestion qna = dao.findByPrimaryKey(userID);
+			if(qna != null) {
+				qna = new UserSecurityQuestion();
+				qna.setAttemptedCount(1l);
+				conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+				dao = new PasswordChangeDAO(conn);
+				dao.update(userID, qna);
+			} else {
+				throw new Exception(userID + " does not exist.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
 	}
 	
 /*
