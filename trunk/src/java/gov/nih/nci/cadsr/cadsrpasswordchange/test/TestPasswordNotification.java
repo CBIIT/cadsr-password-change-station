@@ -285,7 +285,7 @@ public class TestPasswordNotification {
 		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
 	}
 
-	@Test
+//	@Test
 	public void testNotifications() throws Exception {
 		boolean fromDB = true;	//true = real; false = simulated
 		List<User> recipients = null;

@@ -236,21 +236,22 @@ public class MainServlet extends HttpServlet {
 	
 	private void getUserStoredAttemptedCount(String username) throws Exception {
 		try {
+			PasswordChangeDAO dao = null;
 			connect();
-			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+			dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 			if(oldQna == null) {
 				throw new Exception("Questions have to exists before attempted count can be updated.");
 			}
 			
 			connect();
-			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
+			dao = new PasswordChangeDAO(datasource);
 			long count = 1;
 			if(oldQna.getAttemptedCount() != null) {
 				count = oldQna.getAttemptedCount().longValue() + 1;
 			}
 			oldQna.setAttemptedCount(new Long(count));
-			dao1.update(username, oldQna);
+			dao.update(username, oldQna);
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
 		} catch (Exception e) {
@@ -260,21 +261,22 @@ public class MainServlet extends HttpServlet {
 
 	private void updateUserStoredAttemptedCount(String username) throws Exception {
 		try {
+			PasswordChangeDAO dao = null;
 			connect();
-			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+			dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 			if(oldQna == null) {
 				throw new Exception("Questions have to exists before attempted count can be updated.");
 			}
 			
 			connect();
-			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
+			dao = new PasswordChangeDAO(datasource);
 			long count = 1;
 			if(oldQna.getAttemptedCount() != null) {
 				count = oldQna.getAttemptedCount().longValue() + 1;
 			}
 			oldQna.setAttemptedCount(new Long(count));
-			dao1.update(username, oldQna);
+			dao.update(username, oldQna);
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
 		} catch (Exception e) {
