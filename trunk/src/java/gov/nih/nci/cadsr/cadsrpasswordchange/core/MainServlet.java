@@ -233,32 +233,27 @@ public class MainServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
-	private void getUserStoredAttemptedCount(String username) throws Exception {
+
+	private long getUserStoredAttemptedCount(String username) throws Exception {
+		long count = 0;
 		try {
-			PasswordChangeDAO dao = null;
 			connect();
 			dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
 			if(oldQna == null) {
-				throw new Exception("Questions have to exists before attempted count can be updated.");
+				throw new Exception("Questions have to exists before attempted count can be retrieved.");
 			}
 			
-			connect();
-			dao = new PasswordChangeDAO(datasource);
-			long count = 1;
 			if(oldQna.getAttemptedCount() != null) {
-				count = oldQna.getAttemptedCount().longValue() + 1;
+				count = oldQna.getAttemptedCount().longValue();
 			}
-			oldQna.setAttemptedCount(new Long(count));
-			dao.update(username, oldQna);
-			//showUserSecurityQuestionList();	//just for debug
-			disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
+			throw e;
 		}
+		return count;
 	}
-
+	
 	private void updateUserStoredAttemptedCount(String username) throws Exception {
 		try {
 			PasswordChangeDAO dao = null;
@@ -284,6 +279,25 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 	
+	private void resetUserStoredAttemptedCount(String username) throws Exception {
+		try {
+			connect();
+			UserSecurityQuestion oldQna = dao.findByUaName(username);
+			if(oldQna == null) {
+				throw new Exception("Questions have to exists before attempted count can be reset.");
+			}
+			
+			connect();
+			long count = 0;
+			oldQna.setAttemptedCount(new Long(count));
+			dao.update(username, oldQna);
+			//showUserSecurityQuestionList();	//just for debug
+			disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	//Please the following method for debugging
 	/*
 	private void showUserSecurityQuestionList() {
@@ -577,15 +591,23 @@ public class MainServlet extends HttpServlet {
 		}		
 	}
 
-//	private void clearCache(HttpServletRequest req) {
-//		HttpSession session = req.getSession(false);
-//
-//		if(session != null) {
-//		}
-//	}
-	
+	//CADSRPASSW-42
+	private void doValidateAttemptedCount(HttpSession session, HttpServletResponse resp, String redictedUrl) throws Exception {
+		if(session == null) {
+			throw new Exception("Http session is null or empty.");
+		}
+		
+		long count = getUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));
+		if(count >= 6) {
+			logger.info("security answers limit reached");
+			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
+			resp.sendRedirect(redictedUrl);
+			return;
+		}
+	}
+
 	protected void doValidateQuestion1(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws Exception {
 		logger.info("doValidateQuestion 1");
 		
 		HttpSession session = req.getSession(false);
@@ -596,6 +618,8 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
+		doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp");
+		
 		try {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
@@ -612,7 +636,7 @@ public class MainServlet extends HttpServlet {
 	}
 	
 	protected void doValidateQuestion2(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws Exception {
 		logger.info("doValidateQuestion 2");
 		
 		HttpSession session = req.getSession(false);
@@ -623,6 +647,8 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
+		doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp");
+		
 		try {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
@@ -639,7 +665,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doValidateQuestion3(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws Exception {
 		logger.info("doValidateQuestion 3");
 		
 		HttpSession session = req.getSession(false);
@@ -650,6 +676,8 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
+		doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp");
+		
 		try {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
@@ -735,7 +763,9 @@ public class MainServlet extends HttpServlet {
 			disconnect();
 
 			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
-				logger.info("password changed");
+				logger.info("password reset");
+				resetUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
+				logger.debug("answer count reset");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
 			} else {
@@ -850,6 +880,8 @@ public class MainServlet extends HttpServlet {
 
 			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
 				logger.info("password changed");
+				resetUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
+				logger.debug("answer count reset");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
 			} else {
