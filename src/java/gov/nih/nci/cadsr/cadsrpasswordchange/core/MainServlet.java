@@ -390,6 +390,7 @@ public class MainServlet extends HttpServlet {
 			
 			// Security enhancement
 			int paramCount = 0;
+			String loginID = req.getParameter("userid");	//CADSRPASSW-40
 			String question1 = req.getParameter("question1");
 			String answer1 = req.getParameter("answer1");
 			String question2 = req.getParameter("question2");
@@ -400,6 +401,7 @@ public class MainServlet extends HttpServlet {
 			//"remember" the questions selected by the user
 			String selectedQ[] = {question1, question2, question3};
 			handleQuestionsOptions(req, selectedQ);
+			req.getSession().setAttribute("userid", loginID);	//CADSRPASSW-40
 			
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, "");			
 			UserBean userBean = (UserBean) session.getAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE);
