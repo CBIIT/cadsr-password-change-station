@@ -75,7 +75,7 @@
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>You will be prompted to answer security Questions.</p>
+        				<p class=std>You will be prompted to answer your security questions.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
