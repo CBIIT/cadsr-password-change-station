@@ -49,12 +49,13 @@ public class MainServlet extends HttpServlet {
 	}
 
     private static void disconnect() {
-		try {
-			datasource.getConnection().close();
-	    	datasource = null;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    	//never close the datasource connection as it is a shared super account connection!!!
+//		try {
+//			datasource.getConnection().close();
+//	    	datasource = null;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
     }
     
     private static final int TOTAL_QUESTIONS = 3;
@@ -422,10 +423,9 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, "");			
 			UserBean userBean = (UserBean) session.getAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE);
 			
-			String username = req.getParameter("userid");
+//			String username = req.getParameter("userid");
 			String password = req.getParameter("password");
 			
-			logger.debug("username " + username);
 			//xss prevention (http://ha.ckers.org/xss.html)
 			if(!StringEscapeUtils.escapeHtml4(answer1).equals(answer1) ||
 					!StringEscapeUtils.escapeHtml4(answer2).equals(answer2) ||
@@ -451,9 +451,12 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 			
+			logger.debug("saveQuestions:username " + loginID);
+//			handleLockedAccount(loginID, password, session, req, resp, "./jsp/setupPassword.jsp");
+			
 			connect();
 			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
-			userBean = loginDAO.checkValidUser(username, password);
+			userBean = loginDAO.checkValidUser(loginID, password);
 			disconnect();
 			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
 			logger.debug ("validUser" + userBean.isLoggedIn());
@@ -491,7 +494,7 @@ public class MainServlet extends HttpServlet {
 		    if(question2 != null && !question2.equals("") && answer2 != null && !answer2.equals("")) userQuestions.put(Constants.Q2, question2); userAnswers.put(Constants.A2, answer2);
 		    if(question3 != null && !question3.equals("") && answer3 != null && !answer3.equals("")) userQuestions.put(Constants.Q3, question3); userAnswers.put(Constants.A3, answer3);
 			logger.debug("saving request: " + question1 + "=" + answer1 + " " +question2 + "=" + answer2 + " " +question3 + "=" + answer3);
-			if(Messages.getString("PasswordChangeHelper.125").equals(PasswordChangeHelper.validateSecurityQandA(TOTAL_QUESTIONS, username, userQuestions, userAnswers))) {
+			if(Messages.getString("PasswordChangeHelper.125").equals(PasswordChangeHelper.validateSecurityQandA(TOTAL_QUESTIONS, loginID, userQuestions, userAnswers))) {
 				logger.debug("security Q&A validation failed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.125"));
 				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
@@ -507,10 +510,10 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			logger.info("saving request: user provided " +  userQuestions + " " + userAnswers);
-		    saveUserStoredQna(username, userQuestions, userAnswers);
+		    saveUserStoredQna(loginID, userQuestions, userAnswers);
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
-			session.setAttribute(Constants.USERNAME, username);
+			session.setAttribute(Constants.USERNAME, loginID);
 			
 			session.invalidate();
 			resp.sendRedirect(Constants.SETUP_SAVED_URL);
@@ -590,6 +593,29 @@ public class MainServlet extends HttpServlet {
 			logger.error(theException);
 		}		
 	}
+
+/*
+	private void handleLockedAccount(String username, String password, HttpSession session, HttpServletRequest req, HttpServletResponse resp, String redictedUrl) throws Exception {
+		UserBean userBean = null;
+		connect();
+		PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
+		userBean = loginDAO.checkValidUser(username, password);
+		disconnect();
+		session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
+		logger.debug ("validUser" + userBean.isLoggedIn());
+		logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
+		if (!userBean.isLoggedIn()) {
+			if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+			} else {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+			}
+			//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+			req.getRequestDispatcher(redictedUrl).forward(req, resp);
+			return;
+		}
+	}
+*/
 
 	//CADSRPASSW-42
 	private void doValidateAttemptedCount(HttpSession session, HttpServletResponse resp, String redictedUrl) throws Exception {
@@ -756,6 +782,15 @@ public class MainServlet extends HttpServlet {
 		
 			logger.debug("username " + username);
 			//check locked state here
+			//CADSRPASSW-29
+			connect();
+			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+			String status = dao.getAccountStatus(username);
+			if(status != null && status.equals(Constants.LOCKED_STATUS)) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+				resp.sendRedirect("./jsp/resetPassword.jsp");
+				return;
+			}			
 
 			connect();
 			PasswordChangeDAO changeDAO = new PasswordChangeDAO(datasource);
@@ -852,7 +887,9 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 
-			logger.debug("username " + username);
+			logger.debug("passwordChange:username " + username);
+//			handleLockedAccount(username, oldPassword, session, req, resp, "./jsp/changePassword.jsp");
+			
 			UserBean userBean = null;			
 			connect();
 			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
