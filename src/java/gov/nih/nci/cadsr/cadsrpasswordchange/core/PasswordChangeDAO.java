@@ -165,8 +165,8 @@ public class PasswordChangeDAO implements PasswordChange {
 
        logger.info("returning ResultCode " + result.getResultCode().toString());        
        return result;
-	}	
-		
+	}
+	
     private void params( PreparedStatement pstmt, Object[] params) throws SQLException {
         int i = 1;
         for (Object param : params) {
@@ -610,6 +610,43 @@ public class PasswordChangeDAO implements PasswordChange {
 		}
 
        return value;
+	}
+	
+	public String getAccountStatus(String user) {
+
+		logger.info("getAccountStatus  user " + user );
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String retVal = null;
+		
+		try {
+	        if(conn == null) {				
+	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+		        logger.debug("got DataSource for " + _jndiSystem);
+	        	
+		        conn = ds.getConnection();
+	        }
+	        logger.debug("connected");
+	        
+			String sql = "select account_status from sys.cadsr_users where upper(username) =  ?";
+	        stmt = conn.prepareStatement(sql);
+	        stmt.setString(1, user.toUpperCase());
+			logger.debug("attempted to alter user " + user);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				retVal = (String)rs.getString("account_status");
+			}
+		} catch (Exception ex) {
+			logger.debug(ex.getMessage());
+		} finally {
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
+		}
+
+       logger.info("returning account status " + retVal);        
+       return retVal;
 	}
 	
 }
