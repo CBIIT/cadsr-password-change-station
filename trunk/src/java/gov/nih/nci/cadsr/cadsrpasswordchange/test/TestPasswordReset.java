@@ -399,8 +399,69 @@ public class TestPasswordReset {
 		}
 //		assertTrue(status.getResult().equals(ResultCode.));
 	}
+
+	/**
+	 * Mockup method for PasswordChangeDAO.checkValidUser(String username, String password).
+	 * @param username
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
+	public UserBean checkValidUser(String username, String password) throws Exception {
+
+		if(username == null || password == null) {
+			throw new Exception("username and/or password is empty or NULL.");
+		}
+		
+		UserBean userBean = new UserBean(username);
+		
+		Connection conn = null;
+		try {
+			conn = getConnection(username, password);
+			userBean.setLoggedIn(true);
+			userBean.setResult(new Result(ResultCode.NOT_EXPIRED));
+	    } catch (Exception ex) {
+			Result result = ConnectionUtil.decode(ex);
+			
+	    	// expired passwords are acceptable as logins
+			if (result.getResultCode() == ResultCode.EXPIRED) {
+				userBean.setLoggedIn(true);
+				System.out.println("considering expired password acceptable login");
+			}
+			
+			userBean.setResult(result);
+        }
+        finally {
+        	if (conn != null) {
+        		try {
+        			conn.close();
+        		} catch (Exception ex) {
+        			ex.printStackTrace();
+        		}
+	        }
+	    }
+		System.out.println("returning isLoggedIn " + userBean.isLoggedIn());
+        return userBean;
+	}
 	
 	@Test
+	public void testUserIDLockedInPasswordChange() throws Exception {
+		UserBean userBean = null;
+		String userid = "tanj";
+		try {
+			userBean = checkValidUser(userid,userid);
+		} catch (Exception e) {
+//			e.printStackTrace();
+		} finally {
+		}
+		Connection conn = null;		
+		conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+		dao = new PasswordChangeDAO(conn);
+		System.out.println("status is " + userBean.getResult().getResultCode() + " getAccountStatus is " + dao.getAccountStatus(userid));
+		assertTrue(userBean.getResult().getResultCode() == ResultCode.LOCKED_OUT);
+	}
+	
+//	@Test
 	public void testUserAttemptedCountUpdate() {
 		Connection conn = null;
 		String userID = "TEST112";

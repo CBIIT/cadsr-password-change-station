@@ -2,6 +2,9 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -154,6 +157,12 @@ public class ConnectionUtil {
 			if (found != -1)
 				result = new Result(ResultCode.LOCKED_OUT);
 		}
+
+		if (result == null) {
+			found = errorMessage.indexOf("Unable to get managed connection");  // locked - CADSRPASSW-29
+			if (found != -1)
+				result = new Result(ResultCode.LOCKED_OUT);
+		}
 		
 		if (result == null) {
 			found = errorMessage.indexOf("ORA-28001");  // expired password
@@ -224,7 +233,7 @@ public class ConnectionUtil {
 		}
 		return result;
 	}
-	
+
 	public static DataSource getDS(String _jndiUser) throws Exception {
 		Context envContext = new InitialContext();
 		DataSource ds = (DataSource)envContext.lookup(_jndiUser);
