@@ -92,6 +92,8 @@
         	</table>
     	</form>
     	
+        	<p>        	
+        	Warning: Security questions must be created in order to reset a password if a password is forgotten or locked.
 		<cadsrpasswordchangetags:footer />
 		
     	</td></tr></table>
