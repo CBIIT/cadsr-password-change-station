@@ -150,6 +150,10 @@
             <fileset file="src/conf/template.config.xml" />
         </copy>
 
+        <copy tofile="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/core/database.properties" filtering="true">
+            <fileset file="src/conf/template.database.properties" />
+        </copy>
+
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountName@" value="${systemAccountName}"/>
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
 	</target>
