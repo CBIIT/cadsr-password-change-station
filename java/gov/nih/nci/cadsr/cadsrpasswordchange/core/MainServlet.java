@@ -279,7 +279,7 @@ public class MainServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void resetUserStoredAttemptedCount(String username) throws Exception {
 		try {
 			connect();
@@ -538,7 +538,6 @@ public class MainServlet extends HttpServlet {
 			}
 
 			String username = req.getParameter("userid");
-			
 			logger.debug("username " + username);
 			//check locked state here
 			String action = (String)session.getAttribute("action");
@@ -592,6 +591,10 @@ public class MainServlet extends HttpServlet {
 			logger.debug("answers removed from session.");
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			logger.debug("answers saved in session.");
+
+			if(doValidateAttemptedCount(session, resp, Constants.ASK_USERID_URL) == false) {
+				return;
+			}			
 			
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
@@ -631,7 +634,9 @@ public class MainServlet extends HttpServlet {
 */
 
 	//CADSRPASSW-42
-	private void doValidateAttemptedCount(HttpSession session, HttpServletResponse resp, String redictedUrl) throws Exception {
+	private boolean doValidateAttemptedCount(HttpSession session, HttpServletResponse resp, String redictedUrl) throws Exception {
+		boolean retVal = true;
+
 		if(session == null) {
 			throw new Exception("Http session is null or empty.");
 		}
@@ -641,8 +646,9 @@ public class MainServlet extends HttpServlet {
 			logger.info("security answers limit reached");
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
 			resp.sendRedirect(redictedUrl);
-			return;
+			retVal = false;
 		}
+		return retVal;
 	}
 
 	protected void doValidateQuestion1(HttpServletRequest req, HttpServletResponse resp)
@@ -657,7 +663,9 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp");
+		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp") == false) {
+			return;
+		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
@@ -665,6 +673,7 @@ public class MainServlet extends HttpServlet {
 				resp.sendRedirect("./jsp/askQuestion2.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
+				updateUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
 				resp.sendRedirect("./jsp/askQuestion1.jsp");		
 			}
@@ -686,7 +695,9 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp");
+		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp") == false) {
+			return;
+		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
@@ -694,6 +705,7 @@ public class MainServlet extends HttpServlet {
 				resp.sendRedirect("./jsp/askQuestion3.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
+				updateUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
 				resp.sendRedirect("./jsp/askQuestion2.jsp");		
 			}
@@ -715,7 +727,9 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp");
+		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp") == false) {
+			return;
+		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
@@ -723,6 +737,7 @@ public class MainServlet extends HttpServlet {
 				resp.sendRedirect("./jsp/resetPassword.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
+				updateUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
 				resp.sendRedirect("./jsp/askQuestion3.jsp");		
 			}
@@ -815,7 +830,7 @@ public class MainServlet extends HttpServlet {
 
 			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
 				logger.info("password reset");
-				resetUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
+				resetUserStoredAttemptedCount(username);	//CADSRPASSW-42
 				logger.debug("answer count reset");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
@@ -823,7 +838,7 @@ public class MainServlet extends HttpServlet {
 				logger.info("password change failed");
 				String errorMessage = passwordChangeResult.getMessage();
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
-				resp.sendRedirect("./jsp/resetPassword.jsp");		
+				resp.sendRedirect("./jsp/resetPassword.jsp");	
 			}
 		}
 		catch (Throwable theException) {
@@ -933,7 +948,7 @@ public class MainServlet extends HttpServlet {
 
 			if (passwordChangeResult.getResultCode() == ResultCode.PASSWORD_CHANGED) {
 				logger.info("password changed");
-				resetUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
+				resetUserStoredAttemptedCount(username);	//CADSRPASSW-42
 				logger.debug("answer count reset");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
