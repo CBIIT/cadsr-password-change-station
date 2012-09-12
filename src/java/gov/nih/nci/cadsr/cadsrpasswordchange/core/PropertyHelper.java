@@ -1,9 +1,17 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import java.io.FileInputStream;
+import java.sql.Connection;
 import java.util.Map;
+import java.util.Properties;
 
 public class PropertyHelper {
 
+	private static org.apache.log4j.Logger _logger = org.apache.log4j.Logger.getLogger(PropertyHelper.class);
+    private static Properties          _propList;
+    private static String              _user;
+    private static String              _pswd;
+	
 	public static String HELP_LINK;
 	public static String LOGO_LINK;
 	public static String EMAIL_ID;
@@ -41,4 +49,37 @@ public class PropertyHelper {
 	public static String getDatabasePassword() {
 		return Database.getString("password");
 	}
+	
+    /**
+     * Load the properties from the XML file specified.
+     *
+     * @param propFile_ the properties file.
+     */
+    public static void loadProp(String propFile_) throws Exception
+    {
+        _propList = new Properties();
+
+        _logger.debug("PropertyHelper:Loading properties...\n\n");
+
+        try
+        {
+            FileInputStream in = new FileInputStream(propFile_);
+            _propList.loadFromXML(in);
+            in.close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+        _user = _propList.getProperty(Constants._DSUSER);
+        if (_user == null)
+            _logger.error("Missing " + Constants._DSUSER + " in " + propFile_);
+
+        _pswd = _propList.getProperty(Constants._DSPSWD);
+        if (_pswd == null)
+            _logger.error("Missing " + Constants._DSPSWD + " in " + propFile_);
+
+        _logger.debug("PropertyHelper: " + _user + " property loaded.");
+    }	
 }
