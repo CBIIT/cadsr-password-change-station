@@ -97,16 +97,16 @@ public class CommonUtil {
 	public static String getPageHeader(String token) {
 		String retVal = Constants.RESET_TITLE;
 
-		if(token != null && token.equals("save")) {
+		if(token != null && token.equals(Constants.SAVE_TOKEN)) {
 			retVal = Constants.SETUP_TITLE;
 		} else
-		if(token != null && token.equals("change")) {
+		if(token != null && token.equals(Constants.CHANGE_TOKEN)) {
 			retVal = Constants.CHANGE_PASSWORD_TITLE;
 		} else
-		if(token != null && token.equals("forgot")) {
+		if(token != null && token.equals(Constants.FORGOT_TOKEN)) {
 			retVal = Constants.FORGOT_PASSWORD_TITLE;
 		} else
-		if(token != null && token.equals("unlock")) {
+		if(token != null && token.equals(Constants.UNLOCK_TOKEN)) {
 			retVal = Constants.UNLOCK_PASSWORD_TITLE;
 		}
 		

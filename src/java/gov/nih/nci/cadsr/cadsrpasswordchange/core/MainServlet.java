@@ -540,6 +540,19 @@ public class MainServlet extends HttpServlet {
 			String username = req.getParameter("userid");
 			
 			logger.debug("username " + username);
+			//check locked state here
+			String action = (String)session.getAttribute("action");
+			if(action != null && !action.equals(Constants.UNLOCK_TOKEN)) {
+				//CADSRPASSW-29
+				connect();
+				PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+				String status = dao.getAccountStatus(username);
+				if(status != null && status.equals(Constants.LOCKED_STATUS)) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+					resp.sendRedirect("./jsp/askQuestion1.jsp");
+					return;
+				}
+			}
 			
 			connect();
 			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
@@ -782,15 +795,18 @@ public class MainServlet extends HttpServlet {
 		
 			logger.debug("username " + username);
 			//check locked state here
-			//CADSRPASSW-29
-			connect();
-			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
-			String status = dao.getAccountStatus(username);
-			if(status != null && status.equals(Constants.LOCKED_STATUS)) {
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");
-				return;
-			}			
+			String action = (String)session.getAttribute("action");
+			if(action != null && !action.equals(Constants.UNLOCK_TOKEN)) {
+				//CADSRPASSW-29
+				connect();
+				PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+				String status = dao.getAccountStatus(username);
+				if(status != null && status.equals(Constants.LOCKED_STATUS)) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+					resp.sendRedirect("./jsp/resetPassword.jsp");
+					return;
+				}
+			}
 
 			connect();
 			PasswordChangeDAO changeDAO = new PasswordChangeDAO(datasource);
