@@ -222,6 +222,7 @@ public class PasswordChangeDAO implements PasswordChange {
 				q.setQuestion3(rs.getString("question3"));
 				q.setAnswer3(decode(rs.getString("answer3")));
 				q.setDateModified(rs.getDate("date_modified"));
+				q.setAttemptedCount(rs.getLong("attempted_count"));
 			}
 			logger.debug("findByPrimaryKey: " + count + " q " + q); 			
         }
