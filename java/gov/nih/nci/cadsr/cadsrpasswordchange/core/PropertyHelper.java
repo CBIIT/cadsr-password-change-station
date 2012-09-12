@@ -33,4 +33,12 @@ public class PropertyHelper {
 	public static void setEMAIL_PWD(String eMAIL_PWD) {
 		EMAIL_PWD = eMAIL_PWD;
 	}
+	
+	public static String getDatabaseUserID() {
+		return Database.getString("userid");
+	}
+	
+	public static String getDatabasePassword() {
+		return Database.getString("password");
+	}
 }
