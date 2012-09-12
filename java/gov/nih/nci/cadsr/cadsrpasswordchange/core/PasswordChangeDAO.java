@@ -38,13 +38,14 @@ public class PasswordChangeDAO implements PasswordChange {
     public PasswordChangeDAO(Connection conn) {
     	this.conn = conn;
     }
-    
+
+    //CADSRPASSW-46
     private Connection getConnection() throws Exception {
 		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-        logger.debug("got DataSource for " + _jndiSystem);
-    	
-        conn = ds.getConnection();
-        
+        logger.debug("got DataSource for " + _jndiSystem);    	
+//        conn = ds.getConnection();
+        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
+
         return conn;
     }
 
@@ -60,9 +61,10 @@ public class PasswordChangeDAO implements PasswordChange {
 		ResultSet rs = null;
 		try {
 	        if(conn == null) {
-			DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-	        logger.debug("got DataSource for " + _jndiSystem);
-	        conn = ds.getConnection();
+//			DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//	        logger.debug("got DataSource for " + _jndiSystem);
+//	        conn = ds.getConnection();
+	        conn = getConnection();
 	        }
 	        logger.debug("connected");
 			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UPPER(UA_NAME) = ?");	//CADSRPASSW-15
@@ -139,11 +141,10 @@ public class PasswordChangeDAO implements PasswordChange {
 
 		try {
 	        if(conn == null) {
-				DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-		        logger.debug("got DataSource for " + _jndiSystem);
-	        	
-		        conn = ds.getConnection();
-	        	
+//				DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//		        logger.debug("got DataSource for " + _jndiSystem);
+//		        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
 	        logger.debug("connected");
 	        
@@ -201,10 +202,10 @@ public class PasswordChangeDAO implements PasswordChange {
             logger.debug("findByPrimaryKey sql : " + sql);
 
 	        if(conn == null) {
-            DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-	        logger.debug("got DataSource for " + _jndiSystem);
-        	
-	        conn = ds.getConnection();
+//            DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//	        logger.debug("got DataSource for " + _jndiSystem);
+//	        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
@@ -248,10 +249,10 @@ public class PasswordChangeDAO implements PasswordChange {
             sql = "select * from " + QUESTION_TABLE_NAME;
 
 	        if(conn == null) {
-            DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-	        logger.debug("got DataSource for " + _jndiSystem);
-        	
-	        conn = ds.getConnection();
+//            DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//	        logger.debug("got DataSource for " + _jndiSystem);
+//	        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
 	        
             PreparedStatement pstmt = conn.prepareStatement( sql );
@@ -300,10 +301,10 @@ public class PasswordChangeDAO implements PasswordChange {
 
         try {
 	        if(conn == null) {
-        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-	        logger.debug("got DataSource for " + _jndiSystem);
-        	
-	        conn = ds.getConnection();
+//        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//	        logger.debug("got DataSource for " + _jndiSystem);
+//	        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
 	        stmt = conn.prepareStatement( SQL_INSERT );
 
@@ -468,10 +469,10 @@ public class PasswordChangeDAO implements PasswordChange {
         try {
             if (params != null && params.length > 0) {
     	        if(conn == null) {
-            	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-    	        logger.debug("got DataSource for " + _jndiSystem);
-            	
-    	        conn = ds.getConnection();
+//            	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//    	        logger.debug("got DataSource for " + _jndiSystem);
+//    	        conn = ds.getConnection();
+    		        conn = getConnection();
     	        }
                 PreparedStatement pstmt = conn.prepareStatement( sql );
                 stmt = pstmt;
@@ -547,10 +548,10 @@ public class PasswordChangeDAO implements PasswordChange {
 		
 		try {
 	        if(conn == null) {				
-	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-		        logger.debug("got DataSource for " + _jndiSystem);
-	        	
-		        conn = ds.getConnection();
+//	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//		        logger.debug("got DataSource for " + _jndiSystem);
+//		        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
 	        logger.debug("connected");
 
@@ -594,10 +595,10 @@ public class PasswordChangeDAO implements PasswordChange {
 		
 		try {
 	        if(conn == null) {				
-	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-		        logger.debug("got DataSource for " + _jndiSystem);
-	        	
-		        conn = ds.getConnection();
+//	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//		        logger.debug("got DataSource for " + _jndiSystem);
+//		        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
 	        logger.debug("connected");
 
@@ -631,10 +632,10 @@ public class PasswordChangeDAO implements PasswordChange {
 		
 		try {
 	        if(conn == null) {				
-	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-		        logger.debug("got DataSource for " + _jndiSystem);
-	        	
-		        conn = ds.getConnection();
+//	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//		        logger.debug("got DataSource for " + _jndiSystem);
+//		        conn = ds.getConnection();
+		        conn = getConnection();
 	        }
 	        logger.debug("connected");
 	        
