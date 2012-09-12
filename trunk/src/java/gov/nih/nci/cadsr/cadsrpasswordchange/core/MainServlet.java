@@ -549,7 +549,7 @@ public class MainServlet extends HttpServlet {
 				String status = dao.getAccountStatus(username);
 				if(status != null && status.equals(Constants.LOCKED_STATUS)) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
-					resp.sendRedirect("./jsp/askQuestion1.jsp");
+					resp.sendRedirect(Constants.ASK_USERID_URL);
 					return;
 				}
 			}

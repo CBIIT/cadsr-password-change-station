@@ -159,12 +159,6 @@ public class ConnectionUtil {
 		}
 
 		if (result == null) {
-			found = errorMessage.indexOf("Unable to get managed connection");  // locked - CADSRPASSW-29
-			if (found != -1)
-				result = new Result(ResultCode.LOCKED_OUT);
-		}
-		
-		if (result == null) {
 			found = errorMessage.indexOf("ORA-28001");  // expired password
 			if (found != -1)
 				result = new Result(ResultCode.EXPIRED);
