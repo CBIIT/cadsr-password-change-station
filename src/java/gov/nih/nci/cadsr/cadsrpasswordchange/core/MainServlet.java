@@ -986,7 +986,7 @@ public class MainServlet extends HttpServlet {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		System.out.println("database property:" + PropertyHelper.getDatabaseUserID() + "/" + PropertyHelper.getDatabasePassword().substring(0, 3) + "xxxxx");
+		logger.info("database property:" + PropertyHelper.getDatabaseUserID() + "/" + PropertyHelper.getDatabasePassword().substring(0, 3) + "xxxxx");
 		
 	}
 
