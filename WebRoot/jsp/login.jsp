@@ -34,8 +34,6 @@
 		  				errorMessage = "";
 			session.setAttribute("ErrorMessage", "");
 			
-//			System.out.println("database property:" + PropertyHelper.getDatabaseUserID() + "/" + PropertyHelper.getDatabasePassword());
-			
 		%>  
 
 	    <table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">

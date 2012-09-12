@@ -39,6 +39,15 @@ public class PasswordChangeDAO implements PasswordChange {
     	this.conn = conn;
     }
     
+    private Connection getConnection() throws Exception {
+		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+        logger.debug("got DataSource for " + _jndiSystem);
+    	
+        conn = ds.getConnection();
+        
+        return conn;
+    }
+
 	public boolean checkValidUser(String username) throws Exception {
 		boolean retVal = false;
 		
