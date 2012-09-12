@@ -33,6 +33,12 @@
 		  <fileset file="src/conf/template.cadsrpasswordchange.properties" /> 
 		</copy>
 		
+        <copy tofile="src/WebRoot/WEB-INF/classes/database.properties" filtering="true">
+            <fileset file="src/conf/template.database.properties" />
+        </copy>
+		<replace file="src/WebRoot/WEB-INF/classes/database.properties" token="@systemAccountName@" value="${systemAccountName}"/>
+		<replace file="src/WebRoot/WEB-INF/classes/database.properties" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
+
 		<copy tofile="src/WebRoot/WEB-INF/Owasp.CsrfGuard.properties" filtering="false">
 		  <fileset file="src/conf/Owasp.CsrfGuard.properties" /> 
 		</copy>
@@ -149,11 +155,7 @@
         <copy tofile="${dist.dir}/bin/config.xml" filtering="true">
             <fileset file="src/conf/template.config.xml" />
         </copy>
-
-        <copy tofile="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/core/database.properties" filtering="true">
-            <fileset file="src/conf/template.database.properties" />
-        </copy>
-
+        
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountName@" value="${systemAccountName}"/>
 		<replace file="${src.dir}/gov/nih/nci/cadsr/cadsrpasswordchange/test/TestPasswordReset.java" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
 	</target>
