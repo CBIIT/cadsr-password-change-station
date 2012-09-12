@@ -1011,12 +1011,6 @@ public class MainServlet extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 		logger.debug("init");
-//		try {
-//			PropertyHelper.loadProp("database.properties");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		logger.info("database property:" + PropertyHelper.getDatabaseUserID() + "/" + PropertyHelper.getDatabasePassword().substring(0, 3) + "xxxxx");
 		
 	}
