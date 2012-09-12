@@ -1,7 +1,6 @@
 <%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags" %>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.MainServlet" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -34,6 +33,9 @@
 		  			if (errorMessage == null)
 		  				errorMessage = "";
 			session.setAttribute("ErrorMessage", "");
+			
+//			System.out.println("database property:" + PropertyHelper.getDatabaseUserID() + "/" + PropertyHelper.getDatabasePassword());
+			
 		%>  
 
 	    <table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
