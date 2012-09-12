@@ -34,6 +34,16 @@ public class PasswordEntryDAO implements PasswordEntry {
     	this.conn = conn;
     }
 
+    //CADSRPASSW-46
+    private Connection getConnection() throws Exception {
+		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+        logger.debug("got DataSource for " + _jndiSystem);    	
+//        conn = ds.getConnection();
+        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
+
+        return conn;
+    }
+    
 	/**
 	 * This should be moved into a common utility class.
 	 * @param toolName
@@ -50,10 +60,11 @@ public class PasswordEntryDAO implements PasswordEntry {
 		
 		try {
 	        if(conn == null) {				
-	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-		        logger.debug("got DataSource for " + _jndiSystem);
-	        	
-		        conn = ds.getConnection();
+//	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//		        logger.debug("got DataSource for " + _jndiSystem);
+//	        	
+//		        conn = ds.getConnection();
+	          conn = getConnection();
 	        }
 	        logger.debug("connected");
 
