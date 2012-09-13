@@ -877,57 +877,6 @@ public class MainServlet extends HttpServlet {
 			String oldPassword = req.getParameter("pswd");
 			String newPassword = req.getParameter("newpswd1");
 			String newPassword2 = req.getParameter("newpswd2");
-			
-			//begin CADSRPASSW-16
-//			Map<String, String> userQuestions = new HashMap<String, String>();
-//			Map<String, String> userAnswers =  new HashMap<String, String>();
-//			loadUserStoredQna(username, userQuestions, userAnswers);
-//			if(userQuestions.size() == 0) {
-//				logger.info("no security question found");
-//				String msg = Messages.getString("PasswordChangeHelper.136");
-//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, msg);
-//				resp.sendRedirect("./jsp/changePassword.jsp");
-//				return;
-//			}
-			//end CADSRPASSW-16
-
-			if(Messages.getString("PasswordChangeHelper.3").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.3"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
-			}
-
-			if(Messages.getString("PasswordChangeHelper.4").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.4"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
-			}
-			
-			if(Messages.getString("PasswordChangeHelper.5").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.5"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
-			}
-
-//			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
-//				resp.sendRedirect("./jsp/changePassword.jsp");
-//				return;
-//			}					
-
-			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid"));
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.7"));
-				resp.sendRedirect("./jsp/changePassword.jsp");				
-				return;
-			}
-			if(Messages.getString("PasswordChangeHelper.8").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				
-				logger.debug("new password mis-typed");
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.8"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
-			}
 
 			logger.debug("passwordChange:username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
@@ -972,6 +921,60 @@ public class MainServlet extends HttpServlet {
 				}
 			}
 			
+			
+			//begin CADSRPASSW-16
+//			Map<String, String> userQuestions = new HashMap<String, String>();
+//			Map<String, String> userAnswers =  new HashMap<String, String>();
+//			loadUserStoredQna(username, userQuestions, userAnswers);
+//			if(userQuestions.size() == 0) {
+//				logger.info("no security question found");
+//				String msg = Messages.getString("PasswordChangeHelper.136");
+//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, msg);
+//				resp.sendRedirect("./jsp/changePassword.jsp");
+//				return;
+//			}
+			//end CADSRPASSW-16
+
+//=== begin of moved down (CADSRPASSW-48)
+			if(Messages.getString("PasswordChangeHelper.3").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.3"));
+				resp.sendRedirect("./jsp/changePassword.jsp");
+				return;
+			}
+
+			if(Messages.getString("PasswordChangeHelper.4").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.4"));
+				resp.sendRedirect("./jsp/changePassword.jsp");
+				return;
+			}
+			
+			if(Messages.getString("PasswordChangeHelper.5").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.5"));
+				resp.sendRedirect("./jsp/changePassword.jsp");
+				return;
+			}
+
+//			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
+//				resp.sendRedirect("./jsp/changePassword.jsp");
+//				return;
+//			}					
+
+			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid"));
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.7"));
+				resp.sendRedirect("./jsp/changePassword.jsp");				
+				return;
+			}
+			if(Messages.getString("PasswordChangeHelper.8").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				
+				logger.debug("new password mis-typed");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.8"));
+				resp.sendRedirect("./jsp/changePassword.jsp");
+				return;
+			}
+//=== end of moved down (CADSRPASSW-48)
+
 			connect();
 			PasswordChangeDAO changeDAO = new PasswordChangeDAO(datasource);
 			Result passwordChangeResult = changeDAO.changePassword(username, oldPassword, newPassword);
