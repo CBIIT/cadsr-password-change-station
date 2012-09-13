@@ -6,8 +6,8 @@
 <html>
     <head>
     	<%
-    		if(request.getParameter("action") != null) {
-    			request.getSession().setAttribute("action", (String)request.getParameter("action"));
+    		if(request.getParameter(Constants.ACTION_TOKEN) != null) {
+    			request.getSession().setAttribute(Constants.ACTION_TOKEN, (String)request.getParameter(Constants.ACTION_TOKEN));
     		}
     	%>
         <title><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></title>
