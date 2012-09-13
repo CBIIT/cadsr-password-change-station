@@ -27,7 +27,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
     protected static final String PK_CONDITION = "ua_name=?";
 
-    private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified,attempted_count) VALUES (?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
     private Logger logger = Logger.getLogger(PasswordChangeDAO.class);
 
@@ -352,7 +352,7 @@ public class PasswordChangeDAO implements PasswordChange {
                 dto.setDateModified( new Date(DateTimeUtils.currentTimeMillis()) );
             }
             stmt.setDate( 8, dto.getDateModified() );
-
+            
             int n = stmt.executeUpdate();
         }
         catch (SQLException e) {
