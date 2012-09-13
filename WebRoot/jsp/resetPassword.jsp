@@ -50,14 +50,34 @@
 		  
 		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
      
-    	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
+    	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td>
 
 		<cadsrpasswordchangetags:header showlogout="false"/>
 
-		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></h3></p></td></tr></table>
+		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3  style="margin-left:300px;"><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></h3></p></td></tr></table>
 
 		<a name="skip" id="skip"></a>
 			
+		<table>
+<h3>Password Restrictions:</h3>
+			<td class=\face\ style=\WIDTH: 617px\ colspan=\2\> 
+    <ul> 
+Your new password may not re-use your last 24 passwords.<br> 
+You may not change your password more than once within 24 hours.<br> 
+Your new password must be at least 8 and no more than 30 characters long.<br> 
+Your new password must start with a letter.<br> 
+Your new password may only use characters from the following categories and must include characters from at least three of these categories: 
+<br><br>
+<div style="margin-left:40px;">
+<li>Uppercase Letters (A-Z)</li> 
+<li>Lowercase Letters (a-z)</li> 
+<li>Numerals (0-9)</li> 
+<li>Special Characters ( _  #  $)
+</div>
+    </ul><tt> 
+    </tt></td> 
+					</table>
+								
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/resetPassword" method="POST" focus="userid" title="Use this screen to change your password">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
@@ -102,7 +122,9 @@
                 <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2">
                 </td>
             </tr><tr>
+            <!--
                 <td colspan="2" valign="middle"><%=Constants.PWD_RESTRICTIONS%></td>
+            -->
             </tr>
         	</table>
     	</form>
