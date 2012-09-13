@@ -36,6 +36,7 @@ public class Constants {
 	
 	public static final String USERNAME = "username";
 
+	public static final String ACTION_TOKEN = "action";		
 	public static final String SAVE_TOKEN = "save";	
 	public static final String CHANGE_TOKEN = "change";	
 	public static final String FORGOT_TOKEN = "forgot";	
