@@ -485,6 +485,8 @@ public class TestPasswordReset {
 	}
 	
 /*
+select ua_name, attempted_count from sbrext.user_security_questions
+
 select * from sys.cadsr_users where lower(username) like 'test112'
 
 select * from sys.cadsr_users where lower(username) = 'test112'
