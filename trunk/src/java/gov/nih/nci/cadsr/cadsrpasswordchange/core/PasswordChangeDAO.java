@@ -629,7 +629,7 @@ public class PasswordChangeDAO implements PasswordChange {
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String retVal = null;
+		String retVal = "";
 		
 		try {
 	        if(conn == null) {				
