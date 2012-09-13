@@ -417,7 +417,8 @@ public class MainServlet extends HttpServlet {
 			String question3 = req.getParameter("question3");
 			String answer3 = req.getParameter("answer3");
 			
-			if(doValidateAccountStatus(loginID, session, req, resp, "./jsp/setupPassword.jsp") == false) {
+			String status = doValidateAccountStatus(loginID, session, req, resp, "./jsp/setupPassword.jsp");
+			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				return;
 			}
 			
@@ -458,27 +459,42 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			logger.debug("saveQuestions:username " + loginID);
-//			handleLockedAccount(loginID, password, session, req, resp, "./jsp/setupPassword.jsp");
-			
-			connect();
-			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
-			userBean = loginDAO.checkValidUser(loginID, password);
-			disconnect();
-			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
-			logger.debug ("validUser" + userBean.isLoggedIn());
-			logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
-			if (!userBean.isLoggedIn()) {
-				logger.debug("auth failed during questions/answers save");
-				if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
-				} else {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+			//CADSRPASSW-49
+			if(status.equals(Constants.EXPIRED_STATUS)) {
+				connect();
+				PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
+				try {
+					if(!userDAO.checkValidUser(loginID)) {
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+						req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					disconnect();
 				}
-				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
-				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
-				return;
+			} else {
+				connect();
+				PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
+				userBean = loginDAO.checkValidUser(loginID, password);
+				disconnect();
+				session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
+				logger.debug ("validUser" + userBean.isLoggedIn());
+				logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
+				if (!userBean.isLoggedIn()) {
+					logger.debug("auth failed during questions/answers save");
+					if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+					} else {
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+					}
+					//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+					req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+					return;
+				}
 			}
-			
+
 			// Security enhancement
 		    Map<String, String> userQuestions = new HashMap<String, String>();
 		    userQuestions.put(question1,"");
@@ -545,18 +561,9 @@ public class MainServlet extends HttpServlet {
 
 			String username = req.getParameter("userid");
 			logger.debug("username " + username);
-			//check locked state here
-			String action = (String)session.getAttribute("action");
-			if(action != null && !action.equals(Constants.UNLOCK_TOKEN)) {
-				//CADSRPASSW-29
-				connect();
-				PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
-				String status = dao.getAccountStatus(username);
-				if(status != null && status.equals(Constants.LOCKED_STATUS)) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
-					resp.sendRedirect(Constants.ASK_USERID_URL);
-					return;
-				}
+			String status = doValidateAccountStatus(username, session, req, resp, Constants.ASK_USERID_URL);
+			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				return;
 			}
 			
 			connect();
@@ -625,11 +632,11 @@ public class MainServlet extends HttpServlet {
 	 * @param req
 	 * @param resp
 	 * @param redictedUrl
-	 * @return true = passed, false = not ok (locked etc)
+	 * @return account status
 	 * @throws Exception
 	 */
-	private boolean doValidateAccountStatus(String username, HttpSession session, HttpServletRequest req, HttpServletResponse resp, String redictedUrl) throws Exception {
-		boolean retVal = true;
+	private String doValidateAccountStatus(String username, HttpSession session, HttpServletRequest req, HttpServletResponse resp, String redictedUrl) throws Exception {
+		String retVal = "";
 
 		//check locked state here
 		String action = (String)session.getAttribute(Constants.ACTION_TOKEN);
@@ -637,11 +644,10 @@ public class MainServlet extends HttpServlet {
 			//CADSRPASSW-29
 			connect();
 			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
-			String status = dao.getAccountStatus(username);
-			if(status != null && status.equals(Constants.LOCKED_STATUS)) {
+			retVal = dao.getAccountStatus(username);
+			if(retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 				resp.sendRedirect(redictedUrl);
-				retVal = false;
 			}
 		}
 		return retVal;
@@ -823,18 +829,9 @@ public class MainServlet extends HttpServlet {
 			logger.debug("changing request: " + question1 + "=" + answer1 + " " +question2 + "=" + answer2 + " " +question3 + "=" + answer3);
 		
 			logger.debug("username " + username);
-			//check locked state here
-			String action = (String)session.getAttribute("action");
-			if(action != null && !action.equals(Constants.UNLOCK_TOKEN)) {
-				//CADSRPASSW-29
-				connect();
-				PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
-				String status = dao.getAccountStatus(username);
-				if(status != null && status.equals(Constants.LOCKED_STATUS)) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
-					resp.sendRedirect("./jsp/resetPassword.jsp");
-					return;
-				}
+			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/resetPassword.jsp");
+			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				return;
 			}
 
 			connect();
@@ -933,28 +930,46 @@ public class MainServlet extends HttpServlet {
 			}
 
 			logger.debug("passwordChange:username " + username);
-			if(doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp") == false) {
+			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
+			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				return;
 			}
 			
-			UserBean userBean = null;			
-			connect();
-			PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
-			userBean = loginDAO.checkValidUser(username, oldPassword);
-			disconnect();
-			session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
-			logger.debug ("validUser " + userBean.isLoggedIn());
-			logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
-			if (!userBean.isLoggedIn()) {
-				String errorMessage1 = userBean.getResult().getMessage();
-				logger.debug ("errorMessage " + errorMessage1);
-				if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
-				} else {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+			//CADSRPASSW-50
+			if(status.equals(Constants.EXPIRED_STATUS)) {
+				connect();
+				PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
+				try {
+					if(!userDAO.checkValidUser(username)) {
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+						resp.sendRedirect("./jsp/changePassword.jsp");
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					disconnect();
 				}
-				resp.sendRedirect("./jsp/changePassword.jsp");
-				return;
+			} else {
+				UserBean userBean = null;
+				connect();
+				PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
+				userBean = loginDAO.checkValidUser(username, oldPassword);
+				disconnect();
+				session.setAttribute(UserBean.USERBEAN_SESSION_ATTRIBUTE, userBean);		
+				logger.debug ("validUser " + userBean.isLoggedIn());
+				logger.debug ("resultCode " + userBean.getResult().getResultCode().toString());
+				if (!userBean.isLoggedIn()) {
+					String errorMessage1 = userBean.getResult().getMessage();
+					logger.debug ("errorMessage " + errorMessage1);
+					if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+					} else {
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+					}
+					resp.sendRedirect("./jsp/changePassword.jsp");
+					return;
+				}
 			}
 			
 			connect();
