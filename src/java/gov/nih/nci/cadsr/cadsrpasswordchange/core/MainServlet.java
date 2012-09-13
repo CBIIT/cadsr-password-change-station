@@ -605,9 +605,9 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			logger.debug("answers saved in session.");
 
-			if(doValidateAttemptedCount(session, resp, Constants.ASK_USERID_URL) == false) {
-				return;
-			}			
+//			if(doValidateAttemptedCount(session, resp, Constants.ASK_USERID_URL) == false) {
+//				return;
+//			}			
 			
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
@@ -683,9 +683,9 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp") == false) {
-			return;
-		}
+//		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp") == false) {
+//			return;
+//		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
@@ -715,9 +715,9 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp") == false) {
-			return;
-		}
+//		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp") == false) {
+//			return;
+//		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
@@ -747,9 +747,9 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp") == false) {
-			return;
-		}
+//		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp") == false) {
+//			return;
+//		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
