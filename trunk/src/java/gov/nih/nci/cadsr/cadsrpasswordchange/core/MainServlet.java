@@ -605,18 +605,19 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(Constants.ALL_ANSWERS, userAnswers);
 			logger.debug("answers saved in session.");
 
-//			if(doValidateAttemptedCount(session, resp, Constants.ASK_USERID_URL) == false) {
-//				return;
-//			}			
-			
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
 				resp.sendRedirect(Constants.ASK_USERID_URL);
-			} else {
-				//resp.sendRedirect(Constants.Q1_URL);
-				req.getRequestDispatcher("./jsp/askQuestion1.jsp").forward(req, resp);
+				return;
 			}
+			
+			if(doValidateAttemptedCount(session, resp, Constants.ASK_USERID_URL) == false) {
+				return;
+			}			
+			
+			//resp.sendRedirect(Constants.Q1_URL);
+			req.getRequestDispatcher("./jsp/askQuestion1.jsp").forward(req, resp);
 		}
 		catch (Throwable theException) {
 			logger.error(theException);
@@ -667,6 +668,8 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
 			resp.sendRedirect(redictedUrl);
 			retVal = false;
+		} else {
+			retVal = true;
 		}
 		return retVal;
 	}
@@ -683,13 +686,14 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-//		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp") == false) {
-//			return;
-//		}
+		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp") == false) {
+			return;
+		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
+				resetUserStoredAttemptedCount((String)req.getSession().getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				resp.sendRedirect("./jsp/askQuestion2.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
@@ -715,13 +719,14 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-//		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp") == false) {
-//			return;
-//		}
+		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp") == false) {
+			return;
+		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
+				resetUserStoredAttemptedCount((String)req.getSession().getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				resp.sendRedirect("./jsp/askQuestion3.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
@@ -747,13 +752,14 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-//		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp") == false) {
-//			return;
-//		}
+		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp") == false) {
+			return;
+		}
 		
 		try {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
+				resetUserStoredAttemptedCount((String)req.getSession().getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				resp.sendRedirect("./jsp/resetPassword.jsp");				
 			} else {
 				logger.info("security question answered wrongly");
