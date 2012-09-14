@@ -14,6 +14,7 @@ import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -532,6 +533,7 @@ public class TestPasswordReset {
 					qna.setAttemptedCount(1l);
 					System.out.println("Not over 1 hour yet, answer limit count set to 1 (" + period.getMinutes() + " minutes has passed).");
 				}
+				qna.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 				conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
 				dao = new PasswordChangeDAO(conn);
 				dao.update(userID, qna);

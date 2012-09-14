@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.domain;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * This is a DTO class.
@@ -26,7 +27,7 @@ public class UserSecurityQuestion extends AbstractDto {
     private String answer2;
     private String question3;
     private String answer3;
-    private Date dateModified;
+    private Timestamp dateModified;
     private Long attemptedCount;
 
     ////////////////////////////////////////////////////////////////////////////
@@ -99,15 +100,15 @@ public class UserSecurityQuestion extends AbstractDto {
         this.answer3 = _val;
     }
 
-    public Date getDateModified() {
+    public Timestamp getDateModified() {
         return dateModified;
     }
 
-    public void setDateModified( java.util.Date _val ) {
-        setDateModified((Date)( _val != null ? new Date( _val.getTime()) : null ));
-    }
+//    public void setDateModified( java.util.Date _val ) {
+//        setDateModified((Date)( _val != null ? new Date( _val.getTime()) : null ));
+//    }
 
-    public void setDateModified( Date _val) {
+    public void setDateModified( Timestamp _val) {
         this.dateModified = _val;
     }
 
