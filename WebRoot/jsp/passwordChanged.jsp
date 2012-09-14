@@ -24,9 +24,10 @@
 		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3><%=CommonUtil.getPageHeader((String)request.getSession().getAttribute("action"))%></h3></p></td></tr></table>
 
 		<center> Password change successful. You have been logged out. </center>
- 
-        <p><a href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
- 
+<p>
+<form name="form-1" id="form-1" action="<%=Constants.LANDING_URL%>" method="post">
+			<button id="field-2" name="field-2" value="field-2-value" type="submit">Done</button>
+</form>
 	  	<cadsrpasswordchangetags:footer />
 
 	    </td></tr></table>
