@@ -26,6 +26,12 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
 import org.apache.commons.codec.binary.Hex;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -444,7 +450,7 @@ public class TestPasswordReset {
         return userBean;
 	}
 	
-	@Test
+//	@Test
 	public void testUserIDLockedInPasswordChange() throws Exception {
 		UserBean userBean = null;
 		String userid = "tanj";
@@ -464,7 +470,7 @@ public class TestPasswordReset {
 //	@Test
 	public void testUserAttemptedCountUpdate() {
 		Connection conn = null;
-		String userID = "TEST112";
+		String userID = "TEST111";
 		try {
 			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
 			dao = new PasswordChangeDAO(conn);
@@ -484,20 +490,77 @@ public class TestPasswordReset {
 		}
 	}
 	
+//	@Test
+	public void testJodaTimePeriod() {
+		DateTime myBirthDate = new DateTime(1978, 3, 26, 12, 35, 0, 0);
+		DateTime now = new DateTime();
+		Period period = new Period(myBirthDate, now);
+
+		PeriodFormatter formatter = new PeriodFormatterBuilder()
+		    .appendSeconds().appendSuffix(" seconds ago\n")
+		    .appendMinutes().appendSuffix(" minutes ago\n")
+		    .appendHours().appendSuffix(" hours ago\n")
+		    .appendDays().appendSuffix(" days ago\n")
+		    .appendMonths().appendSuffix(" months ago\n")
+		    .appendYears().appendSuffix(" years ago\n")
+		    .printZeroNever()
+		    .toFormatter();
+
+		String elapsed = formatter.print(period);
+		System.out.println(elapsed);
+	}
+	
+	@Test
+	public void testUserAttemptedCountReset() {
+		Connection conn = null;
+		String userID = "TEST111";
+		try {
+			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+			dao = new PasswordChangeDAO(conn);
+			UserSecurityQuestion qna = dao.findByPrimaryKey(userID);
+			if(qna != null) {
+				if(qna.getDateModified() == null) {
+					throw new Exception("Security questions date modified is NULL or empty.");
+				}
+				qna = new UserSecurityQuestion();
+				DateTime now = new DateTime();
+				Period period = new Period(new DateTime(qna.getDateModified()), now);
+				if(period.getHours() > 1) {
+					qna.setAttemptedCount(0l);
+					System.out.println("Over 1 hour, answer limit count reset (" + period.getMinutes() + " minutes has passed).");
+				} else {
+					qna.setAttemptedCount(1l);
+					System.out.println("Not over 1 hour yet, answer limit count set to 1 (" + period.getMinutes() + " minutes has passed).");
+				}
+				conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
+				dao = new PasswordChangeDAO(conn);
+				dao.update(userID, qna);
+			} else {
+				throw new Exception(userID + " does not exist.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+
+	
 /*
 select ua_name, attempted_count from sbrext.user_security_questions
 
-select * from sys.cadsr_users where lower(username) like 'test112'
+select * from sys.cadsr_users where lower(username) like 'test111'
 
-select * from sys.cadsr_users where lower(username) = 'test112'
+select * from sys.cadsr_users where lower(username) = 'test111'
 
 select * from sbrext.user_security_questions
 
-alter user test112 ACCOUNT LOCK PASSWORD EXPIRE
+alter user test111 ACCOUNT LOCK PASSWORD EXPIRE
 
-alter user test112 PASSWORD EXPIRE
+alter user test111 PASSWORD EXPIRE
 
-alter user test112 ACCOUNT LOCK
+alter user test111 ACCOUNT LOCK
+
+INSERT INTO "SBREXT"."USER_SECURITY_QUESTIONS" (ua_name, QUESTION1, ANSWER1, QUESTION2, ANSWER2, QUESTION3, ANSWER3, ATTEMPTED_COUNT ) VALUES  ( 'test111', 'q1', 'a1', 'q2', 'a2', 'q3', 'a3',  -1)
 
 select * from sys.dba_profiles where lower(profile) = 'cadsr_user'
 
@@ -507,7 +570,7 @@ alter user UATDEV1 profile "cadsr_user"
 
 select * from sbr.user_accounts_view where ua_name = 'UATDEV1'
 UA_NAME	DESCRIPTION	DATE_CREATED	CREATED_BY	DATE_MODIFIED	MODIFIED_BY	NAME	ORG_IDSEQ	TITLE	PHONE_NUMBER	FAX_NUMBER	TELEX_NUMBER	MAIL_ADDRESS	ELECTRONIC_MAIL_ADDRESS	DER_ADMIN_IND	ENABLED_IND	ALERT_IND	
-UATDEV1	<NULL>	2012-08-27 00:00:00.0	test112	2012-08-27 00:00:00.0	test112	UAT DEV TEST 1 USER	E66B9F0E-BE4D-1A5B-E034-0003BA3F9857	<NULL>	<NULL>	<NULL>	<NULL>	<NULL>	<NULL>	No	Yes	Yes	
+UATDEV1	<NULL>	2012-08-27 00:00:00.0	test111	2012-08-27 00:00:00.0	test111	UAT DEV TEST 1 USER	E66B9F0E-BE4D-1A5B-E034-0003BA3F9857	<NULL>	<NULL>	<NULL>	<NULL>	<NULL>	<NULL>	No	Yes	Yes	
 
 select * from sys.cadsr_users where username = 'UATDEV1'
 USERNAME	USER_ID	ACCOUNT_STATUS	LOCK_DATE	EXPIRY_DATE	DEFAULT_TABLESPACE	TEMPORARY_TABLESPACE	CREATED	PROFILE	INITIAL_RSRC_CONSUMER_GROUP	EXTERNAL_NAME	PTIME	
