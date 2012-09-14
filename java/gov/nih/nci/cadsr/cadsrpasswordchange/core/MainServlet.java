@@ -4,6 +4,8 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeUtils;
 
 public class MainServlet extends HttpServlet {
 
@@ -274,6 +277,7 @@ public class MainServlet extends HttpServlet {
 				count = oldQna.getAttemptedCount().longValue() + 1;
 			}
 			oldQna.setAttemptedCount(new Long(count));
+			oldQna.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 			dao.update(username, oldQna);
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
@@ -293,6 +297,7 @@ public class MainServlet extends HttpServlet {
 			connect();
 			long count = 0;
 			oldQna.setAttemptedCount(new Long(count));
+			oldQna.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 			dao.update(username, oldQna);
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
