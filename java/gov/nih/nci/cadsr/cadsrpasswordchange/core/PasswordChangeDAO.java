@@ -431,6 +431,15 @@ public class PasswordChangeDAO implements PasswordChange {
             params.add( dto.getAnswer3());
         }
 
+        if ( dto.getDateModified() != null ) {
+            if (sb.length() > 0) {
+                sb.append( ", " );
+            }
+
+            sb.append( "date_modified=?" );
+            params.add( dto.getDateModified());
+        }
+        
         if (sb.length() > 0) {
             sb.append( ", " );
         }
