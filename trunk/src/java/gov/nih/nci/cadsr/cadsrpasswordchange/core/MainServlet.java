@@ -54,13 +54,12 @@ public class MainServlet extends HttpServlet {
 	}
 
     private static void disconnect() {
-    	//never close the datasource connection as it is a shared super account connection!!!
-//		try {
-//			datasource.getConnection().close();
-//	    	datasource = null;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			datasource.getConnection().close();
+	    	datasource = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     
     private static final int TOTAL_QUESTIONS = 3;
@@ -227,7 +226,8 @@ public class MainServlet extends HttpServlet {
 			connect();
 			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
-
+			qna.setAttemptedCount(oldQna.getAttemptedCount());
+			qna.setDateModified(oldQna.getDateModified());
 			connect();			
 			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
 			if(oldQna == null) {
