@@ -19,7 +19,9 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
+import org.joda.time.Period;
 
 public class MainServlet extends HttpServlet {
 
@@ -278,7 +280,10 @@ public class MainServlet extends HttpServlet {
 			}
 			oldQna.setAttemptedCount(new Long(count));
 			oldQna.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
-			dao.update(username, oldQna);
+			boolean saved = dao.update(username, oldQna);
+			if(!saved) {
+				throw new Exception("Answer attempt count not updated properly.");
+			}
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
 		} catch (Exception e) {
@@ -667,15 +672,46 @@ public class MainServlet extends HttpServlet {
 			throw new Exception("Http session is null or empty.");
 		}
 		
-		long count = getUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));
-		if(count >= 6) {
-			logger.info("security answers limit reached");
-			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
-			resp.sendRedirect(redictedUrl);
-			retVal = false;
+		String userID = (String)session.getAttribute(Constants.USERNAME);
+		//CADSRPASSW-51
+		if(isAnswerLockPeriodOver(userID)) {
+			resetUserStoredAttemptedCount(userID);
 		} else {
-			retVal = true;
+			long count = getUserStoredAttemptedCount(userID);
+			if(count >= 6) {
+				logger.info("security answers limit reached");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
+				resp.sendRedirect(redictedUrl);
+				retVal = false;
+			} else {
+				retVal = true;
+			}
 		}
+
+		return retVal;
+	}
+
+	private boolean isAnswerLockPeriodOver(String userID) throws Exception {
+		boolean retVal = false;
+
+		connect();
+		PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+		UserSecurityQuestion qna = dao.findByPrimaryKey(userID);
+		if(qna != null) {
+			if(qna.getDateModified() == null) {
+				throw new Exception("Security questions date modified is NULL or empty.");
+			}
+			DateTime now = new DateTime();
+			logger.debug("isAnswerLockExpired:last modified date for user '" + userID + "' is " + qna.getDateModified());
+			Period period = new Period(new DateTime(qna.getDateModified()), now);
+			if(period.getHours() > 1) {
+				retVal = true;
+				logger.info("isAnswerLockExpired:Over 1 hour for user '" + userID + "', answer limit count reset (" + period.getMinutes() + " minutes has passed).");
+			} else {
+				logger.debug("isAnswerLockExpired:Not over 1 hour yet for user '" + userID + "', nothing is done (" + period.getMinutes() + " minutes has passed).");
+			}
+		}
+		
 		return retVal;
 	}
 

@@ -46,7 +46,7 @@ public class PasswordChangeDAO implements PasswordChange {
         logger.debug("got DataSource for " + _jndiSystem);    	
 //        conn = ds.getConnection();
         conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
-
+        conn.setAutoCommit(true);
         return conn;
     }
 
@@ -490,7 +490,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
-                return pstmt.executeUpdate();
+                return pstmt.executeUpdate();	//???
             }
             else {
                 stmt = conn.createStatement();

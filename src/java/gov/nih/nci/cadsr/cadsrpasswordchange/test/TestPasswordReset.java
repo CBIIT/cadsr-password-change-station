@@ -523,17 +523,16 @@ public class TestPasswordReset {
 				if(qna.getDateModified() == null) {
 					throw new Exception("Security questions date modified is NULL or empty.");
 				}
-				qna = new UserSecurityQuestion();
 				DateTime now = new DateTime();
+				System.out.println("last modified is " + qna.getDateModified());
 				Period period = new Period(new DateTime(qna.getDateModified()), now);
 				if(period.getHours() > 1) {
 					qna.setAttemptedCount(0l);
 					System.out.println("Over 1 hour, answer limit count reset (" + period.getMinutes() + " minutes has passed).");
 				} else {
-					qna.setAttemptedCount(1l);
-					System.out.println("Not over 1 hour yet, answer limit count set to 1 (" + period.getMinutes() + " minutes has passed).");
+					System.out.println("Not over 1 hour yet, nothing is done (" + period.getMinutes() + " minutes has passed).");
 				}
-				qna.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
+				//qna.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 				conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);
 				dao = new PasswordChangeDAO(conn);
 				dao.update(userID, qna);
