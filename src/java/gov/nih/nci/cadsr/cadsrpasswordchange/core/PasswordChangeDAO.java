@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
@@ -221,7 +222,7 @@ public class PasswordChangeDAO implements PasswordChange {
 				q.setAnswer2(decode(rs.getString("answer2")));
 				q.setQuestion3(rs.getString("question3"));
 				q.setAnswer3(decode(rs.getString("answer3")));
-				q.setDateModified(rs.getDate("date_modified"));
+				q.setDateModified(rs.getTimestamp("date_modified"));
 				q.setAttemptedCount(rs.getLong("attempted_count"));
 			}
 			logger.debug("findByPrimaryKey: " + count + " q " + q); 			
@@ -268,7 +269,7 @@ public class PasswordChangeDAO implements PasswordChange {
 				q.setAnswer2(decode(rs.getString("answer2")));
 				q.setQuestion3(rs.getString("question3"));
 				q.setAnswer3(decode(rs.getString("answer3")));
-				q.setDateModified(rs.getDate("date_modified"));
+				q.setDateModified(rs.getTimestamp("date_modified"));
 				qList.add(q);
 			}
         }
@@ -349,9 +350,9 @@ public class PasswordChangeDAO implements PasswordChange {
             stmt.setString( 7, dto.getAnswer3() );
 
             if ( dto.getDateModified() == null ) {
-                dto.setDateModified( new Date(DateTimeUtils.currentTimeMillis()) );
+                dto.setDateModified( new Timestamp(DateTimeUtils.currentTimeMillis()) );
             }
-            stmt.setDate( 8, dto.getDateModified() );
+            stmt.setTimestamp( 8, dto.getDateModified() );
             
             int n = stmt.executeUpdate();
         }
@@ -538,7 +539,7 @@ public class PasswordChangeDAO implements PasswordChange {
         dto.setAnswer2( decode(rs.getString( 5 )));
         dto.setQuestion3( rs.getString( 6 ));
         dto.setAnswer3( decode(rs.getString( 7 )));
-        dto.setDateModified( rs.getDate( 8 ));
+        dto.setDateModified( rs.getTimestamp( 8 ));
 
         return dto;
     }
