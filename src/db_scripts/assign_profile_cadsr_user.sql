@@ -13,7 +13,7 @@ DECLARE
       from user_accounts_view uav, dba_users db
 	  where uav.ua_name = db.username
           and UPPER(ua_name) not in ('CADSRPASSWORDCHANGE', 'CDEBROWSER', 'CDECURATE', 'FORMBUILDER', 'FREESTYLESEARCH', 'SENTINEL',
-                   'SBR', 'SBREXT', 'CADSRADMIN', 'CADSR_API', 'UMLLDR', 'THE_SIW', 'BLKLDR', 'GUEST');
+                   'SBR', 'SBREXT', 'CADSRADMIN', 'CADSR_API', 'UMLLDR', 'THE_SIW', 'BLKLDR', 'GUEST', 'SITESCOPE');
 
 BEGIN
 
