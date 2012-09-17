@@ -24,9 +24,6 @@
     </head>
 
 	<body>
-	<!--
-      %@ include file="basicHeader_inc.jsp"%>
-	-->
 		<%
 			MainServlet.initProperties();
 			String errorMessage = (String)session.getAttribute("ErrorMessage");

@@ -23,7 +23,7 @@ public class Constants {
 	public static final String SETUP_TITLE = "Setup Security Questions";
 	public static final String CHANGE_PASSWORD_TITLE = "Change Password";
 	public static final String FORGOT_PASSWORD_TITLE = "Forgot My Password";
-	public static final String UNLOCK_PASSWORD_TITLE = "Unlock My Password";
+	public static final String UNLOCK_PASSWORD_TITLE = "Unlock My Account";
 	
 	public static final String Q1 = "question1";
 	public static final String Q2 = "question2";
