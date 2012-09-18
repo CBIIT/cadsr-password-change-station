@@ -353,10 +353,13 @@ public class PasswordChangeDAO implements PasswordChange {
                 dto.setDateModified( new Timestamp(DateTimeUtils.currentTimeMillis()) );
             }
             stmt.setTimestamp( 8, dto.getDateModified() );
-            
+         
+        	logger.debug("updating questions '" + dto.toString() + "'");            
             int n = stmt.executeUpdate();
+        	logger.debug("updating questions done");
         }
         catch (SQLException e) {
+        	logger.error(e);
             throw new Exception( e );
         }
         finally {
@@ -467,6 +470,11 @@ public class PasswordChangeDAO implements PasswordChange {
     private boolean updateOne( String setstring, String cond, Object... params) throws Exception {
         int ret = executeUpdate( getUpdateSql( setstring, cond ), params );
 
+        if (ret != 1) {
+        	logger.error("Not able to save record into the dataabase");
+            throw new Exception("Not able to save record into the dataabase");
+        }
+        
         if (ret > 1) {
             throw new Exception("More than one record updated");
         }
@@ -490,11 +498,13 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
+            	logger.debug("updating again questions sql '" + sql + "'");                
                 return pstmt.executeUpdate();	//???
             }
             else {
                 stmt = conn.createStatement();
 
+            	logger.debug("creating questions sql '" + sql + "'");                
                 return stmt.executeUpdate( sql );
             }
         }
