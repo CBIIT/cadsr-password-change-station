@@ -38,7 +38,8 @@
         </copy>
 		<replace file="src/WebRoot/WEB-INF/classes/database.properties" token="@systemAccountName@" value="${systemAccountName}"/>
 		<replace file="src/WebRoot/WEB-INF/classes/database.properties" token="@systemAccountPassword@" value="${systemAccountPassword}"/>
-
+		<replace file="src/WebRoot/WEB-INF/classes/database.properties" token="@connectionUrl@" value="${connectionUrl}"/>
+		
 		<copy tofile="src/WebRoot/WEB-INF/Owasp.CsrfGuard.properties" filtering="false">
 		  <fileset file="src/conf/Owasp.CsrfGuard.properties" /> 
 		</copy>
