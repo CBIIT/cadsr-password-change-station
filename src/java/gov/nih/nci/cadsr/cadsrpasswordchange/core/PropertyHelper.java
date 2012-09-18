@@ -50,6 +50,10 @@ public class PropertyHelper {
 		return Database.getString("password");
 	}
 	
+	public static String getDatabaseURL() {
+		return Database.getString("jdbcurl");
+	}
+	
     /**
      * Load the properties from the XML file specified.
      *

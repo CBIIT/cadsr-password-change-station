@@ -4,12 +4,14 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -42,10 +44,19 @@ public class PasswordChangeDAO implements PasswordChange {
 
     //CADSRPASSW-46
     private Connection getConnection() throws Exception {
-		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-        logger.debug("got DataSource for " + _jndiSystem);    	
+//		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//        logger.debug("got DataSource for " + _jndiSystem);    	
 //        conn = ds.getConnection();
-        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
+//        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
+        
+        String jdbcurl = PropertyHelper.getDatabaseURL();
+        logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
+        Properties info = new Properties();
+        info.put( "user", PropertyHelper.getDatabaseUserID() );
+        logger.debug("with user id [" + PropertyHelper.getDatabaseUserID() + "]");
+        info.put( "password", PropertyHelper.getDatabasePassword() );
+        Connection conn = DriverManager.getConnection(jdbcurl, info);
+
         conn.setAutoCommit(true);
         return conn;
     }
