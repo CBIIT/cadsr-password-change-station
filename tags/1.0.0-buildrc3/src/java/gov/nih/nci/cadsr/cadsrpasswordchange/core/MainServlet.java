@@ -210,30 +210,44 @@ public class MainServlet extends HttpServlet {
 
 	private void saveUserStoredQna(String username, Map<String, String> userQuestions, Map<String, String> userAnswers) throws Exception {
 		UserSecurityQuestion qna = new UserSecurityQuestion();
+		logger.debug("entering saveUserStoredQna ...");		
 		try {
-		qna.setUaName(username);
-		qna.setQuestion1((String)userQuestions.get(Constants.Q1));
-		qna.setAnswer1(CommonUtil.encode((String)userAnswers.get(Constants.A1)));
-		qna.setQuestion2((String)userQuestions.get(Constants.Q2));
-		qna.setAnswer2(CommonUtil.encode((String)userAnswers.get(Constants.A2)));
-		qna.setQuestion3((String)userQuestions.get(Constants.Q3));
-		qna.setAnswer3(CommonUtil.encode((String)userAnswers.get(Constants.A3)));
+			qna.setUaName(username);
+			qna.setQuestion1((String)userQuestions.get(Constants.Q1));
+			qna.setAnswer1(CommonUtil.encode((String)userAnswers.get(Constants.A1)));
+			qna.setQuestion2((String)userQuestions.get(Constants.Q2));
+			qna.setAnswer2(CommonUtil.encode((String)userAnswers.get(Constants.A2)));
+			qna.setQuestion3((String)userQuestions.get(Constants.Q3));
+			qna.setAnswer3(CommonUtil.encode((String)userAnswers.get(Constants.A3)));
+			logger.info("saveUserStoredQna:qna object saved ...");
 		} catch (GeneralSecurityException e1) {
 			e1.printStackTrace();
 		}
 
 		try {
+			logger.debug("saveUserStoredQna:connecting to the db ...");
 			connect();
+			logger.info("saveUserStoredQna:connected 1");
 			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
 			UserSecurityQuestion oldQna = dao.findByUaName(username);
-			qna.setAttemptedCount(oldQna.getAttemptedCount());
-			qna.setDateModified(oldQna.getDateModified());
+			if(oldQna != null) {
+				logger.debug("saveUserStoredQna:dao.findByUaName(" + username + "' queried ...");
+				logger.debug("saveUserStoredQna:oldQna.getAttemptedCount() = '" + oldQna.getAttemptedCount() + "'");
+				qna.setAttemptedCount(oldQna.getAttemptedCount());
+				logger.debug("saveUserStoredQna:qna.getAttemptedCount() = '" + qna.getAttemptedCount() + "'");
+				logger.debug("saveUserStoredQna:oldQna.getDateModified() = '" + oldQna.getDateModified() + "'");
+				qna.setDateModified(oldQna.getDateModified());
+				logger.debug("saveUserStoredQna:qna.getDateModified() = '" + qna.getDateModified() + "'");
+			}
 			connect();			
+			logger.info("saveUserStoredQna:connected 2");
 			PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
 			if(oldQna == null) {
 				dao1.insert(qna);
+				logger.debug("saveUserStoredQna:inserted qna [" + qna.toString() + "]");
 			} else {
 				dao1.update(username, qna);
+				logger.debug("saveUserStoredQna:updated username ["+ username + "] qna [" + qna.toString() + "]");
 			}
 			//showUserSecurityQuestionList();	//just for debug
 			disconnect();
