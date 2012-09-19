@@ -18,6 +18,6 @@ Statement st=con.createStatement();
 String sql = "INSERT INTO SBREXT.USER_SECURITY_QUESTIONS (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES('"+name+"','test q 1','"+a1+"','test q 2','"+a2+"','test q 3','"+a3+"',sysdate)";
 System.out.println("SQL executed = [" + sql +"]");
 int i=st.executeUpdate(sql);
-out.println("Data is inserted successfully");
-out.println("SQL executed = [" + sql+"]");
+out.println(i + " data is inserted successfully");
+out.println("SQL executed = [" + sql+"] rc2");
 %>
