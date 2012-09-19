@@ -17,7 +17,7 @@ con.setAutoCommit(true);
 Statement st=con.createStatement();
 String sql = "INSERT INTO SBREXT.USER_SECURITY_QUESTIONS (ua_name,answer1,answer2,answer3) VALUES('"+name+"','"+a1+"','"+a2+"','"+a3+"')";
 System.out.println("SQL executed = [" + sql +"]");
-//int i=st.executeUpdate(sql);
+int i=st.executeUpdate(sql);
 out.println("Data is inserted successfully");
 out.println("SQL executed = [" + sql+"]");
 %>
