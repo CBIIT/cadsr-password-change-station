@@ -74,7 +74,7 @@
 <td style="width:50px;"></td>
 <td><img id="img2" accesskey="R" tabindex="3" onclick="javascript:ForgotPasswordSubmit();" src="/cadsrpasswordchange/images/forgot-100x_purple.gif" alt="Forgot My Password" style="border-width:0px;">&nbsp;&nbsp;</td>
 <td style="width:50px;"></td>
-<td><img id="img3" accesskey="U" tabindex="4" onclick="javascript:ForgotPasswordSubmit();" src="/cadsrpasswordchange/images/unlock-100x_purple.gif" alt="Unlock My Password" style="border-width:0px;"></td><p>
+<td><img id="img3" accesskey="U" tabindex="4" onclick="javascript:ForgotPasswordSubmit();" src="/cadsrpasswordchange/images/unlock-100x_purple.gif" alt="Unlock My Account" style="border-width:0px;"></td><p>
             	</tr>
             	<tr>
 		<td><center><a target="_top" href="<%=Constants.SETUP_QUESTIONS_URL%>">Setup Security Questions</a></center></td>
@@ -83,7 +83,7 @@
 		<td></td>
 		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>?action=forgot">Forgot My Password</a></center></td>
 		<td></td>
-		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>?action=unlock">Unlock My Password</a></center></td>
+		<td><center><a target="_top" href="<%=Constants.ASK_USERID_URL%>?action=unlock">Unlock My Account</a></center></td>
             	</tr>
             	
         	</table>
