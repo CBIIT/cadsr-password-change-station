@@ -395,6 +395,8 @@ select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_n
 
 select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like '%EMAIL%'
 
+select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like 'EMAIL.NOTIFY_TYPE'
+
 select username, expiry_date, account_status from dba_users where expiry_date < sysdate+2 and expiry_date < sysdate+60 and account_status IN ( 'OPEN', 'EXPIRED(GRACE)' ) order by account_status, expiry_date, username
 
 SELECT mail_address, username, account_status, expiry_date, lock_date FROM dba_users a, user_accounts b WHERE a.username = b.ua_name and EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+60;
@@ -439,8 +441,8 @@ select
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
 order by 
---a.EXPIRY_DATE,
+a.EXPIRY_DATE,
 a.PTIME  asc
--- and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
+and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
  */
 }
