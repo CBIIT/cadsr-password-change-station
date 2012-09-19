@@ -6,5 +6,5 @@
 		    input.parentNode.replaceChild(input2, input);
 		    setTimeout(function () {
 		        input2.focus();
-		    }, 10);
+		    }, 1000);
 		}
