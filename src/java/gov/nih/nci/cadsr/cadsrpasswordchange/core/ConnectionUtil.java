@@ -228,6 +228,29 @@ public class ConnectionUtil {
 		return result;
 	}
 
+	public static boolean isExpiredAccount(String userid, String password) {
+		boolean retVal = false;
+		
+		String jdbcurl = PropertyHelper.getDatabaseURL();
+		  logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
+		  Properties info = new Properties();
+		  info.put( "user", userid );
+		  logger.debug("with user id [" + PropertyHelper.getDatabaseUserID() + "]");
+		  info.put( "password", password );
+		  try {
+			Connection conn = DriverManager.getConnection(jdbcurl, info);
+		  } catch (SQLException e) {
+		    	logger.debug(e.getMessage());
+				Result result = ConnectionUtil.decode(e);
+		    	// expired passwords are acceptable as logins
+				if (result.getResultCode() == ResultCode.EXPIRED) {
+					retVal = true;
+				}
+		  }
+		  
+		  return retVal;
+	}
+
 	public static DataSource getDS(String _jndiUser) throws Exception {
 		Context envContext = new InitialContext();
 		DataSource ds = (DataSource)envContext.lookup(_jndiUser);

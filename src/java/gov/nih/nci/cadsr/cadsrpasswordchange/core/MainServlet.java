@@ -483,6 +483,15 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			logger.debug("saveQuestions:username " + loginID);
+			//CADSRPASSW-54
+			if(ConnectionUtil.isExpiredAccount(loginID, password)) {
+				logger.debug("expired password status for userid " + loginID);
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.104"));
+				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+				return;
+			}
+			
 			//CADSRPASSW-49
 			if(status.equals(Constants.EXPIRED_STATUS)) {
 				connect();
