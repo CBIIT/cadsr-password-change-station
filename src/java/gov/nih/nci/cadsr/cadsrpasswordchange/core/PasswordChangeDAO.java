@@ -135,6 +135,7 @@ public class PasswordChangeDAO implements PasswordChange {
         	if (conn != null) {
         		try {
         			conn.close();
+        			conn = null;
         		} catch (Exception ex) {
         			logger.error(ex.getMessage());
         		}
@@ -200,7 +201,7 @@ public class PasswordChangeDAO implements PasswordChange {
     }
 	
     public UserSecurityQuestion findByPrimaryKey( String uaName ) throws Exception {
-        Statement stmt = null;
+    	PreparedStatement pstmt = null;
         String sql = null;
         ResultSet rs = null;
         UserSecurityQuestion q = null;
@@ -220,7 +221,7 @@ public class PasswordChangeDAO implements PasswordChange {
 //	        conn = ds.getConnection();
 		        conn = getConnection();
 	        }
-            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
 			rs = pstmt.executeQuery();
 			int count = 0;
@@ -244,7 +245,7 @@ public class PasswordChangeDAO implements PasswordChange {
         }
         finally {
             if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (pstmt != null) {  try { pstmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return q;
@@ -255,7 +256,7 @@ public class PasswordChangeDAO implements PasswordChange {
     }
 
     public UserSecurityQuestion[] findAll( ) throws Exception {
-        Statement stmt = null;
+    	PreparedStatement pstmt = null;
         ResultSet rs = null;
         String sql = null;
         ArrayList<UserSecurityQuestion> qList = new ArrayList<UserSecurityQuestion>();
@@ -269,7 +270,7 @@ public class PasswordChangeDAO implements PasswordChange {
 		        conn = getConnection();
 	        }
 	        
-            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt = conn.prepareStatement( sql );
 			rs = pstmt.executeQuery();
 			UserSecurityQuestion q = null;
 			while(rs.next()) {
@@ -290,7 +291,7 @@ public class PasswordChangeDAO implements PasswordChange {
         }
         finally {
             if (rs != null) { try { rs.close(); } catch (SQLException e) {} }
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+            if (pstmt != null) {  try { pstmt.close(); } catch (SQLException e) {} }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return toArray(qList);
@@ -501,7 +502,8 @@ public class PasswordChangeDAO implements PasswordChange {
             if (params != null && params.length > 0) {
             	logger.debug("updating questions with sql params = [");
                 for(Object obj : params){
-                	logger.debug(obj.toString());
+                	logger.debug("**********" + obj.toString() + "**********");
+                	System.out.println("**********" + obj.toString() + "**********");
             	}            	
             	logger.debug("]");
             	logger.debug("updating questions sql = [" + sql + "]");
