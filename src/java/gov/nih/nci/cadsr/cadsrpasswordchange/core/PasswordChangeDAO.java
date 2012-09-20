@@ -290,8 +290,8 @@ public class PasswordChangeDAO implements PasswordChange {
             throw new Exception( e );
         }
         finally {
-            if (rs != null) { try { rs.close(); } catch (SQLException e) {} }
-            if (pstmt != null) {  try { pstmt.close(); } catch (SQLException e) {} }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (pstmt != null) {  try { pstmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return toArray(qList);
@@ -376,7 +376,7 @@ public class PasswordChangeDAO implements PasswordChange {
             throw new Exception( e );
         }
         finally {
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
     }
@@ -503,7 +503,6 @@ public class PasswordChangeDAO implements PasswordChange {
             	logger.debug("updating questions with sql params = [");
                 for(Object obj : params){
                 	logger.debug("**********" + obj.toString() + "**********");
-                	System.out.println("**********" + obj.toString() + "**********");
             	}            	
             	logger.debug("]");
             	logger.debug("updating questions sql = [" + sql + "]");
@@ -518,7 +517,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
-                return pstmt.executeUpdate();	//???
+                return pstmt.executeUpdate();
             }
             else {
             	logger.debug("creating questions sql = [" + sql + "]");
@@ -531,7 +530,7 @@ public class PasswordChangeDAO implements PasswordChange {
             throw new Exception( e );
         }
         finally {
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
     }
