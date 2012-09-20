@@ -228,15 +228,15 @@ public class ConnectionUtil {
 		return result;
 	}
 
-	public static boolean isExpiredAccount(String userid) {
+	public static boolean isExpiredAccount(String userid, String password) {
 		boolean retVal = false;
 		
 		String jdbcurl = PropertyHelper.getDatabaseURL();
 		  logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
 		  Properties info = new Properties();
-		  info.put( "user", PropertyHelper.getDatabaseUserID() );
+		  info.put( "user", userid );
 		  logger.debug("with user id [" + PropertyHelper.getDatabaseUserID() + "]");
-		  info.put( "password", PropertyHelper.getDatabasePassword() );
+		  info.put( "password", password );
 		  try {
 			Connection conn = DriverManager.getConnection(jdbcurl, info);
 		  } catch (SQLException e) {
