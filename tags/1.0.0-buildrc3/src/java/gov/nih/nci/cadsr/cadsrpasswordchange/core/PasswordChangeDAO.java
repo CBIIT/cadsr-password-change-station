@@ -135,6 +135,7 @@ public class PasswordChangeDAO implements PasswordChange {
         	if (conn != null) {
         		try {
         			conn.close();
+        			conn = null;
         		} catch (Exception ex) {
         			logger.error(ex.getMessage());
         		}
@@ -200,7 +201,7 @@ public class PasswordChangeDAO implements PasswordChange {
     }
 	
     public UserSecurityQuestion findByPrimaryKey( String uaName ) throws Exception {
-        Statement stmt = null;
+    	PreparedStatement pstmt = null;
         String sql = null;
         ResultSet rs = null;
         UserSecurityQuestion q = null;
@@ -220,7 +221,7 @@ public class PasswordChangeDAO implements PasswordChange {
 //	        conn = ds.getConnection();
 		        conn = getConnection();
 	        }
-            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt = conn.prepareStatement( sql );
             pstmt.setString(1, uaName);
 			rs = pstmt.executeQuery();
 			int count = 0;
@@ -244,7 +245,7 @@ public class PasswordChangeDAO implements PasswordChange {
         }
         finally {
             if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (pstmt != null) {  try { pstmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return q;
@@ -255,7 +256,7 @@ public class PasswordChangeDAO implements PasswordChange {
     }
 
     public UserSecurityQuestion[] findAll( ) throws Exception {
-        Statement stmt = null;
+    	PreparedStatement pstmt = null;
         ResultSet rs = null;
         String sql = null;
         ArrayList<UserSecurityQuestion> qList = new ArrayList<UserSecurityQuestion>();
@@ -269,7 +270,7 @@ public class PasswordChangeDAO implements PasswordChange {
 		        conn = getConnection();
 	        }
 	        
-            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt = conn.prepareStatement( sql );
 			rs = pstmt.executeQuery();
 			UserSecurityQuestion q = null;
 			while(rs.next()) {
@@ -289,8 +290,8 @@ public class PasswordChangeDAO implements PasswordChange {
             throw new Exception( e );
         }
         finally {
-            if (rs != null) { try { rs.close(); } catch (SQLException e) {} }
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+            if (pstmt != null) {  try { pstmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
         return toArray(qList);
@@ -375,7 +376,7 @@ public class PasswordChangeDAO implements PasswordChange {
             throw new Exception( e );
         }
         finally {
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
     }
@@ -483,8 +484,8 @@ public class PasswordChangeDAO implements PasswordChange {
         int ret = executeUpdate( getUpdateSql( setstring, cond ), params );
 
         if (ret != 1) {
-        	logger.error("Not able to save record into the dataabase");
-            throw new Exception("Not able to save record into the dataabase");
+        	logger.error("Not able to save record into the database");
+            throw new Exception("Not able to save record into the database");
         }
         
         if (ret > 1) {
@@ -499,6 +500,12 @@ public class PasswordChangeDAO implements PasswordChange {
 
         try {
             if (params != null && params.length > 0) {
+            	logger.debug("updating questions with sql params = [");
+                for(Object obj : params){
+                	logger.debug("**********" + obj.toString() + "**********");
+            	}            	
+            	logger.debug("]");
+            	logger.debug("updating questions sql = [" + sql + "]");
     	        if(conn == null) {
 //            	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
 //    	        logger.debug("got DataSource for " + _jndiSystem);
@@ -510,13 +517,12 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
-            	logger.debug("updating again questions sql '" + sql + "'");                
-                return pstmt.executeUpdate();	//???
+                return pstmt.executeUpdate();
             }
             else {
+            	logger.debug("creating questions sql = [" + sql + "]");
                 stmt = conn.createStatement();
 
-            	logger.debug("creating questions sql '" + sql + "'");                
                 return stmt.executeUpdate( sql );
             }
         }
@@ -524,7 +530,7 @@ public class PasswordChangeDAO implements PasswordChange {
             throw new Exception( e );
         }
         finally {
-            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) {} }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
     }
