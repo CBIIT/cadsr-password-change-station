@@ -440,9 +440,9 @@ select
 			 from 
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
+and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
 order by 
 a.EXPIRY_DATE,
 a.PTIME  asc
-and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
  */
 }
