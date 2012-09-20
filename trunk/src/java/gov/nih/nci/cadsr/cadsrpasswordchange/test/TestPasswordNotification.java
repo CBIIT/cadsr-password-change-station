@@ -33,6 +33,7 @@ public class TestPasswordNotification {
 	private static PasswordNotify dao;
 	public String ADMIN_ID = "cadsrpasswordchange";
 	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+//	public String ADMIN_PASSWORD = "Str0ngp@55words";
 	public String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
@@ -53,8 +54,8 @@ public class TestPasswordNotification {
 	public Connection getConnection(String username, String password)
 			throws Exception {
 		String dbtype = "oracle";
-		String dbserver = "137.187.181.4";
-		String dbname = "DSRDEV";
+		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
+//		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
 		// String username = "root";
 		// String password = "root";
 		int port = 1551;
@@ -264,12 +265,14 @@ public class TestPasswordNotification {
 	 * Mockup method for NotifyPassword.saveIntoQueue().
 	 */
 	private void saveIntoQueue(User user, int daysLeft) throws Exception {
+		System.out.println("Queud for user " + user.getUsername() + " type " + daysLeft);
 	}
 
 	/**
 	 * Mockup method for NotifyPassword.sendEmail().
 	 */
 	private boolean sendEmail(User user, int daysLeft) throws Exception {
+		System.out.println("Email sent for user " + user.getUsername() + " type " + daysLeft);
 		return true;
 	}
 
@@ -282,7 +285,7 @@ public class TestPasswordNotification {
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
 		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
-		System.out.println("updateStatus: " + user + " days left = " + daysLeft);
+		System.out.println("updateStatus: " + user + " status " + status + " days left = " + daysLeft);
 	}
 
 //	@Test
@@ -355,6 +358,102 @@ public class TestPasswordNotification {
 		send(u, daysLeft);
 	}
 
+	private boolean isChangedRecently(int daysLeft, long daysSincePasswordChange) {
+		boolean ret = false;
+		if(daysSincePasswordChange <= daysLeft) {
+			ret = true;
+		}
+		return ret;
+	}
+
+	public boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) throws Exception {
+		boolean ret = false;
+		boolean daysCondition = false;
+		boolean deliveryStatus = false;
+		String processedType = null;
+		int attempted = -1;
+		String status = null;
+		long daysSincePasswordChange = -1;
+
+		java.sql.Date passwordChangedDate = user.getPasswordChangedDate();
+		if(passwordChangedDate == null) {
+			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
+		}
+		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
+
+		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
+			if(totalNotificationTypes != currentNotificationIndex) {
+					//not the last type - send only once
+					if(user.getDeliveryStatus() == null && user.getProcessingType() == null) {
+						//has not been processed at all
+						ret = true;
+					} else 
+					if(user.getDeliveryStatus().equals(Constants.FAILED)) {
+						//processed but failed
+						ret = true;
+					} else 
+					if(!user.getProcessingType().equals(String.valueOf(daysLeft))) {
+						//it is different type of notification
+						ret = true;
+					}
+			} else {
+				if(daysLeft != Constants.DEACTIVATED_VALUE) {
+					//the last notification type
+					Calendar start = Calendar.getInstance();
+					start.setTime(passwordChangedDate);
+					if(daysSincePasswordChange >= 1) {
+						ret = true;
+					}
+					System.out.println("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change, send flag is " + ret);
+				} else {
+					System.out.println("daily notification is disabled");// (types = '"+ _processingNotificationDays + "').");
+				}
+			}
+		} else 
+		if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
+//			conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);		
+//			dao = new PasswordNotifyDAO(conn);
+//			dao.removeQueue(user);
+			System.out.println("*** RESET BYPASSED AS IT IS JUST A JUNIT TEST!!! ****");		
+		}
+		
+		return ret;
+	}
+
+	private void process(int days, int size, int index) throws Exception {
+		System.out.println("NotifyPassword.process entered ...");
+		
+		List<User> recipients = null;
+		conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);		
+		dao = new PasswordNotifyDAO(conn);
+		recipients = dao.getPasswordExpiringList(days);
+		if (recipients != null && recipients.size() > 0) {
+			for (User u : recipients) {
+				if(u != null) {
+					System.out.println("Processing user [" + u.getUsername() + "] attempted [" + u.getAttemptedCount() + "] type [" + u.getProcessingType() + "] password updated ["
+							+ u.getPasswordChangedDate() + "] email [" + u.getElectronicMailAddress()
+							+ "] expiry date [" + u.getExpiryDate() + "]");
+					if(isNotificationValid(u, days, size, index)) {
+						saveIntoQueue(u, days);
+						if(sendEmail(u, days)) {
+							updateStatus(u, Constants.SUCCESS, days);
+						} else {
+							updateStatus(u, Constants.FAILED, days);
+						}
+					} else {
+						System.out.println("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
+						updateStatus(u, null, days);
+						System.out.println("status date updated for user " + u);
+					}
+				}
+			}
+		} else {
+			System.out.println("No user for notification of " + days + " found");
+		}
+		
+		System.out.println("NotifyPassword.process done.");		
+	}
+	
 	/**
 	 * Mockup method for NotifyPassword.doAll(String propFile_).
 	 */
@@ -367,6 +466,7 @@ public class TestPasswordNotification {
 				int size = types.size();
 				int index = 1;
 				for (String t : types) {
+					process(Integer.valueOf(t).intValue(), size, index);
 					index++;
 					System.out.println("Notification type " + t + " processed.");
 				}
@@ -379,7 +479,7 @@ public class TestPasswordNotification {
 		}
 	}
 
-//	@Test
+	@Test
 	public void testMainLoop() throws Exception {
 		doAll(null);
 	}
