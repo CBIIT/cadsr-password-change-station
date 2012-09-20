@@ -424,8 +424,7 @@ public class TestPasswordNotification {
 		System.out.println("NotifyPassword.process entered ...");
 		
 		List<User> recipients = null;
-		conn = getConnection(ADMIN_ID, ADMIN_PASSWORD);		
-		dao = new PasswordNotifyDAO(conn);
+		setUp();
 		recipients = dao.getPasswordExpiringList(days);
 		if (recipients != null && recipients.size() > 0) {
 			for (User u : recipients) {
@@ -437,8 +436,10 @@ public class TestPasswordNotification {
 						saveIntoQueue(u, days);
 						if(sendEmail(u, days)) {
 							updateStatus(u, Constants.SUCCESS, days);
+							System.out.println("*** SUCCESS for " + u.getUsername() + "***");
 						} else {
 							updateStatus(u, Constants.FAILED, days);
+							System.out.println("*** FAILED for " + u.getUsername() + "***");
 						}
 					} else {
 						System.out.println("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
@@ -448,7 +449,7 @@ public class TestPasswordNotification {
 				}
 			}
 		} else {
-			System.out.println("No user for notification of " + days + " found");
+			System.out.println("--- No user for notification of " + days + " found! ---");
 		}
 		
 		System.out.println("NotifyPassword.process done.");		
