@@ -32,7 +32,7 @@ public class TestPasswordNotification {
 	Connection conn = null;
 	private static PasswordNotify dao;
 	public String ADMIN_ID = "cadsrpasswordchange";
-//	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+	public String ADMIN_PASSWORD = "cadsrpasswordchange";
 	public String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
