@@ -57,7 +57,7 @@ public class NotifyPassword {
 
             String parts[] = _dsurl.split("[:]");
             ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 15");
+            _logger.info("NotifyPassword v1.0 build 16");
 //            _logger.debug("NotifyPassword:open before [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
 //            parts[3] = parts[3].substring(1, parts[3].length());
 //            _logger.info("NotifyPassword:open after [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
@@ -153,7 +153,7 @@ public class NotifyPassword {
 	}
 
 	private void process(int days, int size, int index) throws Exception {
-		_logger.debug("NotifyPassword.process entered ...");
+		_logger.debug("\nNotifyPassword.process entered ...");
 		
 		List<User> recipients = null;
         open();
