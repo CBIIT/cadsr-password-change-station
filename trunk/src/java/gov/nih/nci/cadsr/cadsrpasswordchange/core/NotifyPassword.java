@@ -153,7 +153,7 @@ public class NotifyPassword {
 	}
 
 	private void process(int days, int size, int index) throws Exception {
-		_logger.debug("NotifyPassword.process entered ...");
+		_logger.debug("\nNotifyPassword.process entered ...");
 		
 		List<User> recipients = null;
         open();
