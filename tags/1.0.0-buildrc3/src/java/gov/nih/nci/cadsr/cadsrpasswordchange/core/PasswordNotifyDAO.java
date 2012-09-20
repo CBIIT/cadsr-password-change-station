@@ -71,7 +71,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			);
 			stmt.setInt(1, withinDays);
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {	//CADSRPASSW-56
 				User user = new User();
 				user.setElectronicMailAddress(rs.getString("electronic_mail_address"));
 				user.setUsername(rs.getString("username"));
