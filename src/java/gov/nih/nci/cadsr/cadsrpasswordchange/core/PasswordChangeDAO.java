@@ -483,8 +483,8 @@ public class PasswordChangeDAO implements PasswordChange {
         int ret = executeUpdate( getUpdateSql( setstring, cond ), params );
 
         if (ret != 1) {
-        	logger.error("Not able to save record into the dataabase");
-            throw new Exception("Not able to save record into the dataabase");
+        	logger.error("Not able to save record into the database");
+            throw new Exception("Not able to save record into the database");
         }
         
         if (ret > 1) {
@@ -499,6 +499,12 @@ public class PasswordChangeDAO implements PasswordChange {
 
         try {
             if (params != null && params.length > 0) {
+            	logger.debug("updating questions with sql params = [");
+                for(Object obj : params){
+                	logger.debug(obj.toString());
+            	}            	
+            	logger.debug("]");
+            	logger.debug("updating questions sql = [" + sql + "]");
     	        if(conn == null) {
 //            	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
 //    	        logger.debug("got DataSource for " + _jndiSystem);
@@ -510,13 +516,12 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
-            	logger.debug("updating again questions sql '" + sql + "'");                
                 return pstmt.executeUpdate();	//???
             }
             else {
+            	logger.debug("creating questions sql = [" + sql + "]");
                 stmt = conn.createStatement();
 
-            	logger.debug("creating questions sql '" + sql + "'");                
                 return stmt.executeUpdate( sql );
             }
         }
