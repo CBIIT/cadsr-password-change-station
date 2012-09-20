@@ -32,8 +32,8 @@ public class TestPasswordNotification {
 	Connection conn = null;
 	private static PasswordNotify dao;
 	public String ADMIN_ID = "cadsrpasswordchange";
-	public String ADMIN_PASSWORD = "cadsrpasswordchange";
-//	public String ADMIN_PASSWORD = "Str0ngp@55words";
+//	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+	public String ADMIN_PASSWORD = "Str0ngp@55words";
 	public String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
@@ -54,8 +54,8 @@ public class TestPasswordNotification {
 	public Connection getConnection(String username, String password)
 			throws Exception {
 		String dbtype = "oracle";
-		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
-//		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
+//		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
+		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
 		// String username = "root";
 		// String password = "root";
 		int port = 1551;
@@ -421,7 +421,7 @@ public class TestPasswordNotification {
 	}
 
 	private void process(int days, int size, int index) throws Exception {
-		System.out.println("NotifyPassword.process entered ...");
+		System.out.println("\nNotifyPassword.process entered ...");
 		
 		List<User> recipients = null;
 		setUp();
@@ -442,7 +442,7 @@ public class TestPasswordNotification {
 							System.out.println("*** FAILED for " + u.getUsername() + "***");
 						}
 					} else {
-						System.out.println("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
+						System.out.println(">>>>>> isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
 						updateStatus(u, null, days);
 						System.out.println("status date updated for user " + u);
 					}
