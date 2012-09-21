@@ -19,17 +19,23 @@ BEGIN
 
 	dbms_output.enable( 1000000 );
 		
+	DBMS_OUTPUT.PUT_LINE('assign profile 1');
+
 	IF (do_change) THEN
 	 	skipped_string := '';
+	DBMS_OUTPUT.PUT_LINE('assign profile 2');
 	END IF;
 
+	DBMS_OUTPUT.PUT_LINE('assign profile 3');
 
     FOR user_accounts_view_rec in c1
     LOOP
         username := user_accounts_view_rec.ua_name;
 		assign_profile_command := 'alter user '||username||' profile '||new_profile;
+	DBMS_OUTPUT.PUT_LINE('assign profile 4 command to be executed = [' || assign_profile_command || ']');
 		IF (do_change) THEN
 		   execute immediate assign_profile_command;
+	DBMS_OUTPUT.PUT_LINE('assign profile 5 execution done');
 		END IF;
 							   
 		dbms_output.put_line( assign_profile_command || skipped_string);
