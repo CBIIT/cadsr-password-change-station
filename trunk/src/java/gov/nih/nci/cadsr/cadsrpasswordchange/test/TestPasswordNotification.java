@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import oracle.jdbc.pool.OracleDataSource;
+
 import org.joda.time.DateTimeUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +34,8 @@ public class TestPasswordNotification {
 	Connection conn = null;
 	private static PasswordNotify dao;
 	public String ADMIN_ID = "cadsrpasswordchange";
-	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+//	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+	public String ADMIN_PASSWORD = "";
 	public String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
@@ -51,6 +54,26 @@ public class TestPasswordNotification {
 	}
 	
 	public Connection getConnection(String username, String password)
+			throws Exception {
+	    Connection          _conn;		
+            OracleDataSource ods = new OracleDataSource();
+            String _dsurl = "jdbc:oracle:thin:@ncidb-dsr-q.nci.nih.gov:1551:DSRQA";
+            String parts[] = _dsurl.split("[:]");
+            ods.setDriverType("thin");
+            String connString=_dsurl;
+            ods.setURL(connString);
+            ods.setUser(username);
+            ods.setPassword(password);
+            System.out.println("NotifyPassword:open _dsurl[" + _dsurl + "] via _user["+ username + "]");
+            _conn = ods.getConnection(username, password);
+            System.out.println("connected to the database");
+            _conn.setAutoCommit(true);
+            
+            return _conn;
+    }
+        
+	
+	public Connection getConnection1(String username, String password)
 			throws Exception {
 		String dbtype = "oracle";
 //		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
