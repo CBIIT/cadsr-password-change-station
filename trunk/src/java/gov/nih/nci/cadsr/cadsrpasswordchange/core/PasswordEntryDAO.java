@@ -38,19 +38,21 @@ public class PasswordEntryDAO implements PasswordEntry {
 
     //CADSRPASSW-46
     private Connection getConnection() throws Exception {
-//		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-//        logger.debug("got DataSource for " + _jndiSystem);    	
-////        conn = ds.getConnection();
-//        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
-
-        String jdbcurl = PropertyHelper.getDatabaseURL();
-        logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
-        Properties info = new Properties();
-        info.put( "user", PropertyHelper.getDatabaseUserID() );
-        logger.debug("with user id [" + PropertyHelper.getDatabaseUserID() + "]");
-        info.put( "password", PropertyHelper.getDatabasePassword() );
-        Connection conn = DriverManager.getConnection(jdbcurl, info);
+		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+        logger.debug("got DataSource for " + _jndiSystem);    	
+//        conn = ds.getConnection();
+      logger.debug("got connection from jboss pool [" + _jndiSystem + "]");
+        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
         
+//        String jdbcurl = PropertyHelper.getDatabaseURL();
+//        logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
+//        Properties info = new Properties();
+//        info.put( "user", PropertyHelper.getDatabaseUserID() );
+//        logger.debug("with user id [" + PropertyHelper.getDatabaseUserID() + "]");
+//        info.put( "password", PropertyHelper.getDatabasePassword() );
+//        Connection conn = DriverManager.getConnection(jdbcurl, info);
+
+        conn.setAutoCommit(true);
         return conn;
     }
     
