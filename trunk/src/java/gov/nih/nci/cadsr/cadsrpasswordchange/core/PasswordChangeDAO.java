@@ -497,6 +497,7 @@ public class PasswordChangeDAO implements PasswordChange {
     
     private int executeUpdate( String sql, Object... params) throws Exception {
         Statement stmt = null;
+        int retVal = -1;
 
         try {
             if (params != null && params.length > 0) {
@@ -517,13 +518,21 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
-                return pstmt.executeUpdate();
+                //CADSRPASSW-58
+                retVal = pstmt.executeUpdate();
+                if(retVal == 0) {
+                	logger.debug("failed to update, creating questions instead, sql = [" + sql + "]");
+                    stmt = conn.createStatement();
+                    retVal = stmt.executeUpdate( sql );
+                	logger.debug("[1] new questions inserted");
+                }
             }
             else {
             	logger.debug("creating questions sql = [" + sql + "]");
                 stmt = conn.createStatement();
 
-                return stmt.executeUpdate( sql );
+                retVal = stmt.executeUpdate( sql );
+            	logger.debug("[2] new questions inserted");
             }
         }
         catch (SQLException e) {
@@ -533,6 +542,8 @@ public class PasswordChangeDAO implements PasswordChange {
             if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
         }
+        
+        return retVal;
     }
     
     private String getUpdateSql(String setstring, String cond) {
