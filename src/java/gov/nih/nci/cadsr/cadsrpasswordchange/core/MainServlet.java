@@ -701,7 +701,7 @@ public class MainServlet extends HttpServlet {
 			resetUserStoredAttemptedCount(userID);
 		} else {
 			long count = getUserStoredAttemptedCount(userID);
-			if(count >= 6) {
+			if(count >= 5) {	//https://tracker.nci.nih.gov/browse/CADSRPASSW-60
 				logger.info("security answers limit reached");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
 				resp.sendRedirect(redictedUrl);
