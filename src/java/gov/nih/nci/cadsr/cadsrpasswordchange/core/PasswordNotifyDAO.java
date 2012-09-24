@@ -55,22 +55,26 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	 */
 	public List<User> getPasswordExpiringList(int withinDays) {
 
-		logger.info("getPasswordExpiringList entered");
+		logger.info("getPasswordExpiringList entered (9/24 100)");
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String value = null;
 		List arr = new ArrayList();
+		String sql = null;
 		try {
 	        if(conn == null) {
 	        	throw new Exception("Connection is NULL or empty.");
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement(SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?"
-			);
+	        sql = SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?";
+			stmt = conn.prepareStatement(sql);
+	        logger.debug("sql statement executed = [" + sql + "]");
 			stmt.setInt(1, withinDays);
+	        logger.debug("set withinDays '" + withinDays + "'");
 			rs = stmt.executeQuery();
+	        logger.debug("sql executed, iterating list ...");
 			while(rs.next()) {	//CADSRPASSW-56
 				User user = new User();
 				user.setElectronicMailAddress(rs.getString("electronic_mail_address"));
@@ -83,6 +87,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				logger.info ("getRecipientList: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 				arr.add(user);
 			}
+	        logger.debug("iteration done");
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
 		} finally {
@@ -91,6 +96,8 @@ public class PasswordNotifyDAO implements PasswordNotify {
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
+		logger.info("getPasswordExpiringList exiting ...");
+		
        return arr;
 	}
 
