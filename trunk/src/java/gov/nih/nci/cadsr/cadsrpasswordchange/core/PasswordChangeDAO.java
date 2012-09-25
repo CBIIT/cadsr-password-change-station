@@ -473,7 +473,7 @@ public class PasswordChangeDAO implements PasswordChange {
             return false;
         }
 
-        params.add( uaName );
+//        params.add( uaName );
 
         Object[] oparams = new Object[ params.size() ];
 
@@ -565,7 +565,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
     private UserSecurityQuestion fetch( ResultSet rs ) throws Exception {
         UserSecurityQuestion dto = new UserSecurityQuestion();
-        dto.setUaName( rs.getString( 1 ));
+        dto.setUaName( rs.getString( 1 ).toUpperCase());	//CADSRPASSW-58
         dto.setQuestion1( rs.getString( 2 ));
         dto.setAnswer1( decode(rs.getString( 3 )));
         dto.setQuestion2( rs.getString( 4 ));
