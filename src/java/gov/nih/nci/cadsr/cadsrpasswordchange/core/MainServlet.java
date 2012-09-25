@@ -178,6 +178,9 @@ public class MainServlet extends HttpServlet {
 			}
 
 			String username = req.getParameter("userid");
+			if(username != null) {
+				username = username.toUpperCase();
+			}
 			
 			logger.debug("username " + username);			
 			
@@ -368,6 +371,9 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, "");
 
 			String username = req.getParameter("userid");
+			if(username != null) {
+				username = username.toUpperCase();
+			}
 			String password = req.getParameter("pswd");
 			logger.info("unvalidated username " + username);
 
@@ -434,6 +440,9 @@ public class MainServlet extends HttpServlet {
 			// Security enhancement
 			int paramCount = 0;
 			String loginID = req.getParameter("userid");	//CADSRPASSW-40
+			if(loginID != null) {
+				loginID = loginID.toUpperCase();
+			}			
 			String question1 = req.getParameter("question1");
 			String answer1 = req.getParameter("answer1");
 			String question2 = req.getParameter("question2");
@@ -593,6 +602,9 @@ public class MainServlet extends HttpServlet {
 			}
 
 			String username = req.getParameter("userid");
+			if(username != null) {
+				username = username.toUpperCase();
+			}
 			logger.debug("username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, Constants.ASK_USERID_URL);
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
@@ -887,6 +899,9 @@ public class MainServlet extends HttpServlet {
 			}
 
 			String username = req.getParameter("userid");
+			if(username != null) {
+				username = username.toUpperCase();
+			}
 			String newPassword = req.getParameter("newpswd1");
 
 			// Security enhancement
@@ -944,6 +959,9 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, "");
 			
 			String username = req.getParameter("userid");
+			if(username != null) {
+				username = username.toUpperCase();
+			}
 			String oldPassword = req.getParameter("pswd");
 			String newPassword = req.getParameter("newpswd1");
 			String newPassword2 = req.getParameter("newpswd2");
@@ -1031,13 +1049,12 @@ public class MainServlet extends HttpServlet {
 //			}					
 
 			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid"));
+				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid").toUpperCase());
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.7"));
 				resp.sendRedirect("./jsp/changePassword.jsp");				
 				return;
 			}
 			if(Messages.getString("PasswordChangeHelper.8").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-				
 				logger.debug("new password mis-typed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.8"));
 				resp.sendRedirect("./jsp/changePassword.jsp");
