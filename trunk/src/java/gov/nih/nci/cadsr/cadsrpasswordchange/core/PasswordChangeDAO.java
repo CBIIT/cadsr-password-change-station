@@ -473,7 +473,11 @@ public class PasswordChangeDAO implements PasswordChange {
             return false;
         }
 
-//        params.add( uaName );
+        //CADSRPASSW-58
+        if(uaName != null) {
+        	uaName = uaName.toUpperCase();
+        }
+        params.add( uaName );
 
         Object[] oparams = new Object[ params.size() ];
 
