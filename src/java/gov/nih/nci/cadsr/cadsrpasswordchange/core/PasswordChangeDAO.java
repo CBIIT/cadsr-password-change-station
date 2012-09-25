@@ -28,7 +28,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
     protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified, attempted_count";
 
-    protected static final String PK_CONDITION = "UPPER(ua_name)=?";	//CADSRPASSW-58
+    protected static final String PK_CONDITION = "ua_name=?";	//CADSRPASSW-58
 
     private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
@@ -387,7 +387,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
         if ( dto.getUaName() != null ) {
             checkMaxLength( "ua_name", dto.getUaName(), 30 );
-            sb.append( "UPPER(ua_name)=?" );
+            sb.append( "ua_name=?" );
             params.add( dto.getUaName().toUpperCase());	//CADSRPASSW-58
         }
 
