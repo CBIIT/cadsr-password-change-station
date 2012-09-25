@@ -28,7 +28,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
     protected static final String SELECT_COLUMNS = "ua_name, question1, answer1, question2, answer2, question3, answer3, date_modified, attempted_count";
 
-    protected static final String PK_CONDITION = "ua_name=?";
+    protected static final String PK_CONDITION = "ua_name=?";	//CADSRPASSW-58
 
     private static final String SQL_INSERT = "INSERT INTO " + QUESTION_TABLE_NAME + " (ua_name,question1,answer1,question2,answer2,question3,answer3,date_modified) VALUES (?,?,?,?,?,?,?,?)";
 
@@ -222,13 +222,13 @@ public class PasswordChangeDAO implements PasswordChange {
 		        conn = getConnection();
 	        }
             pstmt = conn.prepareStatement( sql );
-            pstmt.setString(1, uaName);
+            pstmt.setString(1, uaName.toUpperCase());		//CADSRPASSW-58
 			rs = pstmt.executeQuery();
 			int count = 0;
 			logger.debug("findByPrimaryKey: " + count);    			
 			if(rs.next()) {
 				q = new UserSecurityQuestion();
-				q.setUaName(rs.getString("ua_name"));
+				q.setUaName(rs.getString("ua_name").toUpperCase());	//CADSRPASSW-58
 				q.setQuestion1(rs.getString("question1"));
 				q.setAnswer1(decode(rs.getString("answer1")));
 				q.setQuestion2(rs.getString("question2"));
@@ -275,7 +275,7 @@ public class PasswordChangeDAO implements PasswordChange {
 			UserSecurityQuestion q = null;
 			while(rs.next()) {
 				q = new UserSecurityQuestion();
-				q.setUaName(rs.getString("ua_name"));
+				q.setUaName(rs.getString("ua_name").toUpperCase());	//CADSRPASSW-58
 				q.setQuestion1(rs.getString("question1"));
 				q.setAnswer1(decode(rs.getString("answer1")));
 				q.setQuestion2(rs.getString("question2"));
@@ -327,7 +327,7 @@ public class PasswordChangeDAO implements PasswordChange {
                 throw new Exception("Value of column 'ua_name' cannot be null");
             }
             checkMaxLength( "ua_name", dto.getUaName(), 30 );
-            stmt.setString( 1, dto.getUaName() );
+            stmt.setString( 1, dto.getUaName().toUpperCase() );		//CADSRPASSW-58
 
             if ( dto.getQuestion1() == null ) {
                 throw new Exception("Value of column 'question1' cannot be null");
@@ -388,7 +388,7 @@ public class PasswordChangeDAO implements PasswordChange {
         if ( dto.getUaName() != null ) {
             checkMaxLength( "ua_name", dto.getUaName(), 30 );
             sb.append( "ua_name=?" );
-            params.add( dto.getUaName());
+            params.add( dto.getUaName().toUpperCase());	//CADSRPASSW-58
         }
 
         if ( dto.getQuestion1() != null ) {
@@ -473,6 +473,10 @@ public class PasswordChangeDAO implements PasswordChange {
             return false;
         }
 
+        //CADSRPASSW-58
+        if(uaName != null) {
+        	uaName = uaName.toUpperCase();
+        }
         params.add( uaName );
 
         Object[] oparams = new Object[ params.size() ];
@@ -518,21 +522,15 @@ public class PasswordChangeDAO implements PasswordChange {
 
                 params( pstmt, params);
 
-                //CADSRPASSW-58
                 retVal = pstmt.executeUpdate();
-                if(retVal == 0) {
-                	logger.debug("failed to update, creating questions instead, sql = [" + sql + "]");
-                    stmt = conn.createStatement();
-                    retVal = stmt.executeUpdate( sql );
-                	logger.debug("[1] new questions inserted");
-                }
+            	logger.debug("new questions updated");
             }
             else {
             	logger.debug("creating questions sql = [" + sql + "]");
                 stmt = conn.createStatement();
 
                 retVal = stmt.executeUpdate( sql );
-            	logger.debug("[2] new questions inserted");
+            	logger.debug("new questions inserted");
             }
         }
         catch (SQLException e) {
@@ -571,7 +569,7 @@ public class PasswordChangeDAO implements PasswordChange {
 
     private UserSecurityQuestion fetch( ResultSet rs ) throws Exception {
         UserSecurityQuestion dto = new UserSecurityQuestion();
-        dto.setUaName( rs.getString( 1 ));
+        dto.setUaName( rs.getString( 1 ).toUpperCase());	//CADSRPASSW-58
         dto.setQuestion1( rs.getString( 2 ));
         dto.setAnswer1( decode(rs.getString( 3 )));
         dto.setQuestion2( rs.getString( 4 ));

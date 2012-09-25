@@ -179,7 +179,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement("select * from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
+			stmt = conn.prepareStatement("select * from SBREXT.PASSWORD_NOTIFICATION where UPPER(UA_NAME) = ?");
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			boolean found = false;
@@ -234,7 +234,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        }
 	        logger.debug("connected");
 
-			stmt = conn.prepareStatement("delete from SBREXT.PASSWORD_NOTIFICATION where UA_NAME = ?");
+			stmt = conn.prepareStatement("delete from SBREXT.PASSWORD_NOTIFICATION where UPPER(UA_NAME) = ?");
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			logger.debug ("removeQueue user : " + user.getUsername() + " queue removed");
