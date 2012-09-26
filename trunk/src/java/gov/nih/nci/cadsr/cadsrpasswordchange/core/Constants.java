@@ -91,5 +91,5 @@ public class Constants {
     public static final String EMAIL_INTRO = "EMAIL.INTRO";
     public static final String EMAIL_SUBJECT = "EMAIL.SUBJECT";
     public static final String EMAIL_DAYS_TOKEN = "${daysLeft}";
-
+    public static final String EMAIL_USER_ID_TOKEN = "${userid}";	//CADSRPASSW-62
 }
