@@ -55,7 +55,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	 */
 	public List<User> getPasswordExpiringList(int withinDays) {
 
-		logger.info("getPasswordExpiringList entered (9/24 101)");
+		logger.info("getPasswordExpiringList entered (9/26 101)");
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -69,6 +69,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        logger.debug("connected");
 
 	        sql = SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?";
+	        logger.debug("before executing sql statement");
 			stmt = conn.prepareStatement(sql);
 	        logger.debug("sql statement executed = [" + sql + "]");
 			stmt.setInt(1, withinDays);
