@@ -207,18 +207,28 @@ public class NotifyPassword {
 	}
 
 	private boolean sendEmail(User user, int daysLeft) throws Exception {
+		_logger.debug("NotifyPassword.sendEmail entered ...");
         open();
 		String adminEmailAddress = dao.getAdminEmailAddress();
+		_logger.debug("NotifyPassword.sendEmail adminEmailAddress [" + adminEmailAddress + "]");
         open();
 		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
+		_logger.debug("NotifyPassword.sendEmail emailSubject [" + emailSubject + "]");
         open();
 		String emailBody = EmailHelper.handleDaysToken(dao.getEmailBody(), daysLeft);
+		_logger.debug("NotifyPassword.sendEmail emailBody [" + emailBody + "]");
+		emailBody = EmailHelper.handleUserIDToken(emailBody, user);		//CADSRPASSW-62
+		_logger.info("sendEmail:user id = [" + user.getUsername() + "] body processed = [" + emailBody + "]");
 		String emailAddress = user.getElectronicMailAddress();
+		_logger.debug("NotifyPassword.sendEmail emailAddress [" + emailAddress + "]");
         open();
 		String host = dao.getHostName();
+		_logger.debug("NotifyPassword.sendEmail host [" + host + "]");
         open();
 		String port = dao.getHostPort();
+		_logger.debug("NotifyPassword.sendEmail port [" + port + "]");
 		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
+		_logger.debug("NotifyPassword.sendEmail sending email ...");
 		return ms.send();
 	}
 	
