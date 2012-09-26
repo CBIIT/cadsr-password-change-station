@@ -144,6 +144,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
 				user.setProcessingType(rs.getString("PROCESSING_TYPE"));
 				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
+				user.setUsername(rs.getString("USERNAME"));		//CADSRPASSW-62
 				ret = user;
 			}
 		} catch (Exception ex) {
