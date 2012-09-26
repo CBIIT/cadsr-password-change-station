@@ -55,7 +55,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	 */
 	public List<User> getPasswordExpiringList(int withinDays) {
 
-		logger.info("getPasswordExpiringList entered (9/24 100)");
+		logger.info("getPasswordExpiringList entered (9/24 101)");
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
