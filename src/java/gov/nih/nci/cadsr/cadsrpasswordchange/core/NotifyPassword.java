@@ -57,7 +57,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.4");
+            _logger.info("NotifyPassword v1.0 build 16.5");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -70,6 +70,7 @@ public class NotifyPassword {
           info.put( "user", _user );
           _logger.debug("with user id [" + _user + "]");
           info.put( "password", _pswd );
+          Class.forName("oracle.jdbc.driver.OracleDriver");
           _conn = DriverManager.getConnection(_dsurl, info);
 
             _logger.info("connected to the database");
