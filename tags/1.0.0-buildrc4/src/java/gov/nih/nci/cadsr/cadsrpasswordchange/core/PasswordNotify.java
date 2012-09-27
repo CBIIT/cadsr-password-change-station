@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PasswordNotify {
 
-	public List<User> getPasswordExpiringList(int withinDays);
+	public List<User> getPasswordExpiringList(int withinDays) throws Exception;
 	
 	public User loadQueue(User user) throws Exception;
 	

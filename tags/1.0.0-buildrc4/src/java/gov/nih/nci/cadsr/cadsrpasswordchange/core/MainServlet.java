@@ -1000,6 +1000,11 @@ public class MainServlet extends HttpServlet {
 					String errorMessage1 = userBean.getResult().getMessage();
 					logger.debug ("errorMessage " + errorMessage1);
 					if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
+						//CADSRPASSW-60
+						status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
+						if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+							return;
+						}
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 					} else {
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
@@ -1072,7 +1077,7 @@ public class MainServlet extends HttpServlet {
 				resetUserStoredAttemptedCount(username);	//CADSRPASSW-42
 				logger.debug("answer count reset");
 				session.invalidate();  // they are done, log them out
-				resp.sendRedirect("./jsp/passwordChanged.jsp");				
+				resp.sendRedirect("./jsp/passwordChanged.jsp");
 			} else {
 				logger.info("password change failed");
 				String errorMessage = passwordChangeResult.getMessage();
