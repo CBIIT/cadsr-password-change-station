@@ -58,7 +58,7 @@ public class NotifyPassword {
 
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.2");
+            _logger.info("NotifyPassword v1.0 build 16.3");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -66,14 +66,13 @@ public class NotifyPassword {
 //            _logger.info("NotifyPassword:open _dsurl[" + _dsurl + "] via _user["+ _user + "]");
 //            _conn = ods.getConnection(_user, _pswd);
 
-          String jdbcurl = PropertyHelper.getDatabaseURL();
-          _logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
+          _logger.debug("got connection using direct jdbc url [" + _dsurl + "]");
           Properties info = new Properties();
-          info.put( "user", PropertyHelper.getDatabaseUserID() );
-          _logger.debug("with user id [" + PropertyHelper.getDatabaseUserID() + "]");
-          info.put( "password", PropertyHelper.getDatabasePassword() );
-          Connection conn = DriverManager.getConnection(jdbcurl, info);
-            
+          info.put( "user", _user );
+          _logger.debug("with user id [" + _user + "]");
+          info.put( "password", _pswd );
+          Connection conn = DriverManager.getConnection(_dsurl, info);
+
             _logger.info("connected to the database");
             _conn.setAutoCommit(true);
             return 0;
