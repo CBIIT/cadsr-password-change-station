@@ -52,10 +52,11 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	 * Method to retrieve all the user's with password which are expiring within the days specified in the passed in number.
 	 * @param withinDays
 	 * @return
+	 * @throws Exception 
 	 */
-	public List<User> getPasswordExpiringList(int withinDays) {
+	public List<User> getPasswordExpiringList(int withinDays) throws Exception {
 
-		logger.info("getPasswordExpiringList entered (9/26 101)");
+		logger.info("getPasswordExpiringList entered (9/27 102)");
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -91,6 +92,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        logger.debug("iteration done");
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
+        	throw ex;
 		} finally {
             if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
             if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
