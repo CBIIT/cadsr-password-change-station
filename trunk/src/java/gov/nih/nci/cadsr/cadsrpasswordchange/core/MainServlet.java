@@ -1074,6 +1074,7 @@ public class MainServlet extends HttpServlet {
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
 			} else {
+				//CADSRPASSW-60
 				logger.info("password change failed");
 				String errorMessage = passwordChangeResult.getMessage();
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
