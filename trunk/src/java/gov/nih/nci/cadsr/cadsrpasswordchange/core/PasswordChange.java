@@ -54,6 +54,6 @@ public interface PasswordChange {
 	
 	public String getToolProperty(String toolName, String property);
 	
-	public String getAccountStatus(String user);	
+	public List getAccountStatus(String user);	
 
 }
