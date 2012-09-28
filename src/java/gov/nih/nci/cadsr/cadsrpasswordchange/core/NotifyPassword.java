@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,31 +49,32 @@ public class NotifyPassword {
     private int open() throws Exception
     {
         // If we already have a connection, don't bother.
-        if (_conn != null)
-            return 0;
+        if (_conn != null) {
+            //return 0;
+        	_conn.close();	//CADSRPASSW-56
+        }
 
         try
         {
-            OracleDataSource ods = new OracleDataSource();
+//            OracleDataSource ods = new OracleDataSource();
+//            String parts[] = _dsurl.split("[:]");
+//            ods.setDriverType("thin");
+            _logger.info("NotifyPassword v1.0 build 16.5");
+//            String connString=_dsurl;
+//            ods.setURL(connString);
+//            ods.setUser(_user);
+//            ods.setPassword(_pswd);
+//            _logger.info("NotifyPassword:open _dsurl[" + _dsurl + "] via _user["+ _user + "]");
+//            _conn = ods.getConnection(_user, _pswd);
 
-            String parts[] = _dsurl.split("[:]");
-            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.1");
-//            _logger.debug("NotifyPassword:open before [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
-//            parts[3] = parts[3].substring(1, parts[3].length());
-//            _logger.info("NotifyPassword:open after [3]=" + parts[3] + " [4]=" + parts[4] + " [5]=" + parts[5]);
-//            ods.setServerName(parts[3]);
-//            ods.setPortNumber(Integer.parseInt(parts[4]));
-//            ods.setServiceName(parts[5]);
-            //http://docs.oracle.com/cd/B19306_01/java.102/b14355/jdbcthin.htm
-//            String connString="jdbc:oracle:thin:@prodHost:1521:ORCL";
-            String connString=_dsurl;
-            ods.setURL(connString);
-            ods.setUser(_user);
-            ods.setPassword(_pswd);
-            _logger.info("NotifyPassword:open _dsurl[" + _dsurl + "] via _user["+ _user + "]");
-//            Connection conn = ods.getConnection();
-            _conn = ods.getConnection(_user, _pswd);
+          _logger.debug("got connection using direct jdbc url [" + _dsurl + "]");
+          Properties info = new Properties();
+          info.put( "user", _user );
+          _logger.debug("with user id [" + _user + "]");
+          info.put( "password", _pswd );
+          Class.forName("oracle.jdbc.driver.OracleDriver");
+          _conn = DriverManager.getConnection(_dsurl, info);
+
             _logger.info("connected to the database");
             _conn.setAutoCommit(true);
             return 0;
@@ -323,6 +325,12 @@ public class NotifyPassword {
 		return ret;
 	}
 
+	/**
+	 * To run this in Eclipse -
+	 * 
+	 * 1. Copy log4j.properties from bin/ into java/ folder
+	 * 2. Add program arguments "[full path]\config.xml" in the run
+	 */
 	public static void main(String[] args) {
         if (args.length != 1)
         {
