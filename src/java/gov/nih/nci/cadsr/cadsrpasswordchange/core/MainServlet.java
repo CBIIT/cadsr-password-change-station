@@ -729,23 +729,29 @@ public class MainServlet extends HttpServlet {
 	private boolean isAnswerLockPeriodOver(String userID) throws Exception {
 		boolean retVal = false;
 
+		logger.debug("isAnswerLockExpired:entered");
 		connect();
 		PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+		logger.debug("isAnswerLockExpired:before dao.findByPrimaryKey userid [" + userID + "]");
 		UserSecurityQuestion qna = dao.findByPrimaryKey(userID);
+		logger.debug("isAnswerLockExpired:qna [" + qna + "]");
 		if(qna != null) {
+			logger.debug("isAnswerLockExpired:qna not null [" + qna.toString() + "]");
 			if(qna.getDateModified() == null) {
 				throw new Exception("Security questions date modified is NULL or empty.");
 			}
 			DateTime now = new DateTime();
 			logger.debug("isAnswerLockExpired:last modified date for user '" + userID + "' is " + qna.getDateModified());
 			Period period = new Period(new DateTime(qna.getDateModified()), now);
-			if(period.getHours() > 1) {
+			if(period.getHours() >= 1) {	//CADSRPASSW-51
 				retVal = true;
 				logger.info("isAnswerLockExpired:Over 1 hour for user '" + userID + "', answer limit count reset (" + period.getMinutes() + " minutes has passed).");
 			} else {
 				logger.debug("isAnswerLockExpired:Not over 1 hour yet for user '" + userID + "', nothing is done (" + period.getMinutes() + " minutes has passed).");
 			}
 		}
+		
+		logger.debug("isAnswerLockExpired:exiting ...");
 		
 		return retVal;
 	}
