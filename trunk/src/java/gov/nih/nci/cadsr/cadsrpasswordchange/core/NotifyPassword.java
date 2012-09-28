@@ -49,8 +49,10 @@ public class NotifyPassword {
     private int open() throws Exception
     {
         // If we already have a connection, don't bother.
-        if (_conn != null)
-            return 0;
+        if (_conn != null) {
+            //return 0;
+        	_conn.close();	//CADSRPASSW-56
+        }
 
         try
         {
@@ -323,6 +325,12 @@ public class NotifyPassword {
 		return ret;
 	}
 
+	/**
+	 * To run this in Eclipse -
+	 * 
+	 * 1. Copy log4j.properties from bin/ into java/ folder
+	 * 2. Add program arguments "[full path]\config.xml" in the run
+	 */
 	public static void main(String[] args) {
         if (args.length != 1)
         {
