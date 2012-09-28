@@ -7,6 +7,7 @@ import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -670,7 +671,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	/**
-	 * Method to detect account lock condition.
+	 * Method to detect/handle account lock condition.
 	 * 
 	 * @param username
 	 * @param password
@@ -683,6 +684,7 @@ public class MainServlet extends HttpServlet {
 	 */
 	private String doValidateAccountStatus(String username, HttpSession session, HttpServletRequest req, HttpServletResponse resp, String redictedUrl) throws Exception {
 		String retVal = "";
+		logger.debug("doValidateAccountStatus: entered");
 
 		//check locked state here
 		String action = (String)session.getAttribute(Constants.ACTION_TOKEN);
@@ -690,12 +692,32 @@ public class MainServlet extends HttpServlet {
 			//CADSRPASSW-29
 			connect();
 			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
-			retVal = dao.getAccountStatus(username);
+			List arr = dao.getAccountStatus(username);
+			if(arr == null || arr.size() != 2) {
+				throw new Exception("Not able to check account status.");
+			}
+			retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
+			
+			//begin CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
+			DateTime now = new DateTime();
+			Period period = new Period(new DateTime(arr.get(PasswordChangeDAO.LOCK_DATE)), now);
+			if(period.getHours() >= 1) {
+				connect();
+				PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
+				dao1.unlockAccount(username);
+				logger.info("Over 1 hour, password lock release (" + period.getMinutes() + " minutes has passed).");
+			}
+			//end CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
+			else
 			if(retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.info("Less than 1 hour, password lock stays (" + period.getMinutes() + " minutes has passed).");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 				resp.sendRedirect(redictedUrl);
 			}
 		}
+		
+		logger.debug("doValidateAccountStatus: exiting ...");
+		
 		return retVal;
 	}
 
