@@ -700,7 +700,13 @@ public class MainServlet extends HttpServlet {
 			
 			//begin CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
 			DateTime now = new DateTime();
-			Period period = new Period(new DateTime(arr.get(PasswordChangeDAO.LOCK_DATE)), now);
+			Date lockedDate = (Date)arr.get(PasswordChangeDAO.LOCK_DATE);
+			if(lockedDate == null) {
+				lockedDate = new DateTime().toDate();
+				//throw new Exception("Not able to check account locked date.");
+				logger.debug("Assumed not locked by Oracle (but by a manual alter command by someone?)");
+			}
+			Period period = new Period(new DateTime(lockedDate), now);
 			if(period.getHours() >= 1) {
 				connect();
 				PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
