@@ -526,7 +526,7 @@ public class TestPasswordReset {
 				DateTime now = new DateTime();
 				System.out.println("last modified is " + qna.getDateModified());
 				Period period = new Period(new DateTime(qna.getDateModified()), now);
-				if(period.getHours() > 1) {
+				if(period.getHours() >= 1) {
 					qna.setAttemptedCount(0l);
 					System.out.println("Over 1 hour, answer limit count reset (" + period.getMinutes() + " minutes has passed).");
 				} else {

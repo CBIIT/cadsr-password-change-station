@@ -30,13 +30,13 @@ import org.junit.Test;
 
 public class TestPasswordNotification {
 
-	private boolean fromDB = false;	//true = real; false = simulated	
+	private boolean fromDB = /*false;*/	true; //= real; //false = simulated	
 	private static DataSource datasource = null;
 	Connection conn = null;
 	private static PasswordNotify dao;
 	public String ADMIN_ID = "cadsrpasswordchange";
-	public String ADMIN_PASSWORD = "cadsrpasswordchange";
-//	public String ADMIN_PASSWORD = "";
+//	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+	public String ADMIN_PASSWORD = "Str0ngp@55words";
 	public String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
@@ -77,8 +77,8 @@ public class TestPasswordNotification {
 	public Connection getConnection(String username, String password)
 			throws Exception {
 		String dbtype = "oracle";
-		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
-//		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
+//		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
+		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
 		// String username = "root";
 		// String password = "root";
 		int port = 1551;
@@ -523,12 +523,12 @@ public class TestPasswordNotification {
 		}
 	}
 
-//	@Test
+	@Test
 	public void testMainLoop() throws Exception {
 		doAll(null);
 	}
 
-	@Test
+//	@Test
 	public void testEmailWithUserID() throws Exception {
 		List<User> recipients = null;
 		NotifyPassword n = new NotifyPassword(conn);
