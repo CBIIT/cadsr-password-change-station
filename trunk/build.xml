@@ -96,6 +96,9 @@
 		<copy tofile="${dist.dir}/bin/log4j.properties" filtering="false" verbose="true">
 		  <fileset file="src/conf/log4j.properties" />
 		</copy>
+		<copy tofile="${dist.dir}/bin/joda-time-1.6.2.jar" filtering="false" verbose="true">
+		  <fileset file="src/lib/joda-time-1.6.2.jar" />
+		</copy>
 	</target>
         
 	<!-- Build entire project -->
