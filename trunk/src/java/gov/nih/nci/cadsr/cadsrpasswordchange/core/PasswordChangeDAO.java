@@ -739,7 +739,7 @@ public class PasswordChangeDAO implements PasswordChange {
 			rs = stmt.executeQuery();
 			if(rs.next()) {
 				retVal.add(rs.getString("account_status"));
-				retVal.add(rs.getDate("lock_date"));
+				retVal.add(rs.getTimestamp("lock_date"));
 			}
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
