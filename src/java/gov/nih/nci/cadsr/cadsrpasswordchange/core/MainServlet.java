@@ -701,16 +701,20 @@ public class MainServlet extends HttpServlet {
 			retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
 			
 			//begin CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
-			String status = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
-			DateTime now = new DateTime();
+//			String status = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
 			Date lockedDate = (Date)arr.get(PasswordChangeDAO.LOCK_DATE);
-			if(lockedDate == null && status != null && status.indexOf(Constants.LOCKED_STATUS) > -1) {
-				lockedDate = new DateTime().toDate();
-				//throw new Exception("Not able to check account locked date.");
-				logger.debug("LockedDate is null even though status is LOCKED, thus it is set to now (assumed not locked by Oracle but possibly by a manual alter command?)");
+			logger.debug("LockedDate [" + lockedDate + "] Status [" + retVal + "]");
+			Period period = null;
+			boolean doUnlock = false;
+			if(lockedDate != null && retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
+				DateTime now = new DateTime();
+				period = new Period(new DateTime(lockedDate), now);
+				if(period.getHours() >= 1) {
+					doUnlock = true;
+				}
 			}
-			Period period = new Period(new DateTime(lockedDate), now);
-			if(period.getHours() >= 1) {
+
+			if(doUnlock) {
 				connect();
 				PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
 				dao1.unlockAccount(username);
