@@ -707,7 +707,7 @@ public class MainServlet extends HttpServlet {
 			if(lockedDate == null && status != null && status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				lockedDate = new DateTime().toDate();
 				//throw new Exception("Not able to check account locked date.");
-				logger.debug("Assumed not locked by Oracle (but by a manual alter command by someone?)");
+				logger.debug("LockedDate is null even though status is LOCKED, thus it is set to now (assumed not locked by Oracle but possibly by a manual alter command?)");
 			}
 			Period period = new Period(new DateTime(lockedDate), now);
 			if(period.getHours() >= 1) {
