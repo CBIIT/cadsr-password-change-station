@@ -712,17 +712,21 @@ public class MainServlet extends HttpServlet {
 				PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
 				dao1.unlockAccount(username);
 				logger.info("Over 1 hour, password lock release (" + period.getMinutes() + " minutes has passed).");
+				logger.debug("Getting the account status again ...");
+				retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
+				logger.debug("Account status is now = [" + retVal + "]");
 			}
 			//end CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
 			else
 			if(retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.info("Less than 1 hour, password lock stays (" + period.getMinutes() + " minutes has passed).");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+				logger.debug("Redirecting to '" + redictedUrl + "'");
 				resp.sendRedirect(redictedUrl);
 			}
 		}
 		
-		logger.debug("doValidateAccountStatus: exiting ...");
+		logger.debug("doValidateAccountStatus: exiting with retVal [" + retVal + "] ...");
 		
 		return retVal;
 	}
