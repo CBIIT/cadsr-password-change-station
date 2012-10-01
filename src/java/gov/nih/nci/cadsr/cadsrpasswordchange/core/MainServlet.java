@@ -701,9 +701,10 @@ public class MainServlet extends HttpServlet {
 			retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
 			
 			//begin CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
+			String status = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
 			DateTime now = new DateTime();
 			Date lockedDate = (Date)arr.get(PasswordChangeDAO.LOCK_DATE);
-			if(lockedDate == null) {
+			if(lockedDate == null && status != null && status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				lockedDate = new DateTime().toDate();
 				//throw new Exception("Not able to check account locked date.");
 				logger.debug("Assumed not locked by Oracle (but by a manual alter command by someone?)");
