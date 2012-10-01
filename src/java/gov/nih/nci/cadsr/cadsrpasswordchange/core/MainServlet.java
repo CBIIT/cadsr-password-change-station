@@ -453,6 +453,7 @@ public class MainServlet extends HttpServlet {
 			
 			String status = doValidateAccountStatus(loginID, session, req, resp, "./jsp/setupPassword.jsp");
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doSaveQuestions:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 			
@@ -609,6 +610,7 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, Constants.ASK_USERID_URL);
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 			
@@ -712,9 +714,10 @@ public class MainServlet extends HttpServlet {
 				PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
 				dao1.unlockAccount(username);
 				logger.info("Over 1 hour, password lock release (" + period.getMinutes() + " minutes has passed).");
-				logger.debug("Getting the account status again ...");
-				retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
-				logger.debug("Account status is now = [" + retVal + "]");
+				//logger.debug("Getting the account status again ...");
+				//retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
+				retVal = Constants.OPEN_STATUS;
+				logger.debug("Account status is [" + retVal + "] now");
 			}
 			//end CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
 			else
@@ -954,6 +957,7 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/resetPassword.jsp");
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doChangePassword2:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 
@@ -1004,9 +1008,10 @@ public class MainServlet extends HttpServlet {
 			String newPassword = req.getParameter("newpswd1");
 			String newPassword2 = req.getParameter("newpswd2");
 
-			logger.debug("passwordChange:username " + username);
+			logger.debug("doChangePassword:username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doChangePassword:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 			
@@ -1041,6 +1046,7 @@ public class MainServlet extends HttpServlet {
 						//CADSRPASSW-60
 						status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
 						if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+							logger.debug("doChangePassword:status [" + status + "] returning without doing anything ...");
 							return;
 						}
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
