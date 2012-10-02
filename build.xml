@@ -102,6 +102,9 @@
 		<copy tofile="${dist.dir}/bin/commons-lang3-3.1.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/commons-lang3-3.1.jar" />
 		</copy>
+		<copy tofile="${dist.dir}/bin/mail.jar" filtering="false" verbose="true">
+		  <fileset file="src/lib/mail.jar" />
+		</copy>
 	</target>
         
 	<!-- Build entire project -->
