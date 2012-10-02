@@ -300,6 +300,8 @@ public class NotifyPassword {
 			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
 		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
+		_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed ***, daysSincePasswordChange hardcoded to 1");
+		daysSincePasswordChange = 1;	//open this just for test
 		_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 
 		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
