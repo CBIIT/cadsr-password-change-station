@@ -59,7 +59,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.7");
+            _logger.info("NotifyPassword v1.0 build 16.71");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
