@@ -192,22 +192,22 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			if(rs.next()) {
 				//assuming all user Ids are unique/no duplicate
 				found = true;
-				logger.debug ("updateQueue user found: " + user.getUsername());
+				logger.debug ("1 updateQueue user found: " + user.getUsername());
 			}
 			if(!found) {
 				logger.debug ("updateQueue user not found: " + user.getUsername());
 				stmt = conn.prepareStatement("insert into SBREXT.PASSWORD_NOTIFICATION (ua_name, date_modified, attempted_count, processing_type, delivery_status) values(?,?,?,?,?)");
 				logger.debug ("updateQueue new queue");
 			} else {
-				logger.debug ("updateQueue user found: " + user.getUsername());
-				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set ua_name = ?, date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ?");
+				logger.debug ("2 updateQueue user found: " + user.getUsername());
+				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ? where ua_name = ?");
 				logger.debug ("updateQueue existing queue");
 			}
-			stmt.setString(1, user.getUsername().toUpperCase());
-			stmt.setTimestamp(2, user.getDateModified());
-			stmt.setInt(3, user.getAttemptedCount());
-			stmt.setString(4, user.getProcessingType());
-			stmt.setString(5, user.getDeliveryStatus());
+			stmt.setTimestamp(1, user.getDateModified());
+			stmt.setInt(2, user.getAttemptedCount());
+			stmt.setString(3, user.getProcessingType());
+			stmt.setString(4, user.getDeliveryStatus());
+			stmt.setString(5, user.getUsername().toUpperCase());
 			stmt.executeUpdate();
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
