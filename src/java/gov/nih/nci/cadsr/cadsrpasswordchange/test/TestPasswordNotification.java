@@ -13,6 +13,7 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotifyDAO;
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -108,7 +109,7 @@ public class TestPasswordNotification {
 			user.setAttemptedCount(1);
 			user.setProcessingType("14");
 			user.setDeliveryStatus(Constants.SUCCESS);
-			user.setDateModified(new java.sql.Date(new Date().getTime()));
+			user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 			dao.updateQueue(user);
 			l.add(user);
 			showUserList(l);
@@ -215,7 +216,7 @@ public class TestPasswordNotification {
 		user.setPasswordChangedDate(new java.sql.Date(DateTimeUtils.currentTimeMillis()));
 		//reset the time back
 	    DateTimeUtils.setCurrentMillisOffset(0);
-		user.setDateModified(new java.sql.Date(DateTimeUtils.currentTimeMillis()));
+		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		System.out.println("getExpiredUser: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 		
 		return user;
@@ -308,7 +309,7 @@ public class TestPasswordNotification {
 		user.setAttemptedCount(currentCount++);
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
-		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
+		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		System.out.println("updateStatus: " + user + " status " + status + " days left = " + daysLeft);
 	}
 
