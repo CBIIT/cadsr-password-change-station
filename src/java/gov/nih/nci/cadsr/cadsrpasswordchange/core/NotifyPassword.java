@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -278,7 +279,7 @@ public class NotifyPassword {
 		user.setAttemptedCount(currentCount++);
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
-		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
+		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		dao = new PasswordNotifyDAO(_conn);
 		dao.updateQueue(user);
 	}

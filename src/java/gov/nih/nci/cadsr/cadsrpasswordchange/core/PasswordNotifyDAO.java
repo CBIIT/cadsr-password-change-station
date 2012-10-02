@@ -86,7 +86,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setExpiryDate(rs.getDate("expiry_date"));
 				user.setLockDate(rs.getDate("lock_date"));
 				user.setPasswordChangedDate(rs.getDate("ptime"));
-				user.setDateModified(rs.getDate("DATE_MODIFIED"));
+				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 				logger.info ("getRecipientList: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 				arr.add(user);
 				debugCount++;
@@ -145,7 +145,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setExpiryDate(rs.getDate("EXPIRY_DATE"));
 				user.setLockDate(rs.getDate("LOCK_DATE"));
 				user.setPasswordChangedDate(rs.getDate("PTIME"));
-				user.setDateModified(rs.getDate("DATE_MODIFIED"));
+				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
 				user.setProcessingType(rs.getString("PROCESSING_TYPE"));
 				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
@@ -204,7 +204,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				logger.debug ("updateQueue existing queue");
 			}
 			stmt.setString(1, user.getUsername().toUpperCase());
-			stmt.setDate(2, user.getDateModified());
+			stmt.setTimestamp(2, user.getDateModified());
 			stmt.setInt(3, user.getAttemptedCount());
 			stmt.setString(4, user.getProcessingType());
 			stmt.setString(5, user.getDeliveryStatus());
