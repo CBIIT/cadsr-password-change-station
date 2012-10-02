@@ -244,9 +244,9 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			logger.debug ("removeQueue user : " + user.getUsername() + " queue removed");
-			stmt = conn.prepareStatement("alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"");
-			stmt.executeUpdate();
-			logger.debug ("updateQueue cadsr_user profile reapplied");
+//			stmt = conn.prepareStatement("alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"");
+//			stmt.executeUpdate();
+//			logger.debug ("updateQueue cadsr_user profile reapplied");
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
 		} finally {
