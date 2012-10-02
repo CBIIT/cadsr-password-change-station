@@ -30,6 +30,7 @@ import org.junit.Test;
 
 public class TestPasswordNotification {
 
+	private boolean fromDB = /*false;*/	true; //= real; //false = simulated	
 	private static DataSource datasource = null;
 	Connection conn = null;
 	private static PasswordNotify dao;
@@ -53,7 +54,7 @@ public class TestPasswordNotification {
 	public void tearDown() {
 	}
 	
-	public Connection getConnection(String username, String password)
+	public Connection getConnection1(String username, String password)
 			throws Exception {
 	    Connection          _conn;		
             OracleDataSource ods = new OracleDataSource();
@@ -64,7 +65,7 @@ public class TestPasswordNotification {
             ods.setURL(connString);
             ods.setUser(username);
             ods.setPassword(password);
-            System.out.println("NotifyPassword:open _dsurl[" + _dsurl + "] via _user["+ username + "]");
+            System.out.println("NotifyPassword:setUp _dsurl[" + _dsurl + "] via _user["+ username + "]");
             _conn = ods.getConnection(username, password);
             System.out.println("connected to the database");
             _conn.setAutoCommit(true);
@@ -73,7 +74,7 @@ public class TestPasswordNotification {
     }
         
 	
-	public Connection getConnection1(String username, String password)
+	public Connection getConnection(String username, String password)
 			throws Exception {
 		String dbtype = "oracle";
 //		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
@@ -294,7 +295,28 @@ public class TestPasswordNotification {
 	 * Mockup method for NotifyPassword.sendEmail().
 	 */
 	private boolean sendEmail(User user, int daysLeft) throws Exception {
-		System.out.println("Email sent for user " + user.getUsername() + " type " + daysLeft);
+		System.out.println("NotifyPassword.sendEmail entered ...");
+        setUp();
+		String adminEmailAddress = dao.getAdminEmailAddress();
+		System.out.println("NotifyPassword.sendEmail adminEmailAddress [" + adminEmailAddress + "]");
+        setUp();
+		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
+		System.out.println("NotifyPassword.sendEmail emailSubject [" + emailSubject + "]");
+        setUp();
+		String emailBody = EmailHelper.handleDaysToken(dao.getEmailBody(), daysLeft);
+		System.out.println("NotifyPassword.sendEmail emailBody [" + emailBody + "]");
+		emailBody = EmailHelper.handleUserIDToken(emailBody, user);		//CADSRPASSW-62
+		System.out.println("sendEmail:user id = [" + user.getUsername() + "] body processed = [" + emailBody + "]");
+		String emailAddress = user.getElectronicMailAddress();
+		System.out.println("NotifyPassword.sendEmail emailAddress [" + emailAddress + "]");
+        setUp();
+		String host = dao.getHostName();
+		System.out.println("NotifyPassword.sendEmail host [" + host + "]");
+        setUp();
+		String port = dao.getHostPort();
+		System.out.println("NotifyPassword.sendEmail port [" + port + "]");
+		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
+		System.out.println("NotifyPassword.sendEmail sending email ...");		
 		return true;
 	}
 
@@ -312,7 +334,6 @@ public class TestPasswordNotification {
 
 //	@Test
 	public void testNotifications() throws Exception {
-		boolean fromDB = true;	//true = real; false = simulated
 		List<User> recipients = null;
 		NotifyPassword n = new NotifyPassword(conn);
 		int days;
@@ -340,7 +361,7 @@ public class TestPasswordNotification {
 						updateStatus(u, Constants.FAILED, days);
 					}
 				} else {
-//					System.out.println("testNotifications: isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
+					System.out.println("testNotifications: isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
 					updateStatus(u, null, days);
 				}
 			}
@@ -507,6 +528,44 @@ public class TestPasswordNotification {
 		doAll(null);
 	}
 
+//	@Test
+	public void testEmailWithUserID() throws Exception {
+		List<User> recipients = null;
+		NotifyPassword n = new NotifyPassword(conn);
+		int days;
+		int size = 3; //change this accordingly if you have more than 3 types of notifications (only in this test, as we bypass config.xml)
+		int index;
+
+		days = 14;
+		index = 1;
+		if(!fromDB) {
+			recipients = getPasswordExpiringList(days);
+		} else {
+			recipients = dao.getPasswordExpiringList(days);
+			showUserList(recipients);
+		}
+		for (User u : recipients) {
+			if(u != null) {
+				System.out.println("testNotifications: Processing user [" + u.getUsername() + "] attempted [" + u.getAttemptedCount() + "] type [" + u.getProcessingType() + "] password updated ["
+						+ u.getPasswordChangedDate() + "] email [" + u.getElectronicMailAddress()
+						+ "] expiry date [" + u.getExpiryDate() + "]");
+				sendEmail(u, days);
+				System.out.println("NotifyPassword.sendEmail email sent");
+			}
+		}
+
+		int count = 1;
+		for (User u : recipients) {
+			if(count >0 && count < 3) {
+				assertEquals(Constants.SUCCESS, u.getDeliveryStatus());
+			} else {
+//				assertEquals(null, u.getDeliveryStatus());
+			}
+			System.out.println("testNotifications: " + u.getDeliveryStatus() + " user " + u);
+			count++;
+		}
+	}
+	
 /*
 update sbrext.tool_options_view_ext set value = 'Your password is about to expire in ${daysLeft} days. Please login to Password Change Station or call NCI Helpdesk to change your password.'
 where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.INTRO'

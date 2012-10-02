@@ -526,7 +526,7 @@ public class TestPasswordReset {
 				DateTime now = new DateTime();
 				System.out.println("last modified is " + qna.getDateModified());
 				Period period = new Period(new DateTime(qna.getDateModified()), now);
-				if(period.getHours() > 1) {
+				if(period.getHours() >= 1) {
 					qna.setAttemptedCount(0l);
 					System.out.println("Over 1 hour, answer limit count reset (" + period.getMinutes() + " minutes has passed).");
 				} else {
@@ -547,7 +547,7 @@ public class TestPasswordReset {
 
 	
 /*
-select ua_name, attempted_count from sbrext.user_security_questions
+select date_modified, ua_name, attempted_count from sbrext.user_security_questions
 
 select * from sys.cadsr_users where lower(username) like 'test111'
 
@@ -555,7 +555,7 @@ select * from sys.cadsr_users where lower(username) = 'test111'
 
 select * from sbrext.user_security_questions
 
-alter user test111 ACCOUNT LOCK PASSWORD EXPIRE
+alter user test112 ACCOUNT LOCK PASSWORD EXPIRE
 
 alter user test111 PASSWORD EXPIRE
 
@@ -568,6 +568,8 @@ select * from sys.dba_profiles where lower(profile) = 'cadsr_user'
 use the admin tool to create the user
 
 alter user UATDEV1 profile "cadsr_user"
+
+alter user GUEST profile "cadsr_special_account"
 
 select * from sbr.user_accounts_view where ua_name = 'UATDEV1'
 UA_NAME	DESCRIPTION	DATE_CREATED	CREATED_BY	DATE_MODIFIED	MODIFIED_BY	NAME	ORG_IDSEQ	TITLE	PHONE_NUMBER	FAX_NUMBER	TELEX_NUMBER	MAIL_ADDRESS	ELECTRONIC_MAIL_ADDRESS	DER_ADMIN_IND	ENABLED_IND	ALERT_IND	

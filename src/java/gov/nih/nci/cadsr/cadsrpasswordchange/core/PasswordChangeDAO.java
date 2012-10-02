@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -34,6 +35,9 @@ public class PasswordChangeDAO implements PasswordChange {
 
     private Logger logger = Logger.getLogger(PasswordChangeDAO.class);
 
+    public static final int ACCOUNT_STATUS = 0;
+    public static final int LOCK_DATE = 1;    
+    
     public PasswordChangeDAO(DataSource datasource) {
     	this.datasource = datasource;
     }
@@ -627,6 +631,47 @@ public class PasswordChangeDAO implements PasswordChange {
        return result;
 	}
 	
+	public Result unlockAccount(String user) {
+
+		logger.info("unlockAccount user " + user );
+		
+		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
+		PreparedStatement stmt = null;
+		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
+		
+		try {
+	        if(conn == null) {				
+//	        	DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+//		        logger.debug("got DataSource for " + _jndiSystem);
+//		        conn = ds.getConnection();
+		        conn = getConnection();
+	        }
+	        logger.debug("connected");
+
+	        isConnectionException = false;
+		
+			// can't use parameters with PreparedStatement and "alter user", create a single string
+	        // (must quote password to retain capitalization for verification function)
+			String alterUser = "alter user " + user + " account unlock";
+			stmt = conn.prepareStatement(alterUser);
+			logger.debug("attempted to alter user [" + user + "] with command [" + alterUser + "]");
+			stmt.execute();
+			result = new Result(ResultCode.ACCOUNT_UNLOCKED);
+		} catch (Exception ex) {
+			logger.debug(ex.getMessage());
+				if (isConnectionException) {
+					result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
+				} else {
+					result = ConnectionUtil.decode(ex);
+				}
+		} finally {
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
+        	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
+		}
+
+       return result;
+	}
+
 	/**
 	 * This should be moved into a common utility class.
 	 * @param toolName
@@ -670,13 +715,13 @@ public class PasswordChangeDAO implements PasswordChange {
        return value;
 	}
 	
-	public String getAccountStatus(String user) {
+	public List getAccountStatus(String user) {
 
 		logger.info("getAccountStatus  user " + user );
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String retVal = "";
+		List retVal = new ArrayList();
 		
 		try {
 	        if(conn == null) {				
@@ -687,13 +732,14 @@ public class PasswordChangeDAO implements PasswordChange {
 	        }
 	        logger.debug("connected");
 	        
-			String sql = "select account_status from sys.cadsr_users where upper(username) =  ?";
+			String sql = "select account_status, lock_date from sys.cadsr_users where upper(username) =  ?";
 	        stmt = conn.prepareStatement(sql);
 	        stmt.setString(1, user.toUpperCase());
 			logger.debug("attempted to alter user " + user);
 			rs = stmt.executeQuery();
 			if(rs.next()) {
-				retVal = (String)rs.getString("account_status");
+				retVal.add(rs.getString("account_status"));
+				retVal.add(rs.getTimestamp("lock_date"));
 			}
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
@@ -703,7 +749,8 @@ public class PasswordChangeDAO implements PasswordChange {
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
-       logger.info("returning account status " + retVal);        
+       logger.info("returning account status [" + retVal + "]");
+
        return retVal;
 	}
 	

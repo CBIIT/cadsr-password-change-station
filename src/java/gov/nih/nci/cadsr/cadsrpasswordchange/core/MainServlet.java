@@ -7,6 +7,7 @@ import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -452,6 +453,7 @@ public class MainServlet extends HttpServlet {
 			
 			String status = doValidateAccountStatus(loginID, session, req, resp, "./jsp/setupPassword.jsp");
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doSaveQuestions:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 			
@@ -608,6 +610,7 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, Constants.ASK_USERID_URL);
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 			
@@ -670,7 +673,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	/**
-	 * Method to detect account lock condition.
+	 * Method to detect/handle account lock condition.
 	 * 
 	 * @param username
 	 * @param password
@@ -683,6 +686,7 @@ public class MainServlet extends HttpServlet {
 	 */
 	private String doValidateAccountStatus(String username, HttpSession session, HttpServletRequest req, HttpServletResponse resp, String redictedUrl) throws Exception {
 		String retVal = "";
+		logger.debug("doValidateAccountStatus: entered");
 
 		//check locked state here
 		String action = (String)session.getAttribute(Constants.ACTION_TOKEN);
@@ -690,12 +694,48 @@ public class MainServlet extends HttpServlet {
 			//CADSRPASSW-29
 			connect();
 			PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
-			retVal = dao.getAccountStatus(username);
+			List arr = dao.getAccountStatus(username);
+			if(arr == null || arr.size() != 2) {
+				throw new Exception("Not able to check account status.");
+			}
+			retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
+			
+			//begin CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
+//			String status = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
+			Date lockedDate = (Date)arr.get(PasswordChangeDAO.LOCK_DATE);
+			logger.debug("LockedDate [" + lockedDate + "] Status [" + retVal + "]");
+			Period period = null;
+			boolean doUnlock = false;
+			if(lockedDate != null && retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
+				DateTime now = new DateTime();
+				period = new Period(new DateTime(lockedDate), now);
+				if(period.getHours() >= 1) {
+					doUnlock = true;
+				}
+			}
+
+			if(doUnlock) {
+				connect();
+				PasswordChangeDAO dao1 = new PasswordChangeDAO(datasource);
+				dao1.unlockAccount(username);
+				logger.info("Over 1 hour, password lock release (" + period.getMinutes() + " minutes has passed).");
+				//logger.debug("Getting the account status again ...");
+				//retVal = (String)arr.get(PasswordChangeDAO.ACCOUNT_STATUS);
+				retVal = Constants.OPEN_STATUS;
+				logger.debug("Account status is [" + retVal + "] now");
+			}
+			//end CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
+			else
 			if(retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.info("Less than 1 hour, password lock stays (" + period.getMinutes() + " minutes has passed).");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+				logger.debug("Redirecting to '" + redictedUrl + "'");
 				resp.sendRedirect(redictedUrl);
 			}
 		}
+		
+		logger.debug("doValidateAccountStatus: exiting with retVal [" + retVal + "] ...");
+		
 		return retVal;
 	}
 
@@ -729,23 +769,29 @@ public class MainServlet extends HttpServlet {
 	private boolean isAnswerLockPeriodOver(String userID) throws Exception {
 		boolean retVal = false;
 
+		logger.debug("isAnswerLockExpired:entered");
 		connect();
 		PasswordChangeDAO dao = new PasswordChangeDAO(datasource);
+		logger.debug("isAnswerLockExpired:before dao.findByPrimaryKey userid [" + userID + "]");
 		UserSecurityQuestion qna = dao.findByPrimaryKey(userID);
+		logger.debug("isAnswerLockExpired:qna [" + qna + "]");
 		if(qna != null) {
+			logger.debug("isAnswerLockExpired:qna not null [" + qna.toString() + "]");
 			if(qna.getDateModified() == null) {
 				throw new Exception("Security questions date modified is NULL or empty.");
 			}
 			DateTime now = new DateTime();
 			logger.debug("isAnswerLockExpired:last modified date for user '" + userID + "' is " + qna.getDateModified());
 			Period period = new Period(new DateTime(qna.getDateModified()), now);
-			if(period.getHours() > 1) {
+			if(period.getHours() >= 1) {	//CADSRPASSW-51
 				retVal = true;
 				logger.info("isAnswerLockExpired:Over 1 hour for user '" + userID + "', answer limit count reset (" + period.getMinutes() + " minutes has passed).");
 			} else {
 				logger.debug("isAnswerLockExpired:Not over 1 hour yet for user '" + userID + "', nothing is done (" + period.getMinutes() + " minutes has passed).");
 			}
 		}
+		
+		logger.debug("isAnswerLockExpired:exiting ...");
 		
 		return retVal;
 	}
@@ -916,6 +962,7 @@ public class MainServlet extends HttpServlet {
 			logger.debug("username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/resetPassword.jsp");
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doChangePassword2:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 
@@ -966,9 +1013,10 @@ public class MainServlet extends HttpServlet {
 			String newPassword = req.getParameter("newpswd1");
 			String newPassword2 = req.getParameter("newpswd2");
 
-			logger.debug("passwordChange:username " + username);
+			logger.debug("doChangePassword:username " + username);
 			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doChangePassword:status [" + status + "] returning without doing anything ...");
 				return;
 			}
 			
@@ -1003,6 +1051,7 @@ public class MainServlet extends HttpServlet {
 						//CADSRPASSW-60
 						status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
 						if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+							logger.debug("doChangePassword:status [" + status + "] returning without doing anything ...");
 							return;
 						}
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));

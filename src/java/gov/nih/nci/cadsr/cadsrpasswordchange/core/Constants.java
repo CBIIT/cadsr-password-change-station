@@ -43,6 +43,7 @@ public class Constants {
 	public static final String UNLOCK_TOKEN = "unlock";	
 	public static final String LOCKED_STATUS = "LOCKED";
 	public static final String EXPIRED_STATUS = "EXPIRED";
+	public static final String OPEN_STATUS = "OPEN";
 	
 	public static final String PWD_RESTRICTIONS = "<h3>Password Restrictions:</h3><table>" +
 "			<td class=\"face\" style=\"WIDTH: 617px\" colspan=\"2\">" +

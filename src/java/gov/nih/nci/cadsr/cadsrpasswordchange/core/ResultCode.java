@@ -25,6 +25,12 @@ public enum ResultCode {
 			return "Your account has been temporarily locked due to invalid logins. Please wait one hour and try again.";
 		}
 	},	
+	ACCOUNT_UNLOCKED{		//CADSRPASSW-55
+		@Override
+		public String userMessage() {
+			return "Account unlocked.";
+		}
+	},
 	PASSWORD_CHANGED{
 		@Override
 		public String userMessage() {

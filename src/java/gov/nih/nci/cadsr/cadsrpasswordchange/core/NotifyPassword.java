@@ -59,7 +59,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.5");
+            _logger.info("NotifyPassword v1.0 build 16.6");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -195,6 +195,7 @@ public class NotifyPassword {
         open();
 		dao = new PasswordNotifyDAO(_conn);
 		user.setProcessingType(String.valueOf(daysLeft));
+		dao = new PasswordNotifyDAO(_conn);
 		dao.updateQueue(user);
 	}
 	
@@ -211,12 +212,15 @@ public class NotifyPassword {
 	private boolean sendEmail(User user, int daysLeft) throws Exception {
 		_logger.debug("NotifyPassword.sendEmail entered ...");
         open();
+		dao = new PasswordNotifyDAO(_conn);
 		String adminEmailAddress = dao.getAdminEmailAddress();
 		_logger.debug("NotifyPassword.sendEmail adminEmailAddress [" + adminEmailAddress + "]");
         open();
+		dao = new PasswordNotifyDAO(_conn);
 		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
 		_logger.debug("NotifyPassword.sendEmail emailSubject [" + emailSubject + "]");
         open();
+		dao = new PasswordNotifyDAO(_conn);
 		String emailBody = EmailHelper.handleDaysToken(dao.getEmailBody(), daysLeft);
 		_logger.debug("NotifyPassword.sendEmail emailBody [" + emailBody + "]");
 		emailBody = EmailHelper.handleUserIDToken(emailBody, user);		//CADSRPASSW-62
@@ -224,9 +228,11 @@ public class NotifyPassword {
 		String emailAddress = user.getElectronicMailAddress();
 		_logger.debug("NotifyPassword.sendEmail emailAddress [" + emailAddress + "]");
         open();
+		dao = new PasswordNotifyDAO(_conn);
 		String host = dao.getHostName();
 		_logger.debug("NotifyPassword.sendEmail host [" + host + "]");
         open();
+		dao = new PasswordNotifyDAO(_conn);
 		String port = dao.getHostPort();
 		_logger.debug("NotifyPassword.sendEmail port [" + port + "]");
 		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
@@ -261,6 +267,7 @@ public class NotifyPassword {
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
 		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
+		dao = new PasswordNotifyDAO(_conn);
 		dao.updateQueue(user);
 	}
 
