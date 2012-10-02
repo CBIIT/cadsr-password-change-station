@@ -60,7 +60,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.72");
+            _logger.info("NotifyPassword v1.0 build 16.7");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -300,7 +300,7 @@ public class NotifyPassword {
 			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
 		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
-		_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed ***, daysSincePasswordChange hardcoded to 1");
+_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to 1");
 		daysSincePasswordChange = 1;	//open this just for test
 		_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 
@@ -367,7 +367,11 @@ public class NotifyPassword {
 		_logger.debug("isChangedRecently entered");
 		if(daysSincePasswordChange <= daysLeft) {
 			ret = true;
+			_logger.info("isChangedRecently:daysSincePasswordChange is " + daysSincePasswordChange + " which is <= " + daysLeft + ", thus set to " + ret);
 		}
+ret = false;	//open this just for test
+_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
+		
 		_logger.debug("isChangedRecently is " + ret);
 		return ret;
 	}
