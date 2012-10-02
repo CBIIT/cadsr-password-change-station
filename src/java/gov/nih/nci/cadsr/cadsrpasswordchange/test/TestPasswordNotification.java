@@ -548,6 +548,8 @@ public class TestPasswordNotification {
 	}
 	
 /*
+update SBREXT.PASSWORD_NOTIFICATION set date_modified = sysdate, attempted_count = -2, processing_type = 1, delivery_status = 'test' where ua_name = 'TANJ'
+
 update sbrext.tool_options_view_ext set value = 'james.tan@nih.gov' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.ADDR'
 
 select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like '%EMAIL%'
