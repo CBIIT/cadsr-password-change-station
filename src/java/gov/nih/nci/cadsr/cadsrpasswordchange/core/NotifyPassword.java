@@ -168,11 +168,18 @@ public class NotifyPassword {
 							+ u.getPasswordChangedDate() + "] email [" + u.getElectronicMailAddress()
 							+ "] expiry date [" + u.getExpiryDate() + "]");
 					if(isNotificationValid(u, days, size, index)) {
+						_logger.info("NotifyPassword.process saving into queue for user: " + u.getUsername());
 						saveIntoQueue(u, days);
+						_logger.debug("NotifyPassword.process queued email for user: " + u.getUsername() + " under type " + days);
+						_logger.info("NotifyPassword.process sending email for user: " + u.getUsername() + " under type " + days);
 						if(sendEmail(u, days)) {
+							_logger.info("NotifyPassword.process updating success for user: " + u.getUsername() + " under type " + days);
 							updateStatus(u, Constants.SUCCESS, days);
+							_logger.debug("NotifyPassword.process updated success for user: " + u.getUsername() + " under type " + days);
 						} else {
+							_logger.info("NotifyPassword.process updating failure for user: " + u.getUsername() + " under type " + days);
 							updateStatus(u, Constants.FAILED, days);
+							_logger.debug("NotifyPassword.process updated failure for user: " + u.getUsername() + " under type " + days);
 						}
 					} else {
 						_logger.info("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
@@ -182,7 +189,7 @@ public class NotifyPassword {
 				}
 			}
 		} else {
-			_logger.info("No user for notification of " + days + " found");
+			_logger.info("------- No user for notification of " + days + " found ------- ");
 		}
 		
 		_logger.debug("NotifyPassword.process done.");		

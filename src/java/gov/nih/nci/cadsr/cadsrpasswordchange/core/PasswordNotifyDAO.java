@@ -77,6 +77,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        logger.debug("set withinDays '" + withinDays + "'");
 			rs = stmt.executeQuery();
 	        logger.debug("sql executed, iterating list ...");
+	        int debugCount = 0;
 			while(rs.next()) {	//CADSRPASSW-56
 				User user = new User();
 				user.setElectronicMailAddress(rs.getString("electronic_mail_address"));
@@ -88,8 +89,9 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setDateModified(rs.getDate("DATE_MODIFIED"));
 				logger.info ("getRecipientList: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 				arr.add(user);
+				debugCount++;
 			}
-	        logger.debug("iteration done");
+	        logger.debug("iteration done with count " + debugCount);
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
         	throw ex;
@@ -99,7 +101,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
-		logger.info("getPasswordExpiringList exiting ...");
+		logger.info("getPasswordExpiringList exiting ... arr size is " + arr.size() + " [" + arr + "]");
 		
        return arr;
 	}
