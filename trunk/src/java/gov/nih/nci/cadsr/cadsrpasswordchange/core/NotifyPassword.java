@@ -199,11 +199,16 @@ public class NotifyPassword {
 	 * Add or update the queue with the outgoing email.
 	 */
 	private void saveIntoQueue(User user, int daysLeft) throws Exception {
+		_logger.debug("saveIntoQueue entered");
+		_logger.info("saveIntoQueue:user [" + user + "] type " + daysLeft);
         open();
 		dao = new PasswordNotifyDAO(_conn);
 		user.setProcessingType(String.valueOf(daysLeft));
+		_logger.info("saveIntoQueue:type " + daysLeft + " set");
+        open();
 		dao = new PasswordNotifyDAO(_conn);
 		dao.updateQueue(user);
+		_logger.debug("saveIntoQueue done");
 	}
 	
 	private boolean sendEmail1(User user, int daysLeft) throws Exception {
