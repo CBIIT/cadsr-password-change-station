@@ -56,7 +56,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	 */
 	public List<User> getPasswordExpiringList(int withinDays) throws Exception {
 
-		logger.info("getPasswordExpiringList entered (9/27 102)");
+		logger.info("getPasswordExpiringList entered");
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -77,6 +77,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        logger.debug("set withinDays '" + withinDays + "'");
 			rs = stmt.executeQuery();
 	        logger.debug("sql executed, iterating list ...");
+	        int debugCount = 0;
 			while(rs.next()) {	//CADSRPASSW-56
 				User user = new User();
 				user.setElectronicMailAddress(rs.getString("electronic_mail_address"));
@@ -85,11 +86,12 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setExpiryDate(rs.getDate("expiry_date"));
 				user.setLockDate(rs.getDate("lock_date"));
 				user.setPasswordChangedDate(rs.getDate("ptime"));
-				user.setDateModified(rs.getDate("DATE_MODIFIED"));
+				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 				logger.info ("getRecipientList: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 				arr.add(user);
+				debugCount++;
 			}
-	        logger.debug("iteration done");
+	        logger.debug("iteration done with count " + debugCount);
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
         	throw ex;
@@ -99,7 +101,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
-		logger.info("getPasswordExpiringList exiting ...");
+		logger.info("getPasswordExpiringList exiting ... arr size is " + arr.size() + " [" + arr + "]");
 		
        return arr;
 	}
@@ -143,7 +145,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setExpiryDate(rs.getDate("EXPIRY_DATE"));
 				user.setLockDate(rs.getDate("LOCK_DATE"));
 				user.setPasswordChangedDate(rs.getDate("PTIME"));
-				user.setDateModified(rs.getDate("DATE_MODIFIED"));
+				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
 				user.setProcessingType(rs.getString("PROCESSING_TYPE"));
 				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
@@ -190,22 +192,22 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			if(rs.next()) {
 				//assuming all user Ids are unique/no duplicate
 				found = true;
-				logger.debug ("updateQueue user found: " + user.getUsername());
+				logger.debug ("1 updateQueue user found: " + user.getUsername());
 			}
 			if(!found) {
 				logger.debug ("updateQueue user not found: " + user.getUsername());
 				stmt = conn.prepareStatement("insert into SBREXT.PASSWORD_NOTIFICATION (ua_name, date_modified, attempted_count, processing_type, delivery_status) values(?,?,?,?,?)");
 				logger.debug ("updateQueue new queue");
 			} else {
-				logger.debug ("updateQueue user found: " + user.getUsername());
-				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set ua_name = ?, date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ?");
+				logger.debug ("2 updateQueue user found: " + user.getUsername());
+				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ? where ua_name = ?");
 				logger.debug ("updateQueue existing queue");
 			}
-			stmt.setString(1, user.getUsername().toUpperCase());
-			stmt.setDate(2, user.getDateModified());
-			stmt.setInt(3, user.getAttemptedCount());
-			stmt.setString(4, user.getProcessingType());
-			stmt.setString(5, user.getDeliveryStatus());
+			stmt.setTimestamp(1, user.getDateModified());
+			stmt.setInt(2, user.getAttemptedCount());
+			stmt.setString(3, user.getProcessingType());
+			stmt.setString(4, user.getDeliveryStatus());
+			stmt.setString(5, user.getUsername().toUpperCase());
 			stmt.executeUpdate();
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
@@ -242,9 +244,9 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			logger.debug ("removeQueue user : " + user.getUsername() + " queue removed");
-			stmt = conn.prepareStatement("alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"");
-			stmt.executeUpdate();
-			logger.debug ("updateQueue cadsr_user profile reapplied");
+//			stmt = conn.prepareStatement("alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"");
+//			stmt.executeUpdate();
+//			logger.debug ("updateQueue cadsr_user profile reapplied");
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
 		} finally {

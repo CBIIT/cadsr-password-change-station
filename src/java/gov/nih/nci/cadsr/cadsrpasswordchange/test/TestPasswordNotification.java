@@ -13,6 +13,7 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordNotifyDAO;
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -35,8 +36,8 @@ public class TestPasswordNotification {
 	Connection conn = null;
 	private static PasswordNotify dao;
 	public String ADMIN_ID = "cadsrpasswordchange";
-//	public String ADMIN_PASSWORD = "cadsrpasswordchange";
-	public String ADMIN_PASSWORD = "Str0ngp@55words";
+	public String ADMIN_PASSWORD = "cadsrpasswordchange";
+//	public String ADMIN_PASSWORD = "";
 	public String USER_ID = "TEST111";	//this user has to exist, otherwise test will fail
 
 	@Before
@@ -54,31 +55,11 @@ public class TestPasswordNotification {
 	public void tearDown() {
 	}
 	
-	public Connection getConnection1(String username, String password)
-			throws Exception {
-	    Connection          _conn;		
-            OracleDataSource ods = new OracleDataSource();
-            String _dsurl = "jdbc:oracle:thin:@ncidb-dsr-q.nci.nih.gov:1551:DSRQA";
-            String parts[] = _dsurl.split("[:]");
-            ods.setDriverType("thin");
-            String connString=_dsurl;
-            ods.setURL(connString);
-            ods.setUser(username);
-            ods.setPassword(password);
-            System.out.println("NotifyPassword:setUp _dsurl[" + _dsurl + "] via _user["+ username + "]");
-            _conn = ods.getConnection(username, password);
-            System.out.println("connected to the database");
-            _conn.setAutoCommit(true);
-            
-            return _conn;
-    }
-        
-	
 	public Connection getConnection(String username, String password)
 			throws Exception {
 		String dbtype = "oracle";
-//		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
-		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
+		String dbserver = "137.187.181.4"; String dbname = "DSRDEV"; //dev
+//		String dbserver = "137.187.181.89"; String dbname = "DSRQA";
 		// String username = "root";
 		// String password = "root";
 		int port = 1551;
@@ -128,7 +109,7 @@ public class TestPasswordNotification {
 			user.setAttemptedCount(1);
 			user.setProcessingType("14");
 			user.setDeliveryStatus(Constants.SUCCESS);
-			user.setDateModified(new java.sql.Date(new Date().getTime()));
+			user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 			dao.updateQueue(user);
 			l.add(user);
 			showUserList(l);
@@ -235,7 +216,7 @@ public class TestPasswordNotification {
 		user.setPasswordChangedDate(new java.sql.Date(DateTimeUtils.currentTimeMillis()));
 		//reset the time back
 	    DateTimeUtils.setCurrentMillisOffset(0);
-		user.setDateModified(new java.sql.Date(DateTimeUtils.currentTimeMillis()));
+		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		System.out.println("getExpiredUser: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 		
 		return user;
@@ -328,7 +309,7 @@ public class TestPasswordNotification {
 		user.setAttemptedCount(currentCount++);
 		user.setProcessingType(String.valueOf(daysLeft));
 		user.setDeliveryStatus(status);
-		user.setDateModified(new java.sql.Date(new Date(DateTimeUtils.currentTimeMillis()).getTime()));
+		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		System.out.println("updateStatus: " + user + " status " + status + " days left = " + daysLeft);
 	}
 
@@ -567,6 +548,23 @@ public class TestPasswordNotification {
 	}
 	
 /*
+update SBREXT.PASSWORD_NOTIFICATION set date_modified = sysdate, attempted_count = -2, processing_type = 1, delivery_status = 'test' where ua_name = 'TANJ'
+
+update sbrext.tool_options_view_ext set value = 'james.tan@nih.gov' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.ADDR'
+
+select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like '%EMAIL%'
+
+select * from sys.dba_profiles where profile like 'cadsr_user_test11'
+
+create profile "cadsr_user_test11" limit
+ password_life_time 1
+ password_grace_time 0
+ password_reuse_max 24
+ password_reuse_time 1
+ failed_login_attempts 6
+ password_lock_time 60/1440
+ password_verify_function password_verify_casdr_user
+
 update sbrext.tool_options_view_ext set value = 'Your password is about to expire in ${daysLeft} days. Please login to Password Change Station or call NCI Helpdesk to change your password.'
 where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.INTRO'
 
