@@ -59,7 +59,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.71");
+            _logger.info("NotifyPassword v1.0 build 16.72");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -284,6 +284,7 @@ public class NotifyPassword {
 	}
 
 	public boolean isNotificationValid(User user, int daysLeft, int totalNotificationTypes, int currentNotificationIndex) throws Exception {
+		_logger.debug("isNotificationValid entered");
 		boolean ret = false;
 		boolean daysCondition = false;
 		boolean deliveryStatus = false;
@@ -292,27 +293,42 @@ public class NotifyPassword {
 		String status = null;
 		long daysSincePasswordChange = -1;
 
+		_logger.info("isNotificationValid: calculating last password change time ...");
 		java.sql.Date passwordChangedDate = user.getPasswordChangedDate();
 		if(passwordChangedDate == null) {
 			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
 		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
+		_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 
 		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
+			_logger.info("isNotificationValid: password was not recently changed");
 			if(totalNotificationTypes != currentNotificationIndex) {
+				_logger.info("isNotificationValid: type " + daysLeft + " is not the last notification type");
+				if(user != null) {
+					_logger.debug("isNotificationValid: checking user ...");
 					//not the last type - send only once
 					if(user.getDeliveryStatus() == null && user.getProcessingType() == null) {
 						//has not been processed at all
 						ret = true;
+						_logger.debug("isNotificationValid is true: has not been processed before");
 					} else 
-					if(user.getDeliveryStatus().equals(Constants.FAILED)) {
+					if(user.getDeliveryStatus() != null && user.getDeliveryStatus().equals(Constants.FAILED)) {
 						//processed but failed
 						ret = true;
+						_logger.debug("isNotificationValid is true: processed but failed");
 					} else 
-					if(!user.getProcessingType().equals(String.valueOf(daysLeft))) {
+					if(user.getProcessingType() != null && !user.getProcessingType().equals(String.valueOf(daysLeft))) {
 						//it is different type of notification
 						ret = true;
+						_logger.debug("isNotificationValid is true: it is of different processing type, current type is " + daysLeft + " but the user's last processed type was " + user.getProcessingType());
+					} else {
+						_logger.info("isNotificationValid is false: none of the condition(s) met");
 					}
+					_logger.debug("isNotificationValid: check user done");
+				} else {
+					throw new Exception("User is NULL or empty.");
+				}
 			} else {
 				if(daysLeft != Constants.DEACTIVATED_VALUE) {
 					//the last notification type
@@ -320,27 +336,36 @@ public class NotifyPassword {
 					start.setTime(passwordChangedDate);
 					if(daysSincePasswordChange >= 1) {
 						ret = true;
+						_logger.debug("isNotificationValid is true: current type is " + daysLeft + "(daily notification) and it has been over a day since the last notice");
+					} else {
+						_logger.debug("isNotificationValid is false: current type is " + daysLeft + "(daily notification) and it has not been over a day since the last notice sent");
 					}
-					_logger.info("isNotificationValid: It has been " + daysSincePasswordChange + " day(s) since the password change, send flag is " + ret);
+					_logger.info("isNotificationValid is " + ret + ": it has been " + daysSincePasswordChange + " day(s) since the password change");
 				} else {
 					_logger.debug("daily notification is disabled (types = '"+ _processingNotificationDays + "').");
 				}
 			}
 		} else 
 		if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
+			_logger.debug("isNotificationValid is false, removing the user from the queue ...");
 	        open();
 			dao = new PasswordNotifyDAO(_conn);
 			dao.removeQueue(user);
+			_logger.info("isNotificationValid is false: user [" + user + "] removed from the queue.");
 		}
+
+		_logger.debug("isNotificationValid exiting with ret " + ret + " ...");
 		
 		return ret;
 	}
 	
 	private boolean isChangedRecently(int daysLeft, long daysSincePasswordChange) {
 		boolean ret = false;
+		_logger.debug("isChangedRecently entered");
 		if(daysSincePasswordChange <= daysLeft) {
 			ret = true;
 		}
+		_logger.debug("isChangedRecently is " + ret);
 		return ret;
 	}
 
