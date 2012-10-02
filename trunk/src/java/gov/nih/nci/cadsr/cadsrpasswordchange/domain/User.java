@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.domain;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class User {
 
@@ -10,7 +11,7 @@ public class User {
 	private Date expiryDate;
 	private Date lockDate;
 	private Date passwordChangedDate;
-	private Date dateModified;
+	private Timestamp dateModified;
 	private int attemptedCount;
 	private String processingType;
 	private String deliveryStatus;
@@ -63,11 +64,11 @@ public class User {
 		this.passwordChangedDate = password_changed_date;
 	}
 
-	public Date getDateModified() {
+	public Timestamp getDateModified() {
 		return dateModified;
 	}
 
-	public void setDateModified(Date dateModified) {
+	public void setDateModified(Timestamp dateModified) {
 		this.dateModified = dateModified;
 	}
 
