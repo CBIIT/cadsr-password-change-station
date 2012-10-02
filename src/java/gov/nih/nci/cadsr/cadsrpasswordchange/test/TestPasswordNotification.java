@@ -548,6 +548,10 @@ public class TestPasswordNotification {
 	}
 	
 /*
+update sbrext.tool_options_view_ext set value = 'james.tan@nih.gov' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.ADDR'
+
+select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like '%EMAIL%'
+
 select * from sys.dba_profiles where profile like 'cadsr_user_test11'
 
 create profile "cadsr_user_test11" limit
