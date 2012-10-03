@@ -5,6 +5,8 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 16.8");
+            _logger.info("NotifyPassword v1.0 build 16.9");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -224,6 +226,8 @@ public class NotifyPassword {
 	}
 
 	private boolean sendEmail(User user, int daysLeft) throws Exception {
+		boolean retVal = false;
+
 		_logger.debug("NotifyPassword.sendEmail entered ...");
         open();
 		dao = new PasswordNotifyDAO(_conn);
@@ -251,7 +255,10 @@ public class NotifyPassword {
 		_logger.debug("NotifyPassword.sendEmail port [" + port + "]");
 		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
 		_logger.debug("NotifyPassword.sendEmail sending email ...");
-		return ms.send();
+		retVal = ms.send();
+		_logger.debug("NotifyPassword.ms.send() is " + retVal);
+
+		return retVal;
 	}
 	
 	/**
@@ -282,6 +289,10 @@ public class NotifyPassword {
 		user.setDeliveryStatus(status);
 		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		dao = new PasswordNotifyDAO(_conn);
+//just for debugging
+//if(status != null && status.equals(Constants.SUCCESS)) {
+		_logger.debug("user id [" + user.getUsername() + "] status = [" + status + "]");
+//}
 		dao.updateQueue(user);
 	}
 
@@ -305,7 +316,7 @@ public class NotifyPassword {
 //daysSincePasswordChange = 1;	//open this just for test
 		_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 
-		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
+		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange) && !isAlreadySent(user, daysLeft)) {	//not recently changed (today)
 			_logger.info("isNotificationValid: password was not recently changed");
 			if(totalNotificationTypes != currentNotificationIndex) {
 				_logger.info("isNotificationValid: type " + daysLeft + " is not the last notification type");
@@ -350,7 +361,7 @@ public class NotifyPassword {
 				}
 			}
 		} else 
-		if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
+		if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange) || isAlreadySent(user, daysLeft)) {	//reset everything if changed today OR if changed after the last check point
 			_logger.debug("isNotificationValid is false, removing the user from the queue ...");
 	        open();
 			dao = new PasswordNotifyDAO(_conn);
@@ -374,6 +385,49 @@ public class NotifyPassword {
 //_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
 		_logger.debug("isChangedRecently is " + ret);
 		return ret;
+	}
+
+	public boolean isAlreadySent(User user, int daysLeft) throws Exception {
+		_logger.info("isSent user " + user );
+        if(user == null || user.getUsername() == null) {
+        	throw new Exception("User/ID is NULL or empty.");
+        }
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		boolean retVal = false;
+		String s = null;
+		String t = null;
+		
+		try {
+			open();
+			_logger.debug("connected");
+	        if(_conn == null) {
+	        	throw new Exception("Connection is NULL or empty.");
+	        }
+			String sql = "select delivery_status, processing_type from SBREXT.PASSWORD_NOTIFICATION where upper(username) =  ?";
+	        stmt = _conn.prepareStatement(sql);
+	        stmt.setString(1, user.getUsername().toUpperCase());
+	        _logger.debug("check user [" + user + "] sent status");
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				s = rs.getString("delivery_status");
+				t = rs.getString("processing_type");
+			}
+		} catch (Exception ex) {
+			_logger.debug(ex.getMessage());
+		} finally {
+            if (rs != null) { try { rs.close(); } catch (SQLException e) { _logger.error(e.getMessage()); } }
+            if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { _logger.error(e.getMessage()); } }
+        	if (_conn != null) { try { _conn.close(); _conn = null; } catch (SQLException e) { _logger.error(e.getMessage()); } }
+		}
+
+		if(s != null && t != null && s.equals(Constants.SUCCESS) && t.equals(String.valueOf(daysLeft))) {
+			retVal = true;
+		}
+       _logger.info("returning isAlreadySent [" + retVal + "]");
+       
+       return retVal;
 	}
 
 	/**
