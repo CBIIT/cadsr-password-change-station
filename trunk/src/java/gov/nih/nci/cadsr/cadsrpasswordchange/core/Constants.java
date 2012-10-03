@@ -79,8 +79,8 @@ public class Constants {
     
     //=== notifications status flags
     public static final int DEACTIVATED_VALUE = 0;
-    public static final String SUCCESS = "sucess";
-    public static final String FAILED = "failed";
+    public static final String SUCCESS = "s";
+    public static final String FAILED = "f";
     //=== notifications notification configuration
     public static final String NOTIFICATION_TYPE = "EMAIL.NOTIFY_TYPE";
     //=== notifications email configuration
