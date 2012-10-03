@@ -506,7 +506,10 @@ public class TestPasswordNotification {
 
 	@Test
 	public void testMainLoop() throws Exception {
-		doAll(null);
+//		doAll(null);
+		setUp();
+		NotifyPassword np = new NotifyPassword(conn);
+		np.doAll("C:\\Workspaces\\demo\\cadsrpasswordchange\\dist\\bin\\config.xml");
 	}
 
 //	@Test
