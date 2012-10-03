@@ -87,6 +87,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setLockDate(rs.getDate("lock_date"));
 				user.setPasswordChangedDate(rs.getDate("ptime"));
 				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
+				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
 				logger.info ("getRecipientList: mail_address '" + user.getElectronicMailAddress() + "', username '" + user.getUsername() + "' expiry_date '" + user.getExpiryDate() + "'");
 				arr.add(user);
 				debugCount++;
