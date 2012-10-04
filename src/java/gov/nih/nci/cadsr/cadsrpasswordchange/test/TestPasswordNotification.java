@@ -559,6 +559,14 @@ select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_n
 
 select * from sys.dba_profiles where profile like 'cadsr_user_test11'
 
+select * from 
+--SYS.CADSR_USERS
+--SBREXT.PASSWORD_NOTIFICATION
+sbr.user_accounts_view
+where 
+--username = 'PW11'
+UA_NAME = 'PW11'
+
 create profile "cadsr_user_test11" limit
  password_life_time 1
  password_grace_time 0
