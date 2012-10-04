@@ -566,6 +566,7 @@ select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_n
 select * from sys.dba_profiles where profile like 'cadsr_user_test11'
 
 select
+			   a.USERNAME, 
 			   b.ATTEMPTED_COUNT, 
 			   b.DATE_MODIFIED, 
 			   b.DELIVERY_STATUS,
@@ -575,7 +576,6 @@ select
 			   a.PTIME,  
 			   a.ACCOUNT_STATUS, 
 			   c.electronic_mail_address, 
-			   a.USERNAME, 
 			   a.LOCK_DATE, 
 			   b.PROCESSING_TYPE
 			 from 

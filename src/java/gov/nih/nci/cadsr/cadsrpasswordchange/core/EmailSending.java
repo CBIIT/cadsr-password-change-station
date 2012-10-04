@@ -48,17 +48,21 @@ public class EmailSending {
 
 	public boolean send() throws Exception {
 		boolean ret = false;
-		
-		Authenticator auth = new SMTPAuthenticator();
-		Session session = Session.getInstance(props, auth);
-		// session.setDebug(true);
-		MimeMessage msg = new MimeMessage(session);
-		msg.setContent(emailBody, "text/html");
-		msg.setSubject(emailSubject);
-		msg.setFrom(new InternetAddress(senderEmailId));
-		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
-				recieverEmailId));
-		Transport.send(msg);
+
+		try {
+			Authenticator auth = new SMTPAuthenticator();
+			Session session = Session.getInstance(props, auth);
+			// session.setDebug(true);
+			MimeMessage msg = new MimeMessage(session);
+			msg.setContent(emailBody, "text/html");
+			msg.setSubject(emailSubject);
+			msg.setFrom(new InternetAddress(senderEmailId));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
+					recieverEmailId));
+			Transport.send(msg);
+		} catch (Exception e) {
+			throw e;
+		}
 		
 		ret = true;
 		
