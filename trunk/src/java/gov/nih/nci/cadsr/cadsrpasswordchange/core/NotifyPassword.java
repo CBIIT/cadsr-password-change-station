@@ -187,7 +187,7 @@ public class NotifyPassword {
 						}
 					} else {
 						_logger.info("isNotificationValid is not valid, notification aborted for user: " + u.getUsername());
-						updateStatus(u, null, days);
+						updateStatus(u, Constants.INVALID + String.valueOf(days), days);
 						_logger.debug("status date updated for user " + u);
 					}
 				}
@@ -291,15 +291,25 @@ public class NotifyPassword {
 		}
         open();
 		dao = new PasswordNotifyDAO(_conn);
-		user.setAttemptedCount(currentCount++);
 		user.setProcessingType(String.valueOf(daysLeft));
-		user.setDeliveryStatus(dStatus + " " + status);
+		if(status != null && status.equals(Constants.SUCCESS)) {
+			user.setAttemptedCount(++currentCount);
+			_logger.info("user id [" + user.getUsername() + "] status = [" + status + "] attempted count [" + user.getAttemptedCount() + "]");
+			if(dStatus.length() > 0) {
+				user.setDeliveryStatus(dStatus + " " + status);
+			} else {
+				user.setDeliveryStatus(status);
+			}
+		} else {
+			if(dStatus.length() > 0) {
+				user.setDeliveryStatus(dStatus + " " + status);
+			} else {
+				user.setDeliveryStatus(status);
+			}
+			_logger.debug("user id [" + user.getUsername() + "] status = [" + status + "]");
+		}
 		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		dao = new PasswordNotifyDAO(_conn);
-//just for debugging
-//if(status != null && status.equals(Constants.SUCCESS)) {
-		_logger.debug("user id [" + user.getUsername() + "] status = [" + status + "]");
-//}
 		dao.updateQueue(user);
 	}
 
