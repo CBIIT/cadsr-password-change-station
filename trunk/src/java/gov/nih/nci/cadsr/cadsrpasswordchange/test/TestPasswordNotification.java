@@ -555,9 +555,35 @@ update SBREXT.PASSWORD_NOTIFICATION set date_modified = sysdate, attempted_count
 
 update sbrext.tool_options_view_ext set value = 'james.tan@nih.gov' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.ADDR'
 
+update sbrext.tool_options_view_ext set value = '14' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.NOTIFY_TYPE'
+
+delete from SBREXT.PASSWORD_NOTIFICATION
+
+select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like 'EMAIL.NOTIFY_TYPE'
+
 select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_name = 'PasswordChangeStation' and Property like '%EMAIL%'
 
 select * from sys.dba_profiles where profile like 'cadsr_user_test11'
+
+select
+			   b.ATTEMPTED_COUNT, 
+			   b.DATE_MODIFIED, 
+			   b.DELIVERY_STATUS,
+			   a.created,
+			   a.profile,
+			   a.EXPIRY_DATE, 
+			   a.PTIME,  
+			   a.ACCOUNT_STATUS, 
+			   c.electronic_mail_address, 
+			   a.USERNAME, 
+			   a.LOCK_DATE, 
+			   b.PROCESSING_TYPE
+			 from 
+			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
+			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
+--and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
+and a.username in ('PW14','PW7_','PW4_')
+order by a.EXPIRY_DATE desc
 
 select * from 
 --SYS.CADSR_USERS
@@ -614,6 +640,21 @@ alter user TEST113 identified by Te$t1235 password expire;
 */
 	
 /*
+create profile "cadsr_user_test14" limit
+ password_life_time 14
+ password_grace_time 0
+ password_reuse_max 24
+ password_reuse_time 1
+ failed_login_attempts 6
+ password_lock_time 60/1440
+ password_verify_function password_verify_casdr_user
+  
+alter user PW14 profile "cadsr_user_test14"
+
+alter user PW7 profile "cadsr_user_test7"
+
+alter user PW4 profile "cadsr_user_test4"
+
 select
 			   a.created,
 			   a.profile,
@@ -632,6 +673,7 @@ select
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
 and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
+order by a.EXPIRY_DATE desc
 order by 
 a.EXPIRY_DATE,
 a.PTIME  asc
