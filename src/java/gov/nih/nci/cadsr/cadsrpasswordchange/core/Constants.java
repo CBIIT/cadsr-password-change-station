@@ -81,6 +81,7 @@ public class Constants {
     public static final int DEACTIVATED_VALUE = 0;
     public static final String SUCCESS = "s";
     public static final String FAILED = "f";
+    public static final String INVALID = "i";
     //=== notifications notification configuration
     public static final String NOTIFICATION_TYPE = "EMAIL.NOTIFY_TYPE";
     //=== notifications email configuration
