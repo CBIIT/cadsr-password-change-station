@@ -82,6 +82,7 @@ public class Constants {
     public static final String SUCCESS = "s";
     public static final String FAILED = "f";
     public static final String INVALID = "i";
+    public static final String UNKNOWN = "u";
     //=== notifications notification configuration
     public static final String NOTIFICATION_TYPE = "EMAIL.NOTIFY_TYPE";
     //=== notifications email configuration

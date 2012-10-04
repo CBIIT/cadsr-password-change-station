@@ -175,14 +175,23 @@ public class NotifyPassword {
 						saveIntoQueue(u, days);
 						_logger.debug("NotifyPassword.process queued email for user: " + u.getUsername() + " under type " + days);
 						_logger.info("NotifyPassword.process sending email for user: " + u.getUsername() + " under type " + days);
-						if(sendEmail(u, days)) {
-							_logger.debug("NotifyPassword.sendEmail *** DONE ***");
-							_logger.info("NotifyPassword.process updating success for user: " + u.getUsername() + " under type " + days);
-							updateStatus(u, Constants.SUCCESS + String.valueOf(days), days);
-							_logger.debug("NotifyPassword.process updated success for user: " + u.getUsername() + " under type " + days);
-						} else {
+
+						try {
+							if(sendEmail(u, days)) {
+								_logger.debug("NotifyPassword.sendEmail *** DONE ***");
+								_logger.info("NotifyPassword.process updating success for user: " + u.getUsername() + " under type " + days);
+								updateStatus(u, Constants.SUCCESS + String.valueOf(days), days);
+								_logger.debug("NotifyPassword.process updated success for user: " + u.getUsername() + " under type " + days);
+							} else {
+								_logger.info("NotifyPassword.process updating failure for user: " + u.getUsername() + " under type " + days);
+								updateStatus(u, Constants.FAILED + String.valueOf(days), days);
+								_logger.debug("NotifyPassword.process updated failure for user: " + u.getUsername() + " under type " + days);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							_logger.error(e);
 							_logger.info("NotifyPassword.process updating failure for user: " + u.getUsername() + " under type " + days);
-							updateStatus(u, Constants.FAILED + String.valueOf(days), days);
+							updateStatus(u, Constants.UNKNOWN + String.valueOf(days), days);
 							_logger.debug("NotifyPassword.process updated failure for user: " + u.getUsername() + " under type " + days);
 						}
 					} else {
@@ -255,7 +264,11 @@ public class NotifyPassword {
 		_logger.debug("NotifyPassword.sendEmail port [" + port + "]");
 		EmailSending ms = new EmailSending(adminEmailAddress, "dummy", host, port, emailAddress, emailSubject, emailBody);
 		_logger.debug("NotifyPassword.sendEmail sending email ...");
-		retVal = ms.send();
+		
+_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> sendEmail retVal hardcoded to true");
+retVal = true;	//open this just for test
+
+//		retVal = ms.send();		//uncomment this!!!
 		_logger.debug("NotifyPassword.ms.send() is " + retVal);
 
 		return retVal;
@@ -301,11 +314,11 @@ public class NotifyPassword {
 				user.setDeliveryStatus(status);
 			}
 		} else {
-			if(dStatus.length() > 0) {
-				user.setDeliveryStatus(dStatus + " " + status);
-			} else {
+//			if(dStatus.length() > 0) {
+//				user.setDeliveryStatus(dStatus + " " + status);
+//			} else {
 				user.setDeliveryStatus(status);
-			}
+//			}
 			_logger.debug("user id [" + user.getUsername() + "] status = [" + status + "]");
 		}
 		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
@@ -329,8 +342,8 @@ public class NotifyPassword {
 			throw new Exception("Not able to determine what is the password changed date or password change date is empty (from sys.cadsr_users view).");
 		}
 		daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
-//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to 1");
-//daysSincePasswordChange = 1;	//open this just for test
+_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to 1");
+daysSincePasswordChange = 1;	//open this just for test
 		_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 
 		if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange) && !isAlreadySent(user, daysLeft)) {	//not recently changed (today)
@@ -401,8 +414,8 @@ public class NotifyPassword {
 			ret = true;
 			_logger.info("isChangedRecently:daysSincePasswordChange is " + daysSincePasswordChange + " which is <= " + daysLeft + ", thus set to " + ret);
 		}
-//ret = false;	//open this just for test
-//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
+ret = false;	//open this just for test
+_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
 		_logger.debug("isChangedRecently is " + ret);
 		return ret;
 	}
@@ -425,7 +438,7 @@ public class NotifyPassword {
 	        if(_conn == null) {
 	        	throw new Exception("Connection is NULL or empty.");
 	        }
-			String sql = "select delivery_status, processing_type from SBREXT.PASSWORD_NOTIFICATION where upper(username) =  ?";
+			String sql = "select delivery_status, processing_type from SBREXT.PASSWORD_NOTIFICATION where upper(ua_name) =  ?";
 	        stmt = _conn.prepareStatement(sql);
 	        stmt.setString(1, user.getUsername().toUpperCase());
 	        _logger.debug("isAlreadySent:check user [" + user + "] sent status");
