@@ -137,7 +137,7 @@ public class NotifyPassword {
 				int index = 1;
 				for (String t : types) {
 					process(Integer.valueOf(t).intValue(), size, index);
-					index++;
+					++index;
 					_logger.debug("Notification type " + t + " processed.");
 				}
 				_logger.debug(".doAll.");
@@ -224,16 +224,6 @@ public class NotifyPassword {
 		_logger.debug("saveIntoQueue done");
 	}
 	
-	private boolean sendEmail1(User user, int daysLeft) throws Exception {
-		emailSubject = "caDSR Password Expiration Notice";
-		emailBody = "Your password is about to expire in " + daysLeft + ". Please login to Password Change Station or call NCI Helpdesk to change your password.";
-		String emailAddress = user.getElectronicMailAddress();
-		EmailSending ms = new EmailSending("do-not-reply@nih.gov", "uyeiy3wjukhkuqhwgiw7t1f2863f", "mailfwd.nih.gov", "25", emailAddress, emailSubject, emailBody);
-		_logger.info("sendEmail:send to test account is true");
-		_logger.debug("sendEmail:sent");
-		return ms.send();
-	}
-
 	private boolean sendEmail(User user, int daysLeft) throws Exception {
 		boolean retVal = false;
 
@@ -314,6 +304,7 @@ retVal = true;	//open this just for test
 				user.setDeliveryStatus(status);
 			}
 		} else {
+			//uncomment the following just for test
 //			if(dStatus.length() > 0) {
 //				user.setDeliveryStatus(dStatus + " " + status);
 //			} else {
@@ -379,7 +370,7 @@ daysSincePasswordChange = 1;	//open this just for test
 					//the last notification type
 					Calendar start = Calendar.getInstance();
 					start.setTime(passwordChangedDate);
-					if(daysSincePasswordChange >= 1) {
+					if(daysSincePasswordChange >= 1 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {
 						ret = true;
 						_logger.debug("isNotificationValid is true: current type is " + daysLeft + "(daily notification) and it has been over a day since the last notice");
 					} else {
