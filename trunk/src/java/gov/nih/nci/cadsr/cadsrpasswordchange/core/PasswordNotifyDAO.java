@@ -253,6 +253,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 		ResultSet rs = null;
 		String value = null;
 		List arr = new ArrayList();
+		String sql = null;
 		try {
 	        if(conn == null) {
 	        	throw new Exception("Connection is NULL or empty.");
@@ -262,10 +263,11 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			stmt = conn.prepareStatement("delete from SBREXT.PASSWORD_NOTIFICATION where UPPER(UA_NAME) = ?");
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
-			logger.debug ("removeQueue user : " + user.getUsername() + " queue removed");
-//			stmt = conn.prepareStatement("alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"");
-//			stmt.executeUpdate();
-//			logger.debug ("updateQueue cadsr_user profile reapplied");
+			logger.debug ("removeQueue: user : " + user.getUsername() + " queue removed");
+			sql = "alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"";
+			stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+			logger.debug ("removeQueue: cadsr_user profile re-applied (sql executed = [" + sql + "])");
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
 		} finally {
