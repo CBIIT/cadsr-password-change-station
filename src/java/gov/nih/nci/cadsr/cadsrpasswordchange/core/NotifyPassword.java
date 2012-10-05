@@ -19,7 +19,10 @@ import java.util.Properties;
 import oracle.jdbc.pool.OracleDataSource;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
+import org.joda.time.Interval;
+import org.joda.time.LocalTime;
 
 public class NotifyPassword {
 
@@ -307,7 +310,6 @@ public class NotifyPassword {
 					user.setDeliveryStatus(status);
 				}
 			}
-			user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));		//set date only if successful - IMPORTANT for daily notification to work
 		} else {
 			int indexF = dStatus.indexOf(Constants.FAILED + String.valueOf(daysLeft));
 			int indexI = dStatus.indexOf(Constants.INVALID + String.valueOf(daysLeft));
@@ -320,10 +322,9 @@ public class NotifyPassword {
 					user.setDeliveryStatus(status);
 				}
 			}
-			//TBD
-			user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));			
 			_logger.debug("user id [" + user.getUsername() + "] status = [" + status + "]");
 		}
+		user.setDateModified(new Timestamp(DateTimeUtils.currentTimeMillis()));
 		dao = new PasswordNotifyDAO(_conn);
 		dao.updateQueue(user);
 	}
@@ -421,21 +422,20 @@ public class NotifyPassword {
 	}
 	
 	private boolean isOverADaySinceLastSent(User user) throws Exception {
-		long daysSinceLastSent = -1;
 		boolean retVal = false;
 
-		_logger.info("isOverADaySinceLastSent entered");
-		Timestamp lastSentDate = user.getDateModified();
-		if(lastSentDate == null) {
-			if(user.getDeliveryStatus() != null && user.getProcessingType() != null) {
-				throw new Exception("Not able to determine the date/time of the last sent.");
-			}
-		} else {
-			daysSinceLastSent = CommonUtil.calculateDays(lastSentDate, new Date(DateTimeUtils.currentTimeMillis()));
-			if(daysSinceLastSent >= 1) {
-				retVal = true;
-			}
+		_logger.debug("isOverADaySinceLastSent entered");
+		LocalTime currentTime = new LocalTime();
+//		LocalTime start = new LocalTime(11, 30);
+//		LocalTime end = new LocalTime(12, 30);
+//		LocalInterval interval = new LocalInterval(start, end);
+//		DateTime test = new DateTime(2010, 5, 25, 16, 0, 0, 0);
+//		System.out.println(interval.contains(test));
+		int currentHour = currentTime.getHourOfDay();
+		if(currentHour == 12) {
+			retVal = true;
 		}
+		_logger.debug("isOverADaySinceLastSent: exiting with ret " + retVal + " ...");
 		
 		return retVal;
 	}
@@ -455,8 +455,8 @@ public class NotifyPassword {
 			ret = true;
 			_logger.info("isChangedRecently:daysSincePasswordChange is " + daysSincePasswordChange + " which is <= " + daysLeft + ", thus set to " + ret);
 		}
-ret = false;	//open this just for test
-_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
+//ret = false;	//open this just for test
+//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
 		_logger.debug("isChangedRecently is " + ret);
 		return ret;
 	}
