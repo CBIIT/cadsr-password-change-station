@@ -77,8 +77,10 @@ public class TestPasswordNotification {
 //	@Test
 	public void testUserListWithPasswordExpiring() {
 		List u = null;
+		String _processingNotificationDays = "14,7,4";
+		List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
 		try {
-			u = dao.getPasswordExpiringList(60);
+			u = dao.getPasswordExpiringList(60, 3, 3, types);
 			showUserList(u);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,13 +322,15 @@ public class TestPasswordNotification {
 		int days;
 		int size = 3; //change this accordingly if you have more than 3 types of notifications (only in this test, as we bypass config.xml)
 		int index;
+		String _processingNotificationDays = "14,7,4";
+		List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
 
 		days = 14;
 		index = 1;
 		if(!fromDB) {
 			recipients = getPasswordExpiringList(days);
 		} else {
-			recipients = dao.getPasswordExpiringList(days);
+			recipients = dao.getPasswordExpiringList(days, size, index, types);
 			showUserList(recipients);
 		}
 		for (User u : recipients) {
@@ -446,10 +450,12 @@ public class TestPasswordNotification {
 
 	private void process(int days, int size, int index) throws Exception {
 		System.out.println("\nNotifyPassword.process entered ...");
-		
+		String _processingNotificationDays = "14,7,4";
+		List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator		
 		List<User> recipients = null;
 		setUp();
-		recipients = dao.getPasswordExpiringList(days);
+		recipients = dao.getPasswordExpiringList(days, size, index, types);
+		
 		if (recipients != null && recipients.size() > 0) {
 			for (User u : recipients) {
 				if(u != null) {
@@ -519,13 +525,16 @@ public class TestPasswordNotification {
 		int days;
 		int size = 3; //change this accordingly if you have more than 3 types of notifications (only in this test, as we bypass config.xml)
 		int index;
+		String _processingNotificationDays = "14,7,4";
+		List<String> types = new ArrayList<String>(Arrays.asList(_processingNotificationDays.split(","))); 	//note: no space in between the , separator
 
 		days = 14;
 		index = 1;
 		if(!fromDB) {
 			recipients = getPasswordExpiringList(days);
 		} else {
-			recipients = dao.getPasswordExpiringList(days);
+			recipients = dao.getPasswordExpiringList(days, 3, 3, types);
+			
 			showUserList(recipients);
 		}
 		for (User u : recipients) {
@@ -570,14 +579,14 @@ select
 			   b.ATTEMPTED_COUNT, 
 			   b.DATE_MODIFIED, 
 			   b.DELIVERY_STATUS,
+			   b.PROCESSING_TYPE,
 			   a.created,
 			   a.profile,
 			   a.EXPIRY_DATE, 
 			   a.PTIME,  
 			   a.ACCOUNT_STATUS, 
 			   c.electronic_mail_address, 
-			   a.LOCK_DATE, 
-			   b.PROCESSING_TYPE
+			   a.LOCK_DATE
 			 from 
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
@@ -656,23 +665,24 @@ alter user PW7 profile "cadsr_user_test7"
 alter user PW4 profile "cadsr_user_test4"
 
 select
+			   a.USERNAME, 
+			   b.ATTEMPTED_COUNT, 
+			   b.DATE_MODIFIED, 
+			   b.DELIVERY_STATUS,
+			   b.PROCESSING_TYPE,
 			   a.created,
 			   a.profile,
-			   b.date_modified,
 			   a.EXPIRY_DATE, 
 			   a.PTIME,  
 			   a.ACCOUNT_STATUS, 
 			   c.electronic_mail_address, 
-			   a.USERNAME, 
-			   a.LOCK_DATE, 
-			   b.DATE_MODIFIED, 
-			   b.ATTEMPTED_COUNT, 
-			   b.PROCESSING_TYPE, 
-			   b.DELIVERY_STATUS 
+			   a.LOCK_DATE
 			 from 
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
-and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
+and a.EXPIRY_DATE BETWEEN SYSDATE+7 AND SYSDATE+14
+--and a.EXPIRY_DATE BETWEEN SYSDATE+4 AND SYSDATE+7
+--and a.EXPIRY_DATE BETWEEN SYSDATE+0 AND SYSDATE+4
 order by a.EXPIRY_DATE desc
 order by 
 a.EXPIRY_DATE,

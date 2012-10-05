@@ -54,7 +54,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	 * @return
 	 * @throws Exception 
 	 */
-	public List<User> getPasswordExpiringList(int withinDays) throws Exception {
+	public List<User> getPasswordExpiringList(int withinDays, int size, int index, List<String>types) throws Exception {
 
 		logger.info("getPasswordExpiringList entered");
 		
@@ -69,11 +69,23 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        }
 	        logger.debug("connected");
 
-	        sql = SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?";
-	        logger.debug("before executing sql statement");
-			stmt = conn.prepareStatement(sql);
-	        logger.debug("sql statement executed = [" + sql + "]");
-			stmt.setInt(1, withinDays);
+	        if(size > 1 && size != index) {
+	        	sql = SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE+? AND SYSDATE+?";
+		        logger.debug("getPasswordExpiringList:before executing sql statement");
+				stmt = conn.prepareStatement(sql);
+		        logger.debug("getPasswordExpiringList:sql statement executed = [" + sql + "]");
+		        int excludedDays = Integer.valueOf(types.get(index));	//exclude the next type and beyond
+				stmt.setInt(1, excludedDays);	        	
+				stmt.setInt(2, withinDays);	        	
+		        logger.debug("getPasswordExpiringList:excludedDays = [" + excludedDays + "] for type [" + withinDays + "]");
+	        } else {
+	        	sql = SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+?";
+		        logger.debug("getPasswordExpiringList:before executing sql statement");
+				stmt = conn.prepareStatement(sql);
+		        logger.debug("getPasswordExpiringList:sql statement executed = [" + sql + "]");
+				stmt.setInt(1, withinDays);	        	
+	        }	        
+
 	        logger.debug("set withinDays '" + withinDays + "'");
 			rs = stmt.executeQuery();
 	        logger.debug("sql executed, iterating list ...");
