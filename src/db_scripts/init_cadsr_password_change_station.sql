@@ -14,8 +14,6 @@
 
 @create_password_expiration_queue.sql
 
---@create_sys.cadsr_users.sql
-
 @delete-notification-email-details.sql
 
 @insert-notification-email-details.sql
