@@ -547,6 +547,8 @@ public class TestPasswordReset {
 
 	
 /*
+update sbr.user_accounts_view set enabled_ind = ' ' where ua_name = 'UATDEV1'
+
 select date_modified, ua_name, attempted_count from sbrext.user_security_questions
 
 select * from sys.cadsr_users where lower(username) like 'test111'
