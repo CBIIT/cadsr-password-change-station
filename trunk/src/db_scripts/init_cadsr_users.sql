@@ -7,3 +7,5 @@
 @create_profile_cadsr_special_account.sql
 
 @assign_profile_cadsr_special_account.sql
+
+@disable_unused_accounts.sql
