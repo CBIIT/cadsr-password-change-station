@@ -9,5 +9,5 @@ CREATE TABLE PASSWORD_NOTIFICATION (
     CONSTRAINT pk PRIMARY KEY (ua_name)
 );
 /
-grant select, insert, update, delete on sbrext.PASSWORD_NOTIFICATION to cadsrpasswordchange
+grant select, insert, update, delete on PASSWORD_NOTIFICATION to cadsrpasswordchange
 /
