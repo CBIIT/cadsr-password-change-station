@@ -65,7 +65,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 20");
+            _logger.info("NotifyPassword v1.0 build 20.1");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -405,16 +405,15 @@ public class NotifyPassword {
 				}
 			}
 		}
-		/*
 		else 
 		if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
 			_logger.debug("isNotificationValid is false, removing the user from the queue ...");
 	        open();
 			dao = new PasswordNotifyDAO(_conn);
+			_logger.debug("isNotificationValid: removing the user [" + user + "] removed from the queue ...");
 			dao.removeQueue(user);
 			_logger.info("isNotificationValid is false: user [" + user + "] removed from the queue.");
 		}
-		*/
 
 		_logger.debug("isNotificationValid exiting with ret " + ret + " ...");
 		
