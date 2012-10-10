@@ -238,11 +238,12 @@ public class NotifyPassword {
 		_logger.debug("NotifyPassword.sendEmail adminEmailAddress [" + adminEmailAddress + "]");
         open();
 		dao = new PasswordNotifyDAO(_conn);
-		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
+//		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
+		String emailSubject = dao.getEmailSubject();
 		_logger.debug("NotifyPassword.sendEmail emailSubject [" + emailSubject + "]");
         open();
 		dao = new PasswordNotifyDAO(_conn);
-		String emailBody = EmailHelper.handleDaysToken(dao.getEmailBody(), daysLeft);
+		String emailBody = EmailHelper.handleExpiryDateToken(dao.getEmailBody(), user.getExpiryDate());
 		_logger.debug("NotifyPassword.sendEmail emailBody [" + emailBody + "]");
 		emailBody = EmailHelper.handleUserIDToken(emailBody, user);		//CADSRPASSW-62
 		_logger.info("sendEmail:user id = [" + user.getUsername() + "] body processed = [" + emailBody + "]");

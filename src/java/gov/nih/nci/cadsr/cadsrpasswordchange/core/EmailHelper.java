@@ -2,6 +2,9 @@ package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 public class EmailHelper {
+	public static String handleExpiryDateToken(String originalText, Date expiryDate) {
+		String ret = originalText;
+		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		String fDate = formatter.format(expiryDate);
+
+		if(originalText != null) {
+			ret = StringUtils.replace(originalText, Constants.EMAIL_EXPIRY_DATE_TOKEN, fDate);
+		}
+		
+		return ret;
+	}
+
 	public static String handleDaysToken(String originalText, int daysLeft) {
 		String ret = originalText;
 
