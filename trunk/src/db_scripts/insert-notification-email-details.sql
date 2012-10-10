@@ -12,9 +12,9 @@ insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('Pa
 /
 insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.PORT', '25')
 /
-insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.INTRO', 'Your password of the account ${userid} is about to expire in ${daysLeft} days.  To change your password, you can either login to the Password Change Station by visiting https://cadsrpasswordchange.nci.nih.gov, contact the NCI Helpdesk at ncicb@pop.nci.nih.gov or toll free phone number: 888-478-4423.')
+insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.INTRO', 'Your password of the account ${userid} is about to expire on ${expiryDate}.  To change your password, you can either login to the Password Change Station by visiting https://cadsrpasswordchange.nci.nih.gov, contact the NCI Helpdesk at ncicb@pop.nci.nih.gov or toll free phone number: 888-478-4423.')
 /
-insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.SUBJECT', 'caDSR Password Expiration Notice (in ${daysLeft} day(s))')
+insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.SUBJECT', 'Reminder: caDSR Password Expiration')
 /
 commit
 /
