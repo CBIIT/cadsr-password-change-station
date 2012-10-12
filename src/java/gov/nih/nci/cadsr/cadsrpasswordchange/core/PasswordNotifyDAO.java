@@ -253,7 +253,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	private String handleEmptyDeliveryStatus(String status) {
 		String retVal = status;
 		if(status == null) {
-			retVal = "";
+			retVal = " ";
 		}
 		return retVal;
 	}
