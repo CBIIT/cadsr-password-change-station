@@ -6,10 +6,6 @@
 
 @insert-web-links.sql
 
---@drop_cadsrpasswordchange_user.sql
-
-@create_cadsrpasswordchange_user.sql
-
 @drop_password_expiration_queue.sql
 
 @create_password_expiration_queue.sql
