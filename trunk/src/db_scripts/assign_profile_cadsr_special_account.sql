@@ -2,8 +2,6 @@
 
 alter user GUEST profile "cadsr_special_account"
 /
-alter user UATDEV1 profile "cadsr_special_account"
-/
 alter user CADSRPASSWORDCHANGE profile "cadsr_special_account"
 /
 alter user CDEBROWSER profile "cadsr_special_account"
