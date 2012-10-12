@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -209,21 +210,25 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				logger.debug ("1 updateQueue user found: " + user.getUsername());
 			}
 			if(!found) {
-				logger.debug ("updateQueue user not found: " + user.getUsername());
+				logger.debug ("updateQueue: user not found: " + user.getUsername());
 				stmt = conn.prepareStatement("insert into SBREXT.PASSWORD_NOTIFICATION (ua_name, date_modified, attempted_count, processing_type, delivery_status) values(?,?,?,?,?)");
 				stmt.setString(1, user.getUsername().toUpperCase());
-				stmt.setTimestamp(2, user.getDateModified());
+				logger.debug ("updateQueue: inserting, user date_modified: " + user.getDateModified());
+				stmt.setTimestamp(2, handleEmptyDate(user.getDateModified()));
 				stmt.setInt(3, user.getAttemptedCount());
 				stmt.setString(4, user.getProcessingType());
-				stmt.setString(5, user.getDeliveryStatus());
+				logger.debug ("updateQueue: inserting, user delivery_status: " + user.getDeliveryStatus());
+				stmt.setString(5, handleEmptyDeliveryStatus(user.getDeliveryStatus()));
 				logger.debug ("updateQueue new queue");
 			} else {
-				logger.debug ("2 updateQueue user found: " + user.getUsername());
+				logger.debug ("2 updateQueue: updating, user found: " + user.getUsername());
 				stmt = conn.prepareStatement("update SBREXT.PASSWORD_NOTIFICATION set date_modified = ?, attempted_count = ?, processing_type = ?, delivery_status = ? where ua_name = ?");
-				stmt.setTimestamp(1, user.getDateModified());
+				logger.debug ("updateQueue: updating, user date_modified: " + user.getDateModified());
+				stmt.setTimestamp(1, handleEmptyDate(user.getDateModified()));
 				stmt.setInt(2, user.getAttemptedCount());
 				stmt.setString(3, user.getProcessingType());
-				stmt.setString(4, user.getDeliveryStatus());
+				logger.debug ("updateQueue: updating, user delivery_status: " + user.getDeliveryStatus());
+				stmt.setString(4, handleEmptyDeliveryStatus(user.getDeliveryStatus()));
 				stmt.setString(5, user.getUsername().toUpperCase());
 				logger.debug ("updateQueue existing queue");
 			}
@@ -235,6 +240,22 @@ public class PasswordNotifyDAO implements PasswordNotify {
             if (stmt != null) {  try { stmt.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
+	}
+
+	private Timestamp handleEmptyDate(Timestamp date) {
+		Timestamp retVal = date;
+		if(date == null) {
+			retVal = new Timestamp(DateTimeUtils.currentTimeMillis());
+		}
+		return retVal;
+	}
+	
+	private String handleEmptyDeliveryStatus(String status) {
+		String retVal = status;
+		if(status == null) {
+			retVal = "";
+		}
+		return retVal;
 	}
 
 	/**
