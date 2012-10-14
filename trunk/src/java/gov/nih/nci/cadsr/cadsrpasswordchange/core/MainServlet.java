@@ -1023,7 +1023,7 @@ public class MainServlet extends HttpServlet {
 			} catch (Exception e1) {
 				logger.debug("doChangePassword: account status was: [" + status + "]");
 				if(status != null && status.equals("")) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
 					resp.sendRedirect("./jsp/changePassword.jsp");
 					return;
 				} else {
