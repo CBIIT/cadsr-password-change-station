@@ -254,6 +254,9 @@ public class PasswordNotifyDAO implements PasswordNotify {
 		String retVal = status;
 		if(status == null) {
 			retVal = " ";
+		} else {
+			//CADSRPASSW-70 and CADSRPASSW-71
+			retVal = status.trim();
 		}
 		return retVal;
 	}
