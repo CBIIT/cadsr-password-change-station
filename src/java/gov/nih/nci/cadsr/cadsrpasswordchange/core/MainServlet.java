@@ -1014,18 +1014,24 @@ public class MainServlet extends HttpServlet {
 			String newPassword2 = req.getParameter("newpswd2");
 
 			logger.debug("doChangePassword:username " + username);
-			//CADSRPASSW-73
+			//begin - CADSRPASSW-73
 			String status = "";
 			try {
+				logger.info("doChangePassword: checking account status ...");
 				status = doValidateAccountStatus(username, session, req, resp, "./jsp/changePassword.jsp");
+				logger.debug("doChangePassword: account status check done");
 			} catch (Exception e1) {
-				e1.printStackTrace();
-				if(status.equals("")) {
+				logger.debug("doChangePassword: account status was: [" + status + "]");
+				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 					resp.sendRedirect("./jsp/changePassword.jsp");
 					return;
+				} else {
+					logger.debug("doChangePassword: account status check error was: " + e1.getMessage());
+					e1.printStackTrace();
 				}
 			}
+			//end - CADSRPASSW-73
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.debug("doChangePassword:status [" + status + "] returning without doing anything ...");
 				return;
