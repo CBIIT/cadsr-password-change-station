@@ -139,9 +139,10 @@
         	</table>
 -->        	
     	</form>
-            
+<!--
         <p><a href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
-            
+-->
+             
 		<cadsrpasswordchangetags:footer />
 	
     	</td></tr></table>
