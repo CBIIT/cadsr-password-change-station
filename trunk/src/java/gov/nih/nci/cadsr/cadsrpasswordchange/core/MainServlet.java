@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
@@ -73,6 +74,16 @@ public class MainServlet extends HttpServlet {
 		logger.debug("doGet");
 	}
 		
+	public static String handleTierHostToken(String originalText, String tier) {
+		String ret = originalText;
+
+		if(originalText != null) {
+			ret = StringUtils.replace(originalText, Constants.HOST_TOKEN, tier);
+		}
+		
+		return ret;
+	}
+	
 	private void handleQuestionsOptions(HttpServletRequest req, String[] selectedQuestion) {
 		req.getSession().setAttribute("selectedQuestion1", selectedQuestion[0]);
 		req.getSession().setAttribute("selectedQuestion2", selectedQuestion[1]);
@@ -531,7 +542,7 @@ public class MainServlet extends HttpServlet {
 					if(userBean.getResult().getResultCode() != ResultCode.LOCKED_OUT) {
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 					} else {
-						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, handleTierHostToken(Messages.getString("PasswordChangeHelper.103"), "TIER"));
 					}
 					//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 					req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
@@ -728,7 +739,7 @@ public class MainServlet extends HttpServlet {
 			else
 			if(retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.info("Less than 1 hour, password lock stays (" + period.getMinutes() + " minutes has passed).");
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, handleTierHostToken(Messages.getString("PasswordChangeHelper.103"), "TIER"));
 				logger.debug("Redirecting to '" + redictedUrl + "'");
 				resp.sendRedirect(redictedUrl);
 			}
@@ -1073,7 +1084,7 @@ public class MainServlet extends HttpServlet {
 						}
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 					} else {
-						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, handleTierHostToken(Messages.getString("PasswordChangeHelper.103"), "TIER"));
 					}
 					resp.sendRedirect("./jsp/changePassword.jsp");
 					return;
