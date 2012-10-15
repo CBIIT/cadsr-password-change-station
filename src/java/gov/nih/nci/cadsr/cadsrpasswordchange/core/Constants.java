@@ -85,6 +85,7 @@ public class Constants {
     public static final String UNKNOWN = "u";
     //=== notifications notification configuration
     public static final String NOTIFICATION_TYPE = "EMAIL.NOTIFY_TYPE";
+    public static final String HOST_TOKEN = "${host}";
     //=== notifications email configuration
     public static final String EMAIL_ADDRESS = "EMAIL.ADDR";
     public static final String EMAIL_ADMIN_NAME = "ADMIN.NAME";
