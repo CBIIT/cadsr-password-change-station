@@ -17,7 +17,30 @@
 		</fileset>
 	</path>
 
-	
+    <!-- Paths -->
+    <path id="libpath">
+           <fileset dir="class.path">
+                  <include name="**/*.jar" />
+           </fileset>
+    </path>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="class.path" />
+
+ 	<!--property name="tier" value="qa"/> -->
+     <if>
+            <isset property="tier" />
+            <then>
+                   <!-- if tier is defined, load tier specific properties for tier based installation -->
+                   <property file="${tier}.properties" />
+                   <echo message="loaded ${tier} tier properties." />
+            </then>
+            <else>
+                   <property file="build.properties" />
+                   <echo message="loaded build.properties" />
+            </else>
+     </if>
+	<echo>host = ${host}</echo>
+	<replace file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" token="@host@" value="${host}"/>
+
 	<!-- Check timestamp on files -->
 	<target name="prepare">
 		<tstamp />
