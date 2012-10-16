@@ -62,7 +62,7 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="/changePassword" method="POST" focus="userid" title="Use this screen to get your security questions">
+		<form name="PasswordChangeForm" action="/changePassword" method="POST" focus="userid" title="Use this screen to change your password">
  		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {

@@ -78,14 +78,14 @@ Your new password may only use characters from the following categories and must
     </tt></td> 
 					</table>
 								
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/resetPassword" method="POST" focus="userid" title="Use this screen to change your password">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/resetPassword" method="POST" focus="userid" title="Use this screen to reset your password">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <%
             	if (errorMessage.equals("")) {
                         		if (userMessage.equals("")) {
             %>
-        				<p class=std>Use this screen to change your password.</p>
+        				<p class=std>Use this screen to reset your password.</p>
         			<%
         				} else {
         			%>
