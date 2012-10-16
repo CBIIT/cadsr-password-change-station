@@ -39,10 +39,14 @@
             </else>
      </if>
 	<echo>host = ${host}</echo>
-	<replace file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" token="@host@" value="${host}"/>
 
 	<!-- Check timestamp on files -->
 	<target name="prepare">
+        <delete file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" />
+		<filter token="host" value="${host}"/>
+	    <copy tofile="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" filtering="true">
+		  <fileset file="src/conf/template.messages.properties" />
+		</copy>
 		<tstamp />
 	</target>
 
