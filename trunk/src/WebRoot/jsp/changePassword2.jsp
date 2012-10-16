@@ -60,12 +60,12 @@
 	
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/changePassword" method="POST" focus="userid" title="Use this screen to change your password">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/changePassword" method="POST" focus="userid" title="Use this screen to reset your password">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>Use this screen to change your password.</p>
+        				<p class=std>Use this screen to reset your password.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>

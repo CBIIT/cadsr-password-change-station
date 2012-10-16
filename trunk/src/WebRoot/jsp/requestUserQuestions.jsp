@@ -67,7 +67,7 @@
 
 		<a name="skip" id="skip"></a>
 			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptUserQuestions" method="POST" focus="userid" title="Use this screen to get your security questions">
+		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptUserQuestions" method="POST" focus="userid" title="Use this screen to answer your security questions">
 <!--
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion1" method="POST" focus="userid" title="Use this screen to get your security questions">
 -->
