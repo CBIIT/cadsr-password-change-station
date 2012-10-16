@@ -711,9 +711,7 @@ public class MainServlet extends HttpServlet {
 			connect();
 			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 			try {
-//				if(!userDAO.checkValidUser(username)) {
-				if(false) {
-					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+				if(!userDAO.checkValidUser(username)) {
 					resp.sendRedirect(Constants.ASK_USERID_URL);
 					return;
 				}
