@@ -107,7 +107,8 @@ public class MainServlet extends HttpServlet {
 					resp.sendRedirect(Constants.LANDING_URL);
 				} else {
 	    			req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.CHANGE_TOKEN);
-					doChangePassword(req, resp);
+					doValidateUserQuestions(req, resp);	//CADSRPASSW-76
+//					doChangePassword(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/saveQuestions")) {
 				if(req.getParameter("cancel") != null) {
@@ -683,6 +684,65 @@ public class MainServlet extends HttpServlet {
 		}		
 	}
 
+	protected void doValidateUserQuestions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		logger.info("doValidateUserQuestions");
+		
+		try {
+			HttpSession session = req.getSession(false);
+			if (session == null) {
+				logger.debug("null session");
+				// this shouldn't happen, make the user start over
+				resp.sendRedirect("./jsp/loggedOut.jsp");
+				return;
+			}
+
+			String username = req.getParameter("userid");
+			if(username != null) {
+				username = username.toUpperCase();
+			}
+			logger.debug("username " + username);
+			String status = doValidateAccountStatus(username, session, req, resp, Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
+				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything ...");
+				return;
+			}
+			
+			connect();
+			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
+			try {
+//				if(!userDAO.checkValidUser(username)) {
+				if(false) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+					resp.sendRedirect(Constants.ASK_USERID_URL);
+					return;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				disconnect();
+			}
+
+			// Security enhancement
+			Map<String, String> userQuestions = new HashMap<String, String>();
+			Map<String, String> userAnswers =  new HashMap<String, String>();
+			
+			loadUserStoredQna(username, userQuestions, userAnswers);
+
+			if(userQuestions == null || userQuestions.size() == 0) {
+				logger.info("no security question found");
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
+				resp.sendRedirect(Constants.SETUP_QUESTIONS_URL);
+				return;
+			}
+			
+			req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
+		}
+		catch (Throwable theException) {
+			logger.error(theException);
+		}		
+	}
+	
 	/**
 	 * Method to detect/handle account lock condition.
 	 * 

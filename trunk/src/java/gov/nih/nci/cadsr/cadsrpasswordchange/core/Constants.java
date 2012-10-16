@@ -9,6 +9,7 @@ public class Constants {
 	public static final String APP_URI = "/cadsrpasswordchange";
 	public static final String SERVLET_URI = "";	//jboss
 	public static final String LANDING_URL = APP_URI + "/jsp/login.jsp";
+	public static final String REQUEST_USERID_FOR_CHANGE_PASSWORD_URL = APP_URI + "/jsp/requestUserIdForChangePassword.jsp";
 	public static final String CHANGE_PASSWORD_URL = APP_URI + "/jsp/changePassword.jsp";
 	public static final String SETUP_QUESTIONS_URL = APP_URI + "/jsp/setupPassword.jsp";
 	public static final String ASK_USERID_URL = APP_URI + "/jsp/requestUserQuestions.jsp";
