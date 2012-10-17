@@ -7,7 +7,7 @@ CREATE TABLE PASSWORD_NOTIFICATION (
     processing_type varchar2(30),
     delivery_status varchar2(30),
     CONSTRAINT pk PRIMARY KEY (ua_name)
-);
+)
 /
 grant select, insert, update, delete on PASSWORD_NOTIFICATION to cadsrpasswordchange
 /
