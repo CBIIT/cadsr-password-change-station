@@ -106,7 +106,7 @@ public class MainServlet extends HttpServlet {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
 				} else {
-					doValidateUserQuestions(req, resp);	//CADSRPASSW-76
+					doValidateUserQuestionsForPasswordChange(req, resp);	//CADSRPASSW-76
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/changePassword")) {
 				if(req.getParameter("cancel") != null) {
@@ -719,10 +719,10 @@ public class MainServlet extends HttpServlet {
 		}
 		catch (Throwable theException) {
 			logger.error(theException);
-		}		
+		}
 	}
 
-	protected void doValidateUserQuestions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doValidateUserQuestionsForPasswordChange(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		logger.info("doValidateUserQuestions");
 		
@@ -767,7 +767,7 @@ public class MainServlet extends HttpServlet {
 			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 			try {
 				if(!userDAO.checkValidUser(username)) {
-					resp.sendRedirect(Constants.ASK_USERID_URL);
+					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
 					return;
 				}
 			} catch (Exception e) {
