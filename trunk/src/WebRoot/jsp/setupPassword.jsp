@@ -44,10 +44,10 @@ if (session.getAttribute("username") == null) {
 	return;
 }
 */
-			if (session.getAttribute(Constants.USERNAME) != null) {
-				request.setAttribute("userid", (String)session.getAttribute(Constants.USERNAME));
+			if (session.getAttribute(Constants.USERNAME) != null && request.getParameter("donotclear") != null) {
+				request.setAttribute("userid", (String)session.getAttribute(Constants.USERNAME)!=null?(String)session.getAttribute(Constants.USERNAME):"");
 			} else {
-				request.setAttribute("userid", (String)request.getParameter("userid"));
+				request.setAttribute("userid", (String)request.getParameter("userid")!=null?(String)request.getParameter("userid"):"");
 			}
 
 			String errorMessage = (String)session.getAttribute("ErrorMessage");
