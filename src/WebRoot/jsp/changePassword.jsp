@@ -44,6 +44,11 @@
 		 return;
 		 }
 		 */
+		if (session.getAttribute(Constants.USERNAME) != null && request.getParameter("donotclear") != null) {
+			request.setAttribute("LoginID", (String)session.getAttribute(Constants.USERNAME)!=null?(String)session.getAttribute(Constants.USERNAME):"");
+		} else {
+			request.setAttribute("LoginID", (String)request.getParameter("LoginID")!=null?(String)request.getParameter("userid"):"");
+		}
 
 		String errorMessage = (String) session.getAttribute("ErrorMessage");
 		if (errorMessage == null)
@@ -124,7 +129,7 @@ Your new password may only use characters from the following categories and must
 							ID:
 							</p></td>
 					<td valign="middle"><input id="LoginID" type="text"
-						name="userid" value="${param.LoginID}" style="width: 3.75in"
+						name="userid" value="<%= request.getAttribute("LoginID") %>" style="width: 3.75in"
 						class="std"></td>
 				</tr>
 				<tr>
