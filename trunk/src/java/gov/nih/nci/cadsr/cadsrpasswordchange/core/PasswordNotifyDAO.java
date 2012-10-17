@@ -288,10 +288,10 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			stmt.setString(1, user.getUsername().toUpperCase());
 			rs = stmt.executeQuery();
 			logger.debug ("removeQueue: user : " + user.getUsername() + " queue removed");
-			sql = "alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"";
-			stmt = conn.prepareStatement(sql);
-			stmt.executeUpdate();
-			logger.debug ("removeQueue: cadsr_user profile re-applied (sql executed = [" + sql + "])");
+//			sql = "alter user " + user.getUsername().toUpperCase() + " profile \"cadsr_user\"";
+//			stmt = conn.prepareStatement(sql);
+//			stmt.executeUpdate();
+//			logger.debug ("removeQueue: cadsr_user profile re-applied (sql executed = [" + sql + "])");
 		} catch (Exception ex) {
 			logger.debug(ex.getMessage());
 		} finally {
