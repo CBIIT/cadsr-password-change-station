@@ -31,6 +31,10 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
   </servlet-mapping>
   <servlet-mapping>     
      <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptUserID</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
      <url-pattern>/promptUserQuestions</url-pattern>
   </servlet-mapping>
   <servlet-mapping>     
