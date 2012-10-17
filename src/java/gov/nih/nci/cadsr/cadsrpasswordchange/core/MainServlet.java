@@ -102,13 +102,17 @@ public class MainServlet extends HttpServlet {
 			logger.debug("getServletPath  |" + servletPath +"|");
 			if (servletPath.equals(Constants.SERVLET_URI + "/login")) {
 				doLogin(req, resp);
+			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptUserID")) {
+				if(req.getParameter("cancel") != null) {
+					resp.sendRedirect(Constants.LANDING_URL);
+				} else {
+					doValidateUserQuestions(req, resp);	//CADSRPASSW-76
+				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/changePassword")) {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
 				} else {
-	    			req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.CHANGE_TOKEN);
-					doValidateUserQuestions(req, resp);	//CADSRPASSW-76
-//					doChangePassword(req, resp);
+					doChangePassword(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/saveQuestions")) {
 				if(req.getParameter("cancel") != null) {
@@ -463,7 +467,24 @@ public class MainServlet extends HttpServlet {
 			String question3 = req.getParameter("question3");
 			String answer3 = req.getParameter("answer3");
 			
-			String status = doValidateAccountStatus(loginID, session, req, resp, "./jsp/setupPassword.jsp");
+			//begin - CADSRPASSW-73
+			String status = "";
+			try {
+				logger.info("doSaveQuestions: checking account status ...");
+				status = doValidateAccountStatus(loginID, session, req, resp, "./jsp/setupPassword.jsp");
+				logger.debug("doSaveQuestions: account status check done");
+			} catch (Exception e1) {
+				logger.debug("doSaveQuestions: account status was: [" + status + "]");
+				if(status != null && status.equals("")) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+					resp.sendRedirect("./jsp/setupPassword.jsp");
+					return;
+				} else {
+					logger.debug("doSaveQuestions: account status check error was: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+			//end - CADSRPASSW-73
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.debug("doSaveQuestions:status [" + status + "] returning without doing anything ...");
 				return;
@@ -620,7 +641,24 @@ public class MainServlet extends HttpServlet {
 				username = username.toUpperCase();
 			}
 			logger.debug("username " + username);
-			String status = doValidateAccountStatus(username, session, req, resp, Constants.ASK_USERID_URL);
+			//begin - CADSRPASSW-73
+			String status = "";
+			try {
+				logger.info("doRequestUserQuestions: checking account status ...");
+				status = doValidateAccountStatus(username, session, req, resp, Constants.ASK_USERID_URL);
+				logger.debug("doRequestUserQuestions: account status check done");
+			} catch (Exception e1) {
+				logger.debug("doRequestUserQuestions: account status was: [" + status + "]");
+				if(status != null && status.equals("")) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+					resp.sendRedirect(Constants.ASK_USERID_URL);
+					return;
+				} else {
+					logger.debug("doRequestUserQuestions: account status check error was: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+			//end - CADSRPASSW-73
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything ...");
 				return;
@@ -702,7 +740,24 @@ public class MainServlet extends HttpServlet {
 				username = username.toUpperCase();
 			}
 			logger.debug("username " + username);
-			String status = doValidateAccountStatus(username, session, req, resp, Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+			//begin - CADSRPASSW-73
+			String status = "";
+			try {
+				logger.info("doSaveQuestions: checking account status ...");
+				status = doValidateAccountStatus(username, session, req, resp, Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+				logger.debug("doSaveQuestions: account status check done");
+			} catch (Exception e1) {
+				logger.debug("doSaveQuestions: account status was: [" + status + "]");
+				if(status != null && status.equals("")) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+					return;
+				} else {
+					logger.debug("doSaveQuestions: account status check error was: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+			//end - CADSRPASSW-73			
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything ...");
 				return;
@@ -1029,7 +1084,24 @@ public class MainServlet extends HttpServlet {
 			logger.debug("changing request: " + question1 + "=" + answer1 + " " +question2 + "=" + answer2 + " " +question3 + "=" + answer3);
 		
 			logger.debug("username " + username);
-			String status = doValidateAccountStatus(username, session, req, resp, "./jsp/resetPassword.jsp");
+			//begin - CADSRPASSW-73
+			String status = "";
+			try {
+				logger.info("doChangePassword: checking account status ...");
+				status = doValidateAccountStatus(username, session, req, resp, "./jsp/resetPassword.jsp");
+				logger.debug("doChangePassword: account status check done");
+			} catch (Exception e1) {
+				logger.debug("doChangePassword: account status was: [" + status + "]");
+				if(status != null && status.equals("")) {
+					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+					resp.sendRedirect("./jsp/resetPassword.jsp");
+					return;
+				} else {
+					logger.debug("doChangePassword: account status check error was: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+			//end - CADSRPASSW-73
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
 				logger.debug("doChangePassword2:status [" + status + "] returning without doing anything ...");
 				return;
