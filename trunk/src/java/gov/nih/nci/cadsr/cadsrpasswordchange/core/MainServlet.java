@@ -785,12 +785,12 @@ public class MainServlet extends HttpServlet {
 
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.136"));
 				resp.sendRedirect(Constants.SETUP_QUESTIONS_URL + "?donotclear");
 				return;
 			}
 			
-			req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
+			req.getRequestDispatcher("./jsp/changePassword.jsp" + "?donotclear").forward(req, resp);
 		}
 		catch (Throwable theException) {
 			logger.error(theException);
