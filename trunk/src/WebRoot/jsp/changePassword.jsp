@@ -128,7 +128,6 @@ Your new password may only use characters from the following categories and must
 						class="std"></td>
 				</tr>
 				<tr>
-<!--
 				<tr>
 					<td valign="middle"><label for="OldPassword" class=bstd>Current
 							Password:
@@ -166,7 +165,6 @@ Your new password may only use characters from the following categories and must
 						type="submit" name="cancel" value="Cancel"
 						style="text-align: center" class="but2">
 				</tr>
- -->				
 				<tr>
 					<!--
                 <td colspan="2" valign="middle"><a target="_blank" href="https://wiki.nci.nih.gov/x/3AJQB">Please see the NCI Wiki for information on caDSR passwords including restrictions on choice of passwords</a></td>
