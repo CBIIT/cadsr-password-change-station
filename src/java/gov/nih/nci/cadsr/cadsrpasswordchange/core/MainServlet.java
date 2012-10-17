@@ -739,6 +739,7 @@ public class MainServlet extends HttpServlet {
 			if(username != null) {
 				username = username.toUpperCase();
 			}
+			session.setAttribute(Constants.USERNAME, username);
 			logger.debug("username " + username);
 			//begin - CADSRPASSW-73
 			String status = "";
