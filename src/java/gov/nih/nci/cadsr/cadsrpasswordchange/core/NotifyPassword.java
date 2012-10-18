@@ -517,12 +517,13 @@ public class NotifyPassword {
 	 * To run this in Eclipse -
 	 * 
 	 * 1. Copy log4j.properties from bin/ into java/ folder
-	 * 2. Add program arguments "[full path]\config.xml" in the run
+	 * 2. Add java/ folder into the Run classpath
+	 * 3. Add program arguments "[full path]\config.xml" in the Run
 	 */
 	public static void main(String[] args) {
         if (args.length != 1)
         {
-            System.err.println(NotifyPassword.class.getName() + " config.xml");
+        	_logger.fatal(NotifyPassword.class.getName() + " config.xml");
             return;
         }
 		
