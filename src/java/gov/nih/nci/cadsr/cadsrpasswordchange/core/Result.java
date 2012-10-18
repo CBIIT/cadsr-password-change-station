@@ -1,6 +1,8 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
-public class Result {
+import java.io.Serializable;
+
+public class Result implements Serializable {
 
 	private ResultCode resultCode;
 	private String alternateMessage;   // (null if no alternate message)
