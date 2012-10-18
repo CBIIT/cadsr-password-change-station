@@ -1,4 +1,5 @@
 <%@ page isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld"
 	prefix="cadsrpasswordchangetags"%>
 <%-- <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf"%> --%>
@@ -45,9 +46,9 @@
 		 }
 		 */
 		if (session.getAttribute(Constants.USERNAME) != null && request.getParameter("donotclear") != null) {
-			request.setAttribute("LoginID", (String)session.getAttribute(Constants.USERNAME)!=null?(String)session.getAttribute(Constants.USERNAME):"");
+			request.setAttribute("userid", (String)session.getAttribute(Constants.USERNAME)!=null?(String)session.getAttribute(Constants.USERNAME):"");
 		} else {
-			request.setAttribute("LoginID", (String)request.getParameter("LoginID")!=null?(String)request.getParameter("userid"):"");
+			request.setAttribute("userid", (String)request.getParameter("userid")!=null?(String)request.getParameter("userid"):"");
 		}
 
 		String errorMessage = (String) session.getAttribute("ErrorMessage");
@@ -125,11 +126,11 @@ Your new password may only use characters from the following categories and must
 			<table
 				summary="Login credentials and new password to change password.">
 				<tr>
-					<td valign="middle"><label for="LoginID" class=bstd>Login
+					<td valign="middle"><label for="userid" class=bstd>Login
 							ID:
 							</p></td>
-					<td valign="middle"><input id="LoginID" type="text"
-						name="userid" value="<%= request.getAttribute("LoginID") %>" style="width: 3.75in"
+					<td valign="middle"><input id="userid" type="text"
+						name="userid" value="<%= request.getAttribute("userid") %>" style="width: 3.75in"
 						class="std"></td>
 				</tr>
 				<tr>
