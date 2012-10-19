@@ -1217,7 +1217,7 @@ public class MainServlet extends HttpServlet {
 					} else {
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 					}
-					resp.sendRedirect("./jsp/changePassword.jsp");
+					resp.sendRedirect(Constants.CHANGE_PASSWORD_URL + "?donotclear");
 					return;
 				}
 			}
