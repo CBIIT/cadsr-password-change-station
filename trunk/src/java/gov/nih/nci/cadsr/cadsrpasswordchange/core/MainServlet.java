@@ -112,6 +112,7 @@ public class MainServlet extends HttpServlet {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
 				} else {
+	    			req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.CHANGE_TOKEN);
 					doChangePassword(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/saveQuestions")) {
