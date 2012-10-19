@@ -65,7 +65,7 @@ if (session.getAttribute("username") == null) {
 		  
 		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
      
-    	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td align="center">
+    	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td>
 
 		<cadsrpasswordchangetags:header showlogout="false"/>
 
