@@ -24,7 +24,9 @@ import javax.sql.DataSource;
 
 import oracle.jdbc.pool.OracleDataSource;
 
+import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
+import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -518,7 +520,7 @@ public class TestPasswordNotification {
 		np.doAll("C:\\Workspaces\\demo\\cadsrpasswordchange\\dist\\bin\\config.xml");
 	}
 
-	@Test
+//	@Test
 	public void testEmailWithUserID() throws Exception {
 		List<User> recipients = null;
 		NotifyPassword n = new NotifyPassword(conn);
@@ -559,6 +561,12 @@ public class TestPasswordNotification {
 		}
 	}
 	
+	@Test
+	public void testNoonTime() {
+        LocalDateTime time = new LocalDateTime().withDayOfWeek(DateTimeConstants.MONDAY).withHourOfDay(12);
+        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
+        System.out.println("Time is " + new Date(DateTimeUtils.currentTimeMillis()));
+	}
 /*
 update sbrext.tool_options_view_ext set value = 'Reminder: caDSR Password Expiration' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.SUBJECT'
 
@@ -578,6 +586,8 @@ select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_n
 
 select * from sys.dba_profiles where profile like 'cadsr_user_test11'
 
+alter user PW14 profile "cadsr_user_test14"
+
 select
 			   a.USERNAME, 
 			   b.ATTEMPTED_COUNT, 
@@ -594,8 +604,10 @@ select
 			 from 
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
---and a.EXPIRY_DATE BETWEEN SYSDATE AND SYSDATE+14
-and a.username in ('PW14','PW7_','PW4_')
+and a.EXPIRY_DATE BETWEEN SYSDATE+7 AND SYSDATE+14
+--and a.EXPIRY_DATE BETWEEN SYSDATE+4 AND SYSDATE+7
+--and a.EXPIRY_DATE BETWEEN SYSDATE+0 AND SYSDATE+4
+--and a.username in ('PW14_','PW7_','PW4_')
 order by a.EXPIRY_DATE desc
 
 select * from 
