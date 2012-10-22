@@ -1,45 +1,39 @@
-<%@ page isELIgnored ="false" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags" %>
+<%@ page isELIgnored="false" %>
+<%@ taglib uri="/WEB-INF/tld/cadsrpasswordchange.tld" prefix="cadsrpasswordchangetags"%>
 <%@ taglib uri="/WEB-INF/tld/Owasp.CsrfGuard.tld" prefix="csrf" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants" %>
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants"%>
 <%@ page import="java.util.*" %>
-<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.QuestionHelper" %>
-
+<%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.QuestionHelper"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+    
     <head>
-        <title><%=Constants.SETUP_TITLE %></title>
-        
-		<div style="position:absolute;">
- 			<a href="#skip">
-  			<img src="/cadsrpasswordchange/images/skipnav.gif" border="0" height="1" width="1" alt="Skip Navigation" title="Skip Navigation" />
-	 		</a>
-		</div>
-		        
-        <html:base />
-        <meta http-equiv="Content-Language" content="en-us">
-        <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=WINDOWS-1252">
-        <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
-        <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
-        <LINK href="/cadsrpasswordchange/css/cadsrpasswordchange.css" rel="stylesheet" type="text/css">
-        
-		<script language="JavaScript" type="text/JavaScript">
-		function callLogout(){
-		     document.LogoutForm.submit();
-		}
-		</script>
-		
+        <title>
+            <%=Constants.SETUP_TITLE %>
+        </title>
+        <div style="position:absolute;">	<a href="#skip">
+	<img src="/cadsrpasswordchange/images/skipnav.gif" border="0" height="1" width="1" alt="Skip Navigation" title="Skip Navigation" />
+</a>
+
+                            </div>
+                            <html:base />
+                            <meta http-equiv="Content-Language" content="en-us">
+                            <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=WINDOWS-1252">
+                            <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
+                            <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+                            <LINK href="/cadsrpasswordchange/css/cadsrpasswordchange.css" rel="stylesheet"
+                            type="text/css">
+                            <script language="JavaScript" type="text/JavaScript">
+            function callLogout() {
+                document.LogoutForm.submit();
+            }
+        </script>
     </head>
-
-	<body>
-
-		<%
-		QuestionHelper.initQuestionsOptions(request);		
-
-/*
-if (session.getAttribute("username") == null) {
-	// this shouldn't happen, make the user start over
+    
+    <body>
+                                <% QuestionHelper.initQuestionsOptions(request); /* if (session.getAttribute(
+                                "username")==n ull) { // this shouldn
+                                't happen, make the user start over
 	//response.sendRedirect("./jsp/loggedOut.jsp");
 	response.sendRedirect(Constants.LOGGEDOUT_URL);
 	return;
@@ -65,20 +59,22 @@ if (session.getAttribute("username") == null) {
 		  
 		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
      
-    	<table class="secttable"><colgroup></colgroup><tbody class="secttbody" /><tr><td>
+    	<table style="margin-top:8px;margin-left:20%;"><colgroup></colgroup><tbody/><tr><td>
 
 		<cadsrpasswordchangetags:header showlogout="false"/>
 
-		<table><tr><td align=\"center\"><p class=\"ttl18\"><h3><%=Constants.SETUP_TITLE %></h3></p></td></tr></table>
+		<table style="margin-top:8px;margin-left:33%;"><tr><td =\"center\"><p class=\"ttl18\"><h3><%=Constants.SETUP_TITLE %></h3></p></td></tr></table>
 		
 		<a name="skip" id="skip"></a>
-			
+
+<table width="60%" cellspacing="0" cellpadding="0" border="0" align="center">
+
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/saveQuestions" method="POST" focus="userid" title="Use this screen to setup your security questions">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p class=std>Use this screen to setup your security questions.</p>
+        				<p style="margin-top:8px;margin-left:33%;" class=std>Use this screen to setup your security questions.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
@@ -131,7 +127,8 @@ if(request.getSession() != null) {
 <select name="question2" id="Question2">
 	<option value="">-- Please Select a Question --</option>
     <c:forEach items="${questionsList}" var="question">
-        <option value="${question}" ${question == selectedQuestion2 ? 'selected' : ''}>${question}</option>
+        <option value="${question}" ${question == selectedQuestion2 ? 'selected ' : '
+                                '}>${question}</option>
     </c:forEach>
 </select>
 -->
@@ -168,7 +165,7 @@ if(request.getSession() != null) {
 <select name="question3" id="Question3">
 	<option value="">-- Please Select a Question --</option>
     <c:forEach items="${questionsList}" var="question">
-        <option value="${question}" ${question == selectedQuestion3 ? 'selected' : ''}>${question}</option>
+        <option value="${question}" ${question == selectedQuestion3 ? 'selected ' : ' '}>${question}</option>
     </c:forEach>
 </select>
 -->
@@ -205,7 +202,7 @@ if(request.getSession() != null) {
             </tr>
         	</table>
     	</form>
-            
+</table>            
 		<cadsrpasswordchangetags:footer />
 	
     	</td></tr></table>
