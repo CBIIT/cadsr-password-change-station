@@ -67,7 +67,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 20.2");
+            _logger.info("NotifyPassword v1.0 build 20.3");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -401,7 +401,8 @@ daysSincePasswordChange = 1;	//open this just for test
 				dao.removeQueue(user);
 				_logger.info("isNotificationValid is false: user [" + user + "] removed from the queue.");
 			}
-		} else {
+		} else
+		if(totalNotificationTypes == currentNotificationIndex) {
 			_logger.info("isNotificationValid: type " + daysLeft + " is the last notification type");
 			if(daysLeft != Constants.DEACTIVATED_VALUE) {
 				_logger.info("isNotificationValid: type " + daysLeft + " (the last notification type) is active");
@@ -533,8 +534,8 @@ _logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** 
             return;
         }
 		//=== open this for test
-        LocalDateTime time = new LocalDateTime().withDayOfWeek(DateTimeConstants.MONDAY).withHourOfDay(12);
-        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
+//        LocalDateTime time = new LocalDateTime().withDayOfWeek(DateTimeConstants.MONDAY).withHourOfDay(12);
+//        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
 
 		NotifyPassword np = new NotifyPassword(null);
 
