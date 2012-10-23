@@ -74,7 +74,7 @@
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p style="margin-top:8px;margin-left:10%;" class=std>Use this screen to setup your security questions.</p>
+        				<center><p style="margin-top:8px;" class=std>Use this screen to setup your security questions.</p></center>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
