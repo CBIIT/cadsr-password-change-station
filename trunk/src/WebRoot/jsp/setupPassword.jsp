@@ -59,9 +59,9 @@
 		  
 		<form name="LogoutForm" method="post" action="../../cadsrpasswordchange/logout"></form>
      
-    	<table style="margin-top:8px;margin-left:20%;"><colgroup></colgroup><tbody/><tr><td>
-
 		<cadsrpasswordchangetags:header showlogout="false"/>
+
+    	<table style="margin-top:8px;margin-left:20%;"><colgroup></colgroup><tbody/><tr><td>
 
 		<table style="margin-top:8px;margin-left:33%;"><tr><td =\"center\"><p class=\"ttl18\"><h3><%=Constants.SETUP_TITLE %></h3></p></td></tr></table>
 		
@@ -74,7 +74,7 @@
 
             <% if (errorMessage.equals("")) {
             		if (userMessage.equals("")) { %>
-        				<p style="margin-top:8px;margin-left:33%;" class=std>Use this screen to setup your security questions.</p>
+        				<p style="margin-top:8px;margin-left:10%;" class=std>Use this screen to setup your security questions.</p>
         			<%} else { %>
         				<p class=std><%=userMessage%></p>
         			<%} %>
