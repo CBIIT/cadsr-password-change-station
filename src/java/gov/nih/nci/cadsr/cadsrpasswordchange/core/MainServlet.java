@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.cadsrpasswordchange.core;
 
+import gov.nih.nci.cadsr.cadsrpasswordchange.domain.User;
 import gov.nih.nci.cadsr.cadsrpasswordchange.domain.UserSecurityQuestion;
 
 import java.io.IOException;
@@ -1118,6 +1119,13 @@ public class MainServlet extends HttpServlet {
 				logger.info("password reset");
 				resetUserStoredAttemptedCount(username);	//CADSRPASSW-42
 				logger.debug("answer count reset");
+				connect();
+				PasswordNotifyDAO dao = new PasswordNotifyDAO(datasource);
+				User usr = new User();
+				usr.setUsername(username);
+				logger.debug("doChangePassword: removing the user [" + usr.getUsername() + "] removed from the notification queue ...");
+				dao.removeQueue(usr);	//CADSRPASSW-72
+				logger.info("doChangePassword: user [" + usr.getUsername() + "] removed from the notification queue");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");				
 			} else {
@@ -1285,6 +1293,15 @@ public class MainServlet extends HttpServlet {
 				logger.info("password changed");
 				resetUserStoredAttemptedCount(username);	//CADSRPASSW-42
 				logger.debug("answer count reset");
+				connect();
+				PasswordNotifyDAO dao = new PasswordNotifyDAO(datasource);
+				User usr = new User();
+				usr.setUsername(username);
+				logger.debug("doChangePassword: removing the user [" + usr.getUsername() + "] removed from the notification queue ...");
+				dao.removeQueue(usr);	//CADSRPASSW-72
+				logger.info("doChangePassword: user [" + usr.getUsername() + "] removed from the notification queue");
+				resetUserStoredAttemptedCount(username);	//CADSRPASSW-70
+				logger.debug("notification queue removed");
 				session.invalidate();  // they are done, log them out
 				resp.sendRedirect("./jsp/passwordChanged.jsp");
 			} else {
