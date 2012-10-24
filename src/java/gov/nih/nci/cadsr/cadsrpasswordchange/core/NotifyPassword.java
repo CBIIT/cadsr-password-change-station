@@ -354,8 +354,8 @@ public class NotifyPassword {
 		if(totalNotificationTypes != currentNotificationIndex && !isAlreadySent(user, daysLeft)) {
 			_logger.info("isNotificationValid: type " + daysLeft + " is not the last notification type");
 			daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
-_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to 1");
-daysSincePasswordChange = 1;	//open this just for test
+//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to 1");
+//daysSincePasswordChange = 1;	//open this just for test
 			_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 	
 			if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
@@ -394,12 +394,12 @@ daysSincePasswordChange = 1;	//open this just for test
 			}
 			else 
 			if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
-				_logger.debug("isNotificationValid is false, removing the user from the queue ...");
-		        open();
-				dao = new PasswordNotifyDAO(_conn);
-				_logger.debug("isNotificationValid: removing the user [" + user + "] removed from the queue ...");
-				dao.removeQueue(user);
-				_logger.info("isNotificationValid is false: user [" + user + "] removed from the queue.");
+				_logger.debug("isNotificationValid is false");
+		        //open();
+				//dao = new PasswordNotifyDAO(_conn);
+				//_logger.debug("isNotificationValid: removing the user [" + user + "] removed from the queue ...");
+				//dao.removeQueue(user);	//CADSRPASSW-70
+				_logger.info("isNotificationValid is false: user [" + user + " due to password change today or recently change.");
 			}
 		} else
 		if(totalNotificationTypes == currentNotificationIndex) {
@@ -462,8 +462,8 @@ daysSincePasswordChange = 1;	//open this just for test
 			ret = true;
 			_logger.info("isChangedRecently:daysSincePasswordChange is " + daysSincePasswordChange + " which is <= " + daysLeft + ", thus set to " + ret);
 		}
-ret = false;	//open this just for test
-_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
+//ret = false;	//open this just for test
+//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
 		_logger.debug("isChangedRecently is " + ret);
 		return ret;
 	}
@@ -534,9 +534,11 @@ _logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** 
             return;
         }
 		//=== open this for test
-//        LocalDateTime time = new LocalDateTime().withDayOfWeek(DateTimeConstants.MONDAY).withHourOfDay(12);
-//        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
-
+        LocalDateTime time = new LocalDateTime()/*.withDayOfWeek(DateTimeConstants.MONDAY)*/.withHourOfDay(12);
+//        LocalDateTime time = new LocalDateTime().plusDays(10);	//10 days later, should be Sat (11/3)
+        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
+        
+        System.out.println("Current DateTime is " + new Date(DateTimeUtils.currentTimeMillis()));
 		NotifyPassword np = new NotifyPassword(null);
 
 		try {
