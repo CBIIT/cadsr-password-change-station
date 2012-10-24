@@ -354,8 +354,8 @@ public class NotifyPassword {
 		if(totalNotificationTypes != currentNotificationIndex && !isAlreadySent(user, daysLeft)) {
 			_logger.info("isNotificationValid: type " + daysLeft + " is not the last notification type");
 			daysSincePasswordChange = CommonUtil.calculateDays(passwordChangedDate, new Date(DateTimeUtils.currentTimeMillis()));
-//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to 1");
-//daysSincePasswordChange = 1;	//open this just for test
+//_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> daysSincePasswordChange hardcoded to X (see below)");
+//daysSincePasswordChange = 15;	//open this just for test
 			_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 	
 			if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
@@ -534,8 +534,9 @@ public class NotifyPassword {
             return;
         }
 		//=== open this for test
-        LocalDateTime time = new LocalDateTime()/*.withDayOfWeek(DateTimeConstants.MONDAY)*/.withHourOfDay(12);
-//        LocalDateTime time = new LocalDateTime().plusDays(10);	//10 days later, should be Sat (11/3)
+//        LocalDateTime time = new LocalDateTime()/*.withDayOfWeek(DateTimeConstants.MONDAY)*/.withHourOfDay(12);
+//        LocalDateTime time = new LocalDateTime().plusDays(12);	//12 days later, should be Mon (11/5)
+//        LocalDateTime time = new LocalDateTime().plusDays(1);	//1 days later
 //        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
         
         System.out.println("Current DateTime is " + new Date(DateTimeUtils.currentTimeMillis()));

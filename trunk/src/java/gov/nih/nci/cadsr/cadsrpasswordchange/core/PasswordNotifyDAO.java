@@ -82,6 +82,8 @@ public class PasswordNotifyDAO implements PasswordNotify {
 	        }
 	        logger.debug("connected");
 
+	        //=== uncomment the following and comment out the first block for test
+//	        logger.info("getPasswordExpiringList: FOR TEST ONLY *** the first SQL block should be restored after test");
 	        if(size > 1 && size != index) {
 	        	sql = SELECT_SQL + " and a.EXPIRY_DATE BETWEEN SYSDATE+? AND SYSDATE+?";
 		        logger.debug("getPasswordExpiringList:before executing sql statement");
