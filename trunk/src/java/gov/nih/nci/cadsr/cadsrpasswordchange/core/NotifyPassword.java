@@ -67,7 +67,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 20.3");
+            _logger.info("NotifyPassword v1.0 build 20.4");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -398,7 +398,7 @@ public class NotifyPassword {
 		        //open();
 				//dao = new PasswordNotifyDAO(_conn);
 				//_logger.debug("isNotificationValid: removing the user [" + user + "] removed from the queue ...");
-				//dao.removeQueue(user);	//CADSRPASSW-70
+				//dao.removeQueue(user);	//CADSRPASSW-70 CADSRPASSW-72
 				_logger.info("isNotificationValid is false: user [" + user + " due to password change today or recently change.");
 			}
 		} else
@@ -536,7 +536,7 @@ public class NotifyPassword {
 		//=== open this for test
         LocalDateTime time = new LocalDateTime()/*.withDayOfWeek(DateTimeConstants.MONDAY)*/.withHourOfDay(12);
 //        LocalDateTime time = new LocalDateTime().plusDays(10);	//10 days later, should be Sat (11/3)
-        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
+//        DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
         
         System.out.println("Current DateTime is " + new Date(DateTimeUtils.currentTimeMillis()));
 		NotifyPassword np = new NotifyPassword(null);

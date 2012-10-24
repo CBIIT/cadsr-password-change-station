@@ -20,6 +20,8 @@ import org.joda.time.DateTimeUtils;
 
 public class PasswordNotifyDAO implements PasswordNotify {
 
+    public static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
+	
 	private Connection conn;
 	private DataSource datasource;
 
@@ -47,6 +49,16 @@ public class PasswordNotifyDAO implements PasswordNotify {
 
     public PasswordNotifyDAO(Connection conn) {
     	this.conn = conn;
+    }
+
+    private Connection getConnection() throws Exception {
+		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+        logger.debug("got DataSource for " + _jndiSystem);    	
+        logger.debug("got connection from jboss pool [" + _jndiSystem + "]");
+        conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
+        
+        conn.setAutoCommit(true);
+        return conn;
     }
 
 	/**
@@ -279,6 +291,9 @@ public class PasswordNotifyDAO implements PasswordNotify {
 		List arr = new ArrayList();
 		String sql = null;
 		try {
+	        if(conn == null) {
+	        	conn = getConnection();
+	        }
 	        if(conn == null) {
 	        	throw new Exception("Connection is NULL or empty.");
 	        }
