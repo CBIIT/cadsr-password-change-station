@@ -67,7 +67,7 @@ public class NotifyPassword {
 //            OracleDataSource ods = new OracleDataSource();
 //            String parts[] = _dsurl.split("[:]");
 //            ods.setDriverType("thin");
-            _logger.info("NotifyPassword v1.0 build 20.5");
+            _logger.info("NotifyPassword v1.0 build 21");
 //            String connString=_dsurl;
 //            ods.setURL(connString);
 //            ods.setUser(_user);
@@ -358,7 +358,7 @@ public class NotifyPassword {
 //daysSincePasswordChange = 15;	//open this just for test
 			_logger.info("isNotificationValid: last password change time was " + daysSincePasswordChange);
 	
-			if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange)) {	//not recently changed (today)
+			if(daysSincePasswordChange != 0 && !isChangedRecently(daysLeft, daysSincePasswordChange, user)) {	//not recently changed (today)
 				_logger.info("isNotificationValid: password was not recently changed");
 					if(user != null) {
 						_logger.debug("isNotificationValid: checking user ...");
@@ -393,13 +393,15 @@ public class NotifyPassword {
 					}
 			}
 			else 
-			if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange)) {	//reset everything if changed today OR if changed after the last check point
+			if(daysSincePasswordChange == 0 || isChangedRecently(daysLeft, daysSincePasswordChange, user)) {	//reset everything if changed today OR if changed after the last check point
+				//=== begin - KEEP THIS BLOCK, though not doing anything, but for logging
 				_logger.debug("isNotificationValid is false");
 		        //open();
 				//dao = new PasswordNotifyDAO(_conn);
 				//_logger.debug("isNotificationValid: removing the user [" + user + "] removed from the queue ...");
 				//dao.removeQueue(user);	//CADSRPASSW-70 CADSRPASSW-72
 				_logger.info("isNotificationValid is false: user [" + user + " due to password change today or recently change.");
+				//=== end - KEEP THIS BLOCK, though not doing anything, but for logging
 			}
 		} else
 		if(totalNotificationTypes == currentNotificationIndex) {
@@ -454,14 +456,25 @@ public class NotifyPassword {
 	 * @param daysLeft	the type e.g. 14, 7 or 4
 	 * @param daysSincePasswordChange	the password changed date/time since now
 	 * @return
+	 * @throws Exception 
 	 */
-	private boolean isChangedRecently(int daysLeft, long daysSincePasswordChange) {
+	private boolean isChangedRecently(int daysLeft, long daysSincePasswordChange, User user) throws Exception {
 		boolean ret = false;
 		_logger.debug("isChangedRecently entered");
+		if(user == null || user.getCreatedDate() == null || user.getPasswordChangedDate() == null) {
+			throw new Exception("Not able to determine if an account is newly created or not, user " + user + "]");
+		}
+
 		if(daysSincePasswordChange <= daysLeft) {
 			ret = true;
-			_logger.info("isChangedRecently:daysSincePasswordChange is " + daysSincePasswordChange + " which is <= " + daysLeft + ", thus set to " + ret);
+			_logger.info("type " + daysLeft + "] isChangedRecently:daysSincePasswordChange is " + daysSincePasswordChange + " which is <= " + daysLeft + ", thus set to " + ret);
 		}
+		//=== if it is a newly created account, it is NOT recently changed obviously
+		if((user.getCreatedDate().compareTo(user.getPasswordChangedDate()) == 0)) {
+			ret = false;	//new account, not a true change of password
+			_logger.info("type " + daysLeft + "] isChangedRecently: however this is a new account created on " + user.getCreatedDate() + ", thus set to " + ret);
+		}
+		
 //ret = false;	//open this just for test
 //_logger.info("isNotificationValid: FOR TEST ONLY *** this should be removed *** ===> isChangedRecently hardcoded to false");
 		_logger.debug("isChangedRecently is " + ret);

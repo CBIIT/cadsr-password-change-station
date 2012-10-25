@@ -10,6 +10,7 @@ public class User {
 	private String accountStatus;
 	private Date expiryDate;
 	private Date lockDate;
+	private Date createdDate;
 	private Date passwordChangedDate;
 	private Timestamp dateModified;
 	private int attemptedCount;
@@ -54,6 +55,14 @@ public class User {
 
 	public void setLockDate(Date lock_date) {
 		this.lockDate = lock_date;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public Date getPasswordChangedDate() {
