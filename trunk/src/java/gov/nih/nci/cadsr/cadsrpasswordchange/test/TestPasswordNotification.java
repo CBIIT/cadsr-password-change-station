@@ -586,6 +586,8 @@ select tool_name, property, VALUE from sbrext.tool_options_view_ext where Tool_n
 
 select * from sys.dba_profiles where profile like 'cadsr_user_test11'
 
+alter user PW7A profile "cadsr_user_test7"
+
 alter user PW14 profile "cadsr_user_test14"
 
 select
@@ -604,10 +606,10 @@ select
 			 from 
 			 SYS.CADSR_USERS a, SBREXT.PASSWORD_NOTIFICATION b, sbr.user_accounts_view c 
 			 where a.username = b.UA_NAME(+) and a.username = c.UA_NAME
-and a.EXPIRY_DATE BETWEEN SYSDATE+7 AND SYSDATE+14
+--and a.EXPIRY_DATE BETWEEN SYSDATE+7 AND SYSDATE+14
 --and a.EXPIRY_DATE BETWEEN SYSDATE+4 AND SYSDATE+7
 --and a.EXPIRY_DATE BETWEEN SYSDATE+0 AND SYSDATE+4
---and a.username in ('PW14_','PW7_','PW4_')
+and a.username in ('PW14_','PW7_','PW4_')
 order by a.EXPIRY_DATE desc
 
 select * from 

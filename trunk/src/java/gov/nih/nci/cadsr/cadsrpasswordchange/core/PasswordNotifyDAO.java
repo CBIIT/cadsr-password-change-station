@@ -32,6 +32,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 			"   a.ACCOUNT_STATUS," +
 			"   a.EXPIRY_DATE," +
 			"   a.LOCK_DATE," +
+			"   a.CREATED," +
 			"   a.PTIME, " +
 			"   b.DATE_MODIFIED," +
 			"   b.ATTEMPTED_COUNT," +
@@ -112,6 +113,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setAccountStatus(rs.getString("account_status"));
 				user.setExpiryDate(rs.getDate("expiry_date"));
 				user.setLockDate(rs.getDate("lock_date"));
+				user.setCreatedDate(rs.getDate("CREATED"));
 				user.setPasswordChangedDate(rs.getDate("ptime"));
 				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 				user.setDeliveryStatus(rs.getString("DELIVERY_STATUS"));
@@ -173,6 +175,7 @@ public class PasswordNotifyDAO implements PasswordNotify {
 				user.setAccountStatus(rs.getString("ACCOUNT_STATUS"));
 				user.setExpiryDate(rs.getDate("EXPIRY_DATE"));
 				user.setLockDate(rs.getDate("LOCK_DATE"));
+				user.setCreatedDate(rs.getDate("CREATED"));
 				user.setPasswordChangedDate(rs.getDate("PTIME"));
 				user.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 				user.setAttemptedCount(rs.getInt("ATTEMPTED_COUNT"));
