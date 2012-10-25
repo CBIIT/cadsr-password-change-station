@@ -529,22 +529,29 @@ public class MainServlet extends HttpServlet {
 			}
 			
 			logger.debug("saveQuestions:username " + loginID);
-			//CADSRPASSW-54
-			if(ConnectionUtil.isExpiredAccount(loginID, password)) {
-				logger.debug("expired password status for userid " + loginID);
-				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.104"));
-				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
-				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
-				return;
-			}
+			//CADSRPASSW-54 CADSRPASSW-82
+//			if(ConnectionUtil.isExpiredAccount(loginID, password)) {
+//				logger.debug("expired password status for userid " + loginID);
+//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.104"));
+//				//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+//				req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+//				return;
+//			}
 			
 			//CADSRPASSW-49
-			if(status.equals(Constants.EXPIRED_STATUS)) {
+			if(status != null && status.indexOf(Constants.EXPIRED_STATUS) > -1) {
 				connect();
 				PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 				try {
-					if(!userDAO.checkValidUser(loginID)) {
+					if(!userDAO.checkValidUser(loginID)) {	//incorrect user id
 						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+						req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
+						return;
+					}
+					//CADSRPASSW-82
+					if(!ConnectionUtil.isExpiredAccount(loginID, password)) {	//meaning incorrect password
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+						//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
 						req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp);
 						return;
 					}
