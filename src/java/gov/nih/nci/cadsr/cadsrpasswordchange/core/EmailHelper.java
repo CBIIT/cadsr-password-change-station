@@ -47,4 +47,13 @@ public class EmailHelper {
 		return ret;
 	}
 	
+	public static String handleHostToken(String originalText, String host) {
+		String ret = originalText;
+
+		if(originalText != null) {
+			ret = StringUtils.replace(originalText, Constants.EMAIL_WEB_HOST_TOKEN, host);
+		}
+		
+		return ret;
+	}
 }

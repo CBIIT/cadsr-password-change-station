@@ -25,7 +25,9 @@
     </path>
     <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="class.path" />
 
- 	<!--property name="tier" value="qa"/> -->
+ 	<property name="tier" value="qa"/>
+   	<!--
+ 	-->
      <if>
             <isset property="tier" />
             <then>
