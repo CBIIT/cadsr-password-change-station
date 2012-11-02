@@ -568,9 +568,21 @@ public class TestPasswordNotification {
         System.out.println("Time is " + new Date(DateTimeUtils.currentTimeMillis()));
 	}
 /*
+select
+			   a.USERNAME, 
+			   a.created,
+			   a.profile,
+			   a.EXPIRY_DATE, 
+			   a.PTIME,  
+			   a.ACCOUNT_STATUS, 
+			   a.LOCK_DATE
+			 from 
+			 SYS.CADSR_USERS a
+where a.username in ('TEST113')
+
 update sbrext.tool_options_view_ext set value = 'Reminder: caDSR Password Expiration' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.SUBJECT'
 
-update sbrext.tool_options_view_ext set value = 'Your password of the account ${userid} is about to expire on ${expiryDate}.  To change your password, you can either login to the Password Change Station by visiting https://cadsrpasswordchange.nci.nih.gov, contact the NCI Helpdesk at ncicb@pop.nci.nih.gov or toll free phone number: 888-478-4423.' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.INTRO'
+update sbrext.tool_options_view_ext set value = 'Your password of the account ${userid} is about to expire on ${expiryDate}.  To change your password, you can either login to the Password Change Station by visiting https://${webHost}, contact the NCI Helpdesk at ncicb@pop.nci.nih.gov or toll free phone number: 888-478-4423.' where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.INTRO'
 
 update SBREXT.PASSWORD_NOTIFICATION set date_modified = sysdate, attempted_count = -2, processing_type = 1, delivery_status = 'test' where ua_name = 'TANJ'
 

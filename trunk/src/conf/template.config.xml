@@ -11,5 +11,6 @@
         <entry key="DSurl">@connectionUrl@</entry>
         <entry key="DSusername">@systemAccountName@</entry>
         <entry key="DSpassword">@systemAccountPassword@</entry>
+        <entry key="DSwebHost">@host@</entry>
 
 </properties>

@@ -37,6 +37,7 @@ public class NotifyPassword {
     private String              _dsurl;
     private String              _user;
     private String              _pswd;
+    private String              _webHost;
     private String              _processingNotificationDays;
     
     public NotifyPassword(Connection conn) {
@@ -117,16 +118,28 @@ public class NotifyPassword {
         }
 
         _dsurl = _propList.getProperty(Constants._DSURL);
-        if (_dsurl == null)
+        if (_dsurl == null) {
             _logger.error("Missing " + Constants._DSURL + " connection string in " + propFile_);
-
+            System.exit(-1);
+        }
+        
         _user = _propList.getProperty(Constants._DSUSER);
-        if (_user == null)
+        if (_user == null) {
             _logger.error("Missing " + Constants._DSUSER + " in " + propFile_);
-
+            System.exit(-1);
+        }
+        
         _pswd = _propList.getProperty(Constants._DSPSWD);
-        if (_pswd == null)
+        if (_pswd == null) {
             _logger.error("Missing " + Constants._DSPSWD + " in " + propFile_);
+            System.exit(-1);
+        }
+        
+        _webHost = _propList.getProperty(Constants._WEBHOST);
+        if (_webHost == null) {
+            _logger.error("Missing " + Constants._WEBHOST + " in " + propFile_);
+            System.exit(-1);
+        }
 
     }
     
@@ -243,12 +256,12 @@ public class NotifyPassword {
 		_logger.debug("NotifyPassword.sendEmail adminEmailAddress [" + adminEmailAddress + "]");
         open();
 		dao = new PasswordNotifyDAO(_conn);
-//		String emailSubject = EmailHelper.handleDaysToken(dao.getEmailSubject(), daysLeft);
 		String emailSubject = dao.getEmailSubject();
 		_logger.debug("NotifyPassword.sendEmail emailSubject [" + emailSubject + "]");
         open();
 		dao = new PasswordNotifyDAO(_conn);
 		String emailBody = EmailHelper.handleExpiryDateToken(dao.getEmailBody(), user.getExpiryDate());
+		emailBody = EmailHelper.handleHostToken(emailBody, _webHost);		//CADSRPASSW-63
 		_logger.debug("NotifyPassword.sendEmail emailBody [" + emailBody + "]");
 		emailBody = EmailHelper.handleUserIDToken(emailBody, user);		//CADSRPASSW-62
 		_logger.info("sendEmail:user id = [" + user.getUsername() + "] body processed = [" + emailBody + "]");

@@ -78,6 +78,11 @@ public class Constants {
      */
     public static final String _DSPSWD = "DSpassword";
     
+    /**
+     * The password for the default datasource access account.
+     */
+    public static final String _WEBHOST = "DSwebHost";
+
     //=== notifications status flags
     public static final int DEACTIVATED_VALUE = 0;
     public static final String SUCCESS = "s";
@@ -96,6 +101,7 @@ public class Constants {
     public static final String EMAIL_INTRO = "EMAIL.INTRO";
     public static final String EMAIL_SUBJECT = "EMAIL.SUBJECT";
     public static final String EMAIL_DAYS_TOKEN = "${daysLeft}";
+    public static final String EMAIL_WEB_HOST_TOKEN = "${webHost}";
     public static final String EMAIL_EXPIRY_DATE_TOKEN = "${expiryDate}";
     public static final String EMAIL_USER_ID_TOKEN = "${userid}";	//CADSRPASSW-62
 }
