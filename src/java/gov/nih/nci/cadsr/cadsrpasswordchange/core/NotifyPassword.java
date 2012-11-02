@@ -440,7 +440,7 @@ public class NotifyPassword {
 
 		_logger.debug("isNotificationValid exiting with ret " + ret + " ...");
 		
-		return ret;
+		return true;
 	}
 	
 	private boolean isOverADaySinceLastSent(User user) throws Exception {
