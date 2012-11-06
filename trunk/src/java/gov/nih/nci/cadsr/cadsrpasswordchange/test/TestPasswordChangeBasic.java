@@ -97,14 +97,54 @@ public class TestPasswordChangeBasic {
 	}
 
 	@Test
-	public void testLowercaseChangePassword() {
-		String username = "test111";
-		String oldPassword = "test123";
+	public void testWithoutLettersChangePassword() {
+		String username = "test111";	//should not matter what it is
+		String oldPassword = "test123";	//should not matter what it is
+		String newPassword = "123456";
+		String newPassword2 = "123456";
+		String sessionUsername = username;
+		String httpRequestNewPassword2 = newPassword2;
+		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);
+		if(errorMessage != null) System.out.println("No Letters Error: " + errorMessage);
+		assertNotNull(errorMessage, errorMessage);
+	}
+
+	@Test
+	public void testWithoutNumeralsChangePassword() {
+		String username = "test111";	//should not matter what it is
+		String oldPassword = "test123";	//should not matter what it is
+		String newPassword = "testing";
+		String newPassword2 = "testing";
+		String sessionUsername = username;
+		String httpRequestNewPassword2 = newPassword2;
+		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);
+		if(errorMessage != null) System.out.println("No Numerals Error: " + errorMessage);
+		assertNotNull(errorMessage, errorMessage);
+	}
+	
+	@Test
+	public void testWithoutSpecialCharactersChangePassword() {
+		String username = "test111";	//should not matter what it is
+		String oldPassword = "test123";	//should not matter what it is
 		String newPassword = "test456";
 		String newPassword2 = "test456";
 		String sessionUsername = username;
-		String httpRequestNewPassword2 = newPassword2 + "yy";	//bad
+		String httpRequestNewPassword2 = newPassword2;
 		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);
+		if(errorMessage != null) System.out.println("No Special Characters Error: " + errorMessage);
 		assertNotNull(errorMessage, errorMessage);
+	}
+
+	@Test
+	public void testGoodChangePassword() {
+		String username = "test111";	//should not matter what it is
+		String oldPassword = "test123";	//should not matter what it is
+		String newPassword = "te$t456";
+		String newPassword2 = "te$t456";
+		String sessionUsername = username;
+		String httpRequestNewPassword2 = newPassword2;
+		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);
+		if(errorMessage != null) System.out.println("Good Characters Error: " + errorMessage);
+		assertNull(errorMessage, errorMessage);
 	}
 }
