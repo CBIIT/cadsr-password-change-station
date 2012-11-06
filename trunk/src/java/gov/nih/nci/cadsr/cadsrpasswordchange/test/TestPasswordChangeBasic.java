@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class TestPasswordChangeBasic {
 	
-	@Test
+	//@Test
 	public void testBadUserNameInLogin() {
 		String username = "@hongj";			//bad
 		String password = "test123";
@@ -16,7 +16,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testBadPasswordInLogin() {
 		String username = "chongj";
 		String password = "@7esT123";		//bad
@@ -24,7 +24,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testBadUserIdInChangePassword() {
 		String username = "@hongj";			//bad
 		String oldPassword = "test123";
@@ -36,7 +36,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testBadOldPasswordInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "@7esT123";		//bad
@@ -48,7 +48,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testBadNewPasswordInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
@@ -60,7 +60,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testNewPasswordNotMatchingInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
@@ -72,7 +72,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testLoginIdNotMatchingInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
@@ -84,12 +84,24 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	@Test
+	//@Test
 	public void testNewRequestedPasswordNotMatchingInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
 		String newPassword = "test456";		
 		String newPassword2 = "test456";		
+		String sessionUsername = username;
+		String httpRequestNewPassword2 = newPassword2 + "yy";	//bad
+		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);
+		assertNotNull(errorMessage, errorMessage);
+	}
+
+	@Test
+	public void testLowercaseChangePassword() {
+		String username = "test111";
+		String oldPassword = "test123";
+		String newPassword = "test456";
+		String newPassword2 = "test456";
 		String sessionUsername = username;
 		String httpRequestNewPassword2 = newPassword2 + "yy";	//bad
 		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);

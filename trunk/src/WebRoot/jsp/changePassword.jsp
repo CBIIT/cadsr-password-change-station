@@ -81,11 +81,11 @@
 <h3>Password Restrictions:</h3>
 			<td class=\face\ style=\WIDTH: 617px\ colspan=\2\> 
     <ul> 
-Your new password may not re-use your last 24 passwords.<br> 
-You may not change your password more than once within 24 hours.<br> 
-Your new password must be at least 8 and no more than 30 characters long.<br> 
-Your new password must start with a letter.<br> 
-Your new password may only use characters from the following categories and must include characters from at least three of these categories: 
+Your new password may not re-use your last 24 passwords.<br>
+You may not change your password more than once within 24 hours.<br>
+Your new password must be at least 8 and no more than 30 characters long.<br>
+Your new password must start with a letter.<br>
+Your new password may only use characters from the following categories and must include characters from the following three categories:
 <br><br>
 <div style="margin-left:40px;">
 <li>Uppercase Letters (A-Z)</li> 
