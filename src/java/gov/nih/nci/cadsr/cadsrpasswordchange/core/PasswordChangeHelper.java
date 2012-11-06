@@ -50,10 +50,44 @@ public class PasswordChangeHelper {
 		if (!newPassword.equals(httpRequestNewPassword2)) {
 			retVal = Messages.getString("PasswordChangeHelper.8"); //$NON-NLS-1$
 		}
-	
+
+		//=== begin - Password restriction validation (CADSRPASSW-5)
+		if(!isValidBasedOnPasswordRestriction(newPassword)) {
+			retVal = Messages.getString("PasswordChangeHelper.5");
+		} else
+		if(!isValidBasedOnPasswordRestriction(newPassword2)) {
+			retVal = Messages.getString("PasswordChangeHelper.6");
+		}
+		//=== end - Password restriction validation (CADSRPASSW-5)
+		
 		return retVal;
 	}
 	
+	private static boolean isValidBasedOnPasswordRestriction(String text) {
+		boolean retVal = false;
+		char ch;
+		boolean cond1 = false, cond2 = false, cond3 = false;
+		for (int i=0; i< text.length(); i++) {
+			ch = text.charAt(i);
+			if(Character.isLetter(ch)) {
+				cond1 = true;
+			} else
+			if(Character.isDigit(ch)) {
+				cond2 = true;
+			}
+			else
+			if(ch == '_' || ch == '#' || ch == '$') {
+				cond3 = true;
+			}
+		}
+		if(cond1 && cond2 && cond3) {
+			retVal = true;
+		}
+
+		return retVal; 
+	}
+
+	/*
 	public static String validateChangePassword2(String username, String newPassword, String newPassword2) {
 		String retVal = null;
 
@@ -76,7 +110,8 @@ public class PasswordChangeHelper {
 
 		return retVal;
 	}
-
+	*/
+	
 	/*
 	 * Method to validate that the user setup all the questions and answers properly.
 	 */
