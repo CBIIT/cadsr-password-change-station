@@ -59,6 +59,8 @@
 		<a name="skip" id="skip"></a>
 			
 		<table>
+                <td colspan="2" valign="middle"><%=Constants.PWD_RESTRICTIONS%></td>
+<!--		
 <h3>Password Restrictions:</h3>
 			<td class=\face\ style=\WIDTH: 617px\ colspan=\2\> 
     <ul> 
@@ -77,7 +79,7 @@ Your new password may only use characters from the following categories and must
     </ul><tt> 
     </tt></td> 
 					</table>
-								
+-->
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/resetPassword" method="POST" focus="userid" title="Use this screen to reset your password">
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
