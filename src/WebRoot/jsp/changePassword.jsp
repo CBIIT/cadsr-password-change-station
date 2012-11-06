@@ -75,9 +75,8 @@
 		<table><tr><td><p class=\"ttl18\"><h3 style="margin-left:300px;"><%=Constants.CHANGE_PASSWORD_TITLE %></h3></p></td></tr></table>
 					
 					<table>
-					<!--
 						<td><%=Constants.PWD_RESTRICTIONS%></td>
-						-->
+<!--
 <h3>Password Restrictions:</h3>
 			<td class=\face\ style=\WIDTH: 617px\ colspan=\2\> 
     <ul> 
@@ -96,6 +95,7 @@ Your new password may only use characters from the following categories and must
     </ul><tt> 
     </tt></td> 
 					</table>
+-->					
 				<form name="PasswordChangeForm"
 					action="../../cadsrpasswordchange/changePassword" method="POST"
 					focus="userid" title="Use this screen to change your password">
