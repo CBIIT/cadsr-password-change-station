@@ -53,10 +53,9 @@ public class Constants {
 "You may not change your password more than once within 24 hours.<br>" +
 "Your new password must be at least 8 and no more than 30 characters long.<br>" +
 "Your new password must start with a letter.<br>" +
-"Your new password may only use characters from the following categories and must include characters from at least three of these categories:" +
+"Your new password may only use characters from the following categories and must include characters from the following three categories:" +
 "<br><br>" +
-"            	<li>Uppercase Letters (A-Z)</li>" +
-"            	<li>Lowercase Letters (a-z)</li>" +
+"            	<li>Letters</li>" +
 "            	<li>Numerals (0-9)</li>" +
 "            	<li>Special Characters ( _  #  $)" + 
 "    </ul><tt>" +
