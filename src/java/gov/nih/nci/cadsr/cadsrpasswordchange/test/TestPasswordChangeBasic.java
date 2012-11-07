@@ -6,9 +6,15 @@ import gov.nih.nci.cadsr.cadsrpasswordchange.core.PasswordChangeHelper;
 
 import org.junit.Test;
 
+/*
+ * To run this, set up the folllowing -
+ * 1. Build the app
+ * 2. Add src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core (need messages.properties) into your classpath
+ * 
+ */
 public class TestPasswordChangeBasic {
 	
-	//@Test
+	@Test
 	public void testBadUserNameInLogin() {
 		String username = "@hongj";			//bad
 		String password = "test123";
@@ -16,7 +22,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadPasswordInLogin() {
 		String username = "chongj";
 		String password = "@7esT123";		//bad
@@ -24,7 +30,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadUserIdInChangePassword() {
 		String username = "@hongj";			//bad
 		String oldPassword = "test123";
@@ -36,7 +42,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadOldPasswordInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "@7esT123";		//bad
@@ -48,7 +54,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testBadNewPasswordInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
@@ -60,7 +66,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testNewPasswordNotMatchingInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
@@ -72,7 +78,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testLoginIdNotMatchingInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
@@ -84,7 +90,7 @@ public class TestPasswordChangeBasic {
 		assertNotNull(errorMessage, errorMessage);
 	}
 
-	//@Test
+	@Test
 	public void testNewRequestedPasswordNotMatchingInChangePassword() {
 		String username = "chongj";			
 		String oldPassword = "test123";		
