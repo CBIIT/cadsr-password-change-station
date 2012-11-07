@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="src/lib/activation.jar"/>
 	<classpathentry kind="lib" path="src/lib/mail.jar"/>
 	<classpathentry kind="lib" path="src/lib/joda-time-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-server-standalone-2.25.0.jar"/>
 	<classpathentry kind="output" path="src/WebRoot/WEB-INF/classes"/>
 </classpath>
