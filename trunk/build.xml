@@ -187,6 +187,11 @@
 		<copy tofile="src/WebRoot/WEB-INF/lib/joda-time-1.6.2.jar" filtering="false" verbose="true">
 		  <fileset file="src/lib/joda-time-1.6.2.jar" />
 		</copy>
+<!--
+		<copy tofile="src/WebRoot/WEB-INF/lib/selenium-server-standalone-2.25.0.jar" filtering="false" verbose="true">
+		  <fileset file="src/lib/selenium-server-standalone-2.25.0.jar" />
+		</copy>
+-->
 
 		<war basedir="src/WebRoot/" warfile="${dist.dir}/${project.war.file}" webxml="src/WebRoot/WEB-INF/web.xml" > 
 		</war>
