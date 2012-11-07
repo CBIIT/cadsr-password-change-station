@@ -641,7 +641,7 @@ create profile "cadsr_user_test11" limit
  password_lock_time 60/1440
  password_verify_function password_verify_casdr_user
 
-update sbrext.tool_options_view_ext set value = 'Your password is about to expire in ${daysLeft} days. Please login to Password Change Station or call NCI Helpdesk to change your password.'
+update sbrext.tool_options_view_ext set value = 'Your password of the account ${userid} is about to expire on ${expiryDate}.  To change your password, you can either login to the Password Change Station by visiting https://${webHost}, contact the NCI Helpdesk at ncicb@pop.nci.nih.gov or toll free phone number: 888-478-4423.'
 where Tool_name = 'PasswordChangeStation' and Property = 'EMAIL.INTRO'
 
 update sbrext.tool_options_view_ext set value = 'caDSR Password Expiration Notice (in ${daysLeft} day(s))'
