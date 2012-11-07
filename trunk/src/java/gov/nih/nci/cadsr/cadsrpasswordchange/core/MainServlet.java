@@ -861,13 +861,17 @@ public class MainServlet extends HttpServlet {
 			//end CADSRPASSW-55 - unlock manually as the "password_lock_time 60/1440" does not work
 			else
 			if(retVal != null && retVal.indexOf(Constants.LOCKED_STATUS) > -1) {
-				logger.info("Less than 1 hour, password lock stays (" + period.getMinutes() + " minutes has passed).");
+				String tmp = "NOT ABLE TO CALCULATE PERIOD DUE to NULL LOCKED_DATE";
+				if(period != null) {
+					tmp = String.valueOf(period.getMinutes()) + " minutes has passed).";
+				}
+				logger.info("Less than 1 hour, password lock stays (" + tmp + ")");		//CADSRPASSW-87
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 				logger.debug("Redirecting to '" + redictedUrl + "'");
 				resp.sendRedirect(redictedUrl);
 			}
 		}
-		
+
 		logger.debug("doValidateAccountStatus: exiting with retVal [" + retVal + "] ...");
 		
 		return retVal;
