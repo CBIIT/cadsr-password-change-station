@@ -153,4 +153,18 @@ public class TestPasswordChangeBasic {
 		if(errorMessage != null) System.out.println("Good Characters Error: " + errorMessage);
 		assertNull(errorMessage, errorMessage);
 	}
+	
+	@Test
+	public void testUnmatchedRepeatedpasswordChangePassword() {
+		String username = "test111";	//should not matter what it is
+		String oldPassword = "test123";	//should not matter what it is
+		String newPassword = "Pw4_0017";
+		String newPassword2 = "abcde";	//CADSRPASSW-88
+		String sessionUsername = username;
+		String httpRequestNewPassword2 = newPassword2;
+		String errorMessage = PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, sessionUsername, httpRequestNewPassword2);
+		if(errorMessage != null) System.out.println("Unmatched Repeated Password Error: " + errorMessage);
+		assertNotNull(errorMessage, errorMessage);
+	}
+	
 }
