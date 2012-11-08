@@ -56,7 +56,7 @@ public class Constants {
 "Your new password may only use characters from the following categories and must include characters from the following three categories:" +
 "<br><br>" +
 "<div style=\"margin-left:40px;\">" +
-"<li>Lowercase Letters (a-z)</li>" +
+"<li>Letters</li>" +
 "<li>Numerals (0-9)</li>" +
 "<li>Special Characters ( _  #  $)" +
 "</li></div>" +
