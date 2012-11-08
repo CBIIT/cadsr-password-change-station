@@ -1141,11 +1141,13 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 
-//			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
-//				resp.sendRedirect("./jsp/resetPassword.jsp");
-//				return;
-//			}					
+			//begin - CADSRPASSW-88
+			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
+				resp.sendRedirect("./jsp/resetPassword.jsp");
+				return;
+			}					
+			//end - CADSRPASSW-88
 
 			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid").toUpperCase());
@@ -1315,11 +1317,13 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 
-//			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
-//				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
-//				resp.sendRedirect("./jsp/changePassword.jsp");
-//				return;
-//			}					
+			//begin - CADSRPASSW-88
+			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
+				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
+				resp.sendRedirect("./jsp/changePassword.jsp");
+				return;
+			}					
+			//end - CADSRPASSW-88
 
 			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid").toUpperCase());
