@@ -777,7 +777,7 @@ public class MainServlet extends HttpServlet {
 			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 			try {
 				if(!userDAO.checkValidUser(username)) {
-					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);	//???
 					return;
 				}
 			} catch (Exception e) {
@@ -868,7 +868,7 @@ public class MainServlet extends HttpServlet {
 				logger.info("Less than 1 hour, password lock stays (" + tmp + ")");		//CADSRPASSW-87
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 				logger.debug("Redirecting to '" + redictedUrl + "'");
-				resp.sendRedirect(redictedUrl);
+				resp.sendRedirect(redictedUrl);		//???
 			}
 		}
 
