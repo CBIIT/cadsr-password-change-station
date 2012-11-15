@@ -42,6 +42,7 @@ public class Constants {
 	public static final String CHANGE_TOKEN = "change";	
 	public static final String FORGOT_TOKEN = "forgot";	
 	public static final String UNLOCK_TOKEN = "unlock";	
+	public static final String VALIDATE_TOKEN = "pwd_change";
 	public static final String LOCKED_STATUS = "LOCKED";
 	public static final String EXPIRED_STATUS = "EXPIRED";
 	public static final String OPEN_STATUS = "OPEN";

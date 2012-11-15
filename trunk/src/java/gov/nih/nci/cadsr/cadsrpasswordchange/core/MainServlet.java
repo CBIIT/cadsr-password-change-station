@@ -107,6 +107,7 @@ public class MainServlet extends HttpServlet {
 				if(req.getParameter("cancel") != null) {
 					resp.sendRedirect(Constants.LANDING_URL);
 				} else {
+					req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.VALIDATE_TOKEN);	//CADSRPASSW-90 //CADSRPASSW-91
 					doValidateUserQuestionsForPasswordChange(req, resp);	//CADSRPASSW-76
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/changePassword")) {
@@ -777,8 +778,7 @@ public class MainServlet extends HttpServlet {
 			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 			try {
 				if(!userDAO.checkValidUser(username)) {
-//					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
-					req.getRequestDispatcher("./jsp/requestUserIdForChangePassword.jsp").forward(req, resp);	//CADSRPASSW-91
+					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
 					return;
 				}
 			} catch (Exception e) {
@@ -869,8 +869,7 @@ public class MainServlet extends HttpServlet {
 				logger.info("Less than 1 hour, password lock stays (" + tmp + ")");		//CADSRPASSW-87
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 				logger.debug("Redirecting to '" + redictedUrl + "'");
-//				resp.sendRedirect(redictedUrl);
-				req.getRequestDispatcher(redictedUrl).forward(req, resp);	//CADSRPASSW-90
+				resp.sendRedirect(redictedUrl);
 			}
 		}
 
