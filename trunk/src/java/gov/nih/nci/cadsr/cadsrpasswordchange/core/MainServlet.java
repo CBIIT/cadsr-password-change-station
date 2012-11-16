@@ -39,20 +39,12 @@ public class MainServlet extends HttpServlet {
     private static void connect() {
 		boolean isConnectionException = true;  // use to modify returned messages when exceptions are system issues instead of password change issues  
     	
-		Result result = new Result(ResultCode.UNKNOWN_ERROR);  // (should get replaced)
         try {
-//    		if(connection == null) {
-            	datasource = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-            	dao = new PasswordChangeDAO(datasource);
-            	logger.info("Connected to database");
-//    		}
-        	isConnectionException = false;
+        	datasource = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
+        	dao = new PasswordChangeDAO(datasource);
+        	logger.info("Connected to database");
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (isConnectionException)
-				result = new Result(ResultCode.UNKNOWN_ERROR);  // error not related to user, provide a generic error 
-			else
-				result = ConnectionUtil.decode(e);			
 		}
 	}
 
@@ -372,7 +364,7 @@ public class MainServlet extends HttpServlet {
 	*/
 	
 	protected void doLogin(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws ServletException, Exception {
 		init();
 		
 		logger.info("doLogin");
@@ -442,7 +434,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doSaveQuestions(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws ServletException, Exception {
 
 		logger.info("doSaveQuestions");
 		
@@ -633,7 +625,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doRequestUserQuestions(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws ServletException, Exception {
 
 		logger.info("doRequestUserQuestions");
 		
@@ -732,7 +724,7 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-	protected void doValidateUserQuestionsForPasswordChange(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doValidateUserQuestionsForPasswordChange(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
 		logger.info("doValidateUserQuestions");
 		
@@ -1070,7 +1062,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doChangePassword2(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws Exception {
 
 		logger.info("doChangePassword2");
 		
@@ -1195,7 +1187,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doChangePassword(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+	throws Exception {
 
 		logger.info("doChangePassword");
 		
