@@ -1,0 +1,120 @@
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <description>caDSR Password Change Station</description>
+  <servlet>
+     <servlet-name>
+         MainServlet
+     </servlet-name>
+     <servlet-class>
+         gov.nih.nci.cadsr.cadsrpasswordchange.core.MainServlet
+     </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/changePassword</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/saveQuestions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptUserQuestions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptQuestion1</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptQuestion2</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/promptQuestion3</url-pattern>
+  </servlet-mapping>
+<!--
+  -->
+   <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/validateQuestion1</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/validateQuestion2</url-pattern>
+  </servlet-mapping>
+      <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/validateQuestion3</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/resetPassword</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>     
+     <servlet-name>MainServlet</servlet-name>
+     <url-pattern>/setupPassword</url-pattern>
+  </servlet-mapping>
+
+
+  <session-config>
+    <session-timeout>45</session-timeout>
+  </session-config>
+
+  <welcome-file-list>
+    <welcome-file>jsp/login.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- Application Tag Library Descriptor -->
+<!--
+  <taglib>
+    <taglib-uri>/tags</taglib-uri>
+    <taglib-location>/WEB-INF/tld/cadsrpasswordchange.tld</taglib-location>
+  </taglib>
+-->
+
+  	<!--  CSRF library configuration  -->
+	<context-param>
+		<param-name>Owasp.CsrfGuard.Config</param-name>
+		<param-value>WEB-INF/Owasp.CsrfGuard.properties</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>Owasp.CsrfGuard.Config.Print</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.owasp.csrfguard.CsrfGuardListener</listener-class>
+	</listener>
+
+	<listener>
+	  	<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+	</listener>
+	
+	<filter>
+		<filter-name>CSRFGuard</filter-name>
+		<filter-class>org.owasp.csrfguard.CsrfGuardFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>CSRFGuard</filter-name> 
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+</web-app>
+
+

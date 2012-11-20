@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   This is a shared datasource used by other caDSR applications.
+   Consider excluding from automated deployment and only deploying manually. 
+ -->
+<datasources>
+    <local-tx-datasource>
+        <jndi-name>jdbc/caDSR</jndi-name>
+        <connection-url>jdbc:oracle:thin:@137.187.181.4:1551:DSRDEV</connection-url>
+        <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+        <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.OracleExceptionSorter</exception-sorter-class-name>
+        <check-valid-connection-sql>select 1 from dual</check-valid-connection-sql>
+        <blocking-timeout-millis>10000</blocking-timeout-millis>
+        <track-statements>true</track-statements>
+        <idle-timeout-minutes>1</idle-timeout-minutes>
+        <max-pool-size>85</max-pool-size>
+        <min-pool-size>0</min-pool-size>
+        <application-managed-security/>
+    </local-tx-datasource>
+</datasources>
