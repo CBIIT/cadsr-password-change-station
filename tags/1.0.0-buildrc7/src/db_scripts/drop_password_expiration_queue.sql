@@ -1,4 +1,0 @@
---run as sbrext
-
-DROP TABLE SBREXT.PASSWORD_NOTIFICATION
-/
