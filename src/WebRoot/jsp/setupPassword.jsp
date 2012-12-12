@@ -4,6 +4,7 @@
 <%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.Constants"%>
 <%@ page import="java.util.*" %>
 <%@ page import="gov.nih.nci.cadsr.cadsrpasswordchange.core.QuestionHelper"%>
+<%@ page import="org.apache.commons.lang3.StringEscapeUtils"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     
@@ -117,7 +118,7 @@ if(request.getSession() != null) {
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer1" class=bstd>Answer 1:</p></td>
-                <td valign="middle"><input id="Answer1" type="text" size="50" maxlength="500" name="answer1" value="${param.answer1}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Answer1" type="text" size="50" maxlength="500" name="answer1" value='<%=StringEscapeUtils.escapeHtml4(request.getParameter("answer1"))%>' style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Question2" class=bstd>Question 2:</p></td>
@@ -154,7 +155,7 @@ if(request.getSession() != null) {
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer2" class=bstd>Answer 2:</p></td>
-                <td valign="middle"><input id="Answer2" type="text" size="50" maxlength="500" name="answer2" value="${param.answer2}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Answer2" type="text" size="50" maxlength="500" name="answer2" value='<%=StringEscapeUtils.escapeHtml4(request.getParameter("answer2"))%>' style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Question3" class=bstd>Question 3:</p></td>
@@ -191,7 +192,7 @@ if(request.getSession() != null) {
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="Answer3" class=bstd>Answer 3:</p></td>
-                <td valign="middle"><input id="Answer3" type="text" size="50" maxlength="500" name="answer3" value="${param.answer3}" style="width: 3.75in" class="std" autocomplete="off"></td>
+                <td valign="middle"><input id="Answer3" type="text" size="50" maxlength="500" name="answer3" value='<%=StringEscapeUtils.escapeHtml4(request.getParameter("answer3"))%>' style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide questions and anwers that you can remember. Your questions can not be repeated (must be different).</p></td>
             </tr><tr>
