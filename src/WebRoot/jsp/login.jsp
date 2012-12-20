@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-		<!-- Build 1.0 RC7c1 -->
+		<!-- Build 1.0 RC7d -->
         <title><%=Constants.RESET_TITLE%></title>
 
 		<div style="position:absolute;">
@@ -48,7 +48,7 @@
             <%
             	} else {
             %>
-				<strong align="center"><%=errorMessage%></strong>
+					<strong class="accessible-error-text" align="center"><%=errorMessage%></strong>
             <%
             	}
             %>

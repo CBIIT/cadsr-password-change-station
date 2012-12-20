@@ -117,7 +117,7 @@ Your new password may only use characters from the following categories and must
 					<%
 						} else {
 					%>
-					<strong align="center"><%=errorMessage%></strong>
+					<strong class="accessible-error-text" align="center"><%=errorMessage%></strong>
 					<%
 						}
 					%>

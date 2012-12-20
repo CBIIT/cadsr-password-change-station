@@ -80,7 +80,7 @@
         				<p class=std><%=userMessage%></p>
         			<%} %>
             <%} else { %>
-					<strong align="center"><%=errorMessage%></strong>
+					<strong class="accessible-error-text" align="center"><%=errorMessage%></strong>
             <%} %>          
         	
         	<table summary="Login credentials and new password to change password.">

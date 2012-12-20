@@ -80,7 +80,7 @@
             <%
             	} else {
             %>
-					<strong align="center"><%=errorMessage%></strong>
+					<strong class="accessible-error-text" align="center"><%=errorMessage%></strong>
             <%
             	}
             %>          
