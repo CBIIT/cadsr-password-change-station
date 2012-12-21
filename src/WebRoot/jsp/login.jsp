@@ -55,19 +55,6 @@
 
         	<table summary="Login credentials for the caDSR Password Change Station.">
             	<tr>
-            	<!--
-                	<td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>
-                	<td valign="middle"><input id="LoginID" type="text" name="userid" value="" style="width: 3.75in" class="std"></td>
-            	</tr><tr>
-            	<tr>
-                	<td valign="middle"><label for="Password" class=bstd>Password:</p></td>
-                	<td valign="middle"><input id="Password" type="password" name="pswd" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
-            	</tr><tr>
-                	<td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please enter a Login ID and Password.</p></td>
-            	</tr>
-                	<td valign="bottom"><input type="submit" name="logon" value="Login" style="text-align: center" class="but2"></td>
-				-->
-            	<tr>
 <td><img id="img1" accesskey="C" tabindex="1" onclick="javascript:ForgotPasswordSubmit();" src="/cadsrpasswordchange/images/change-enroll-glow100x_purple.gif" alt="Setup Security Questions" style="border-width:0px;">&nbsp;&nbsp;</td>
 <td style="width:50px;"></td>
 <td><img id="img1" accesskey="C" tabindex="2" onclick="javascript:ForgotPasswordSubmit();" src="/cadsrpasswordchange/images/changepw-100x_purple.gif" alt="Change Password" style="border-width:0px;">&nbsp;&nbsp;</td>
