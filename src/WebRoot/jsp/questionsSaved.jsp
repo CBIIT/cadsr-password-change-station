@@ -25,7 +25,7 @@
 
 		<center> Questions and answers are saved successfully. </center>
  
-        <p><a href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
+        <p><a accesskey="b" href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
 
 	  	<cadsrpasswordchangetags:footer />
 

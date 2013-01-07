@@ -84,12 +84,9 @@
             </tr><tr>
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your login credentials and your desired new password (repeated to avoid typos).</p></td>
             </tr><tr>
-                <td valign="bottom"><input type="submit" name="changePassword" value="Change" style="text-align: center" class="but2"></td>
+                <td valign="bottom"><input accesskey="h" type="submit" name="changePassword" value="Change" style="text-align: center" class="but2"></td>
             </tr><tr>
                 <td colspan="2" valign="middle"><%=Constants.PWD_RESTRICTIONS%></td>
-                <!--
-                <td colspan="2" valign="middle"><a target="_blank" href="https://wiki.nci.nih.gov/x/3AJQB">Please see the NCI Wiki for information on caDSR passwords including restrictions on choice of passwords</a></td>
-				-->
             </tr>
         	</table>
     	</form>

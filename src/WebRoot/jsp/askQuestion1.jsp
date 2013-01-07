@@ -60,9 +60,6 @@
 		<a name="skip" id="skip"></a>
 			
 		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/validateQuestion1" method="POST" focus="userid" title="Use this screen to validate security questions">
-<!--			
-		<form name="PasswordChangeForm" action="../../cadsrpasswordchange/promptQuestion1" method="POST" focus="userid">
--->
 		<input type="hidden" name="<csrf:token-name/>" value="<csrf:token-value/>"/>
 
             <%
@@ -109,40 +106,14 @@
             	<input id="answer" type="hidden" name="answerIndex" value="answer1">
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer your security question 1.</p></td>
             </tr><tr>
-                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2">
-                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
+                <td valign="bottom"><input accesskey="n" type="submit" name="changePassword" value="Next" style="text-align: center" class="but2">
+                <input accesskey="c" type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
             </tr><tr>
             </tr>
         	</table>
-<!--        	
-        	<table summary="Login credentials and new password to change password.">
-            <tr>
-                <td valign="middle"><label for="question1" class=bstd>Question:</p></td>                
-                <td valign="top">
-                <select name="option" onchange="handleOption(this);">
-				  <option value="<%=Constants.Q1%>" selected="selected"><%=session.getAttribute(Constants.Q1)%></option>
-				  <option value="<%=Constants.Q2%>"><%=session.getAttribute(Constants.Q2)%></option>
-				  <option value="<%=Constants.Q3%>"><%=session.getAttribute(Constants.Q3)%></option>
-				</select>
-
-                <input id="answer" type="hidden" name="answer" value="<%=Constants.A1%>">
-            </tr><tr>
-            <tr>
-                <td valign="middle"><label for="answer1" class=bstd>Answer:</p></td>
-                <td valign="middle"><input id="answer1" type="text" name="answer1" value="" style="width: 3.75in" class="std" autocomplete="off"></td>
-            </tr><tr>
-                <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please select and answer one security question to be allowed to change your password.</p></td>
-            </tr><tr>
-                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2"></td>
-            </tr><tr>
-            </tr>
-        	</table>
--->        	
+      	
     	</form>
-<!--
-        <p><a href="<%=Constants.LANDING_URL%>">Back to password change logon</a>
--->
-             
+
 		<cadsrpasswordchangetags:footer />
 	
     	</td></tr></table>

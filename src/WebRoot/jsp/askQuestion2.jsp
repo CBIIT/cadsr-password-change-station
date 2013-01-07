@@ -85,8 +85,8 @@
             	<input id="answer" type="hidden" name="answerIndex" value="answer2">
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please answer your security question 2.</p></td>
             </tr><tr>
-                <td valign="bottom"><input type="submit" name="changePassword" value="Next" style="text-align: center" class="but2">
-                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
+                <td valign="bottom"><input accesskey="n" type="submit" name="changePassword" value="Next" style="text-align: center" class="but2">
+                <input accesskey="c" type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2"></td>
             </tr><tr>
             </tr>
         	</table>

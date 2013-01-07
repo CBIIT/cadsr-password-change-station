@@ -26,7 +26,7 @@
 		<center> Password change successful. You have been logged out. </center>
 <p>
 <form name="form-1" id="form-1" action="<%=Constants.LANDING_URL%>" method="post">
-			<button id="field-2" name="field-2" value="field-2-value" type="submit">Done</button>
+			<button accesskey="d" id="field-2" name="field-2" value="field-2-value" type="submit">Done</button>
 </form>
 	  	<cadsrpasswordchangetags:footer />
 

@@ -13,6 +13,7 @@
         <title>
             <%=Constants.SETUP_TITLE %> 
         </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <div style="position:absolute;">	<a href="#skip">
 	<img src="/cadsrpasswordchange/images/skipnav.gif" border="0" height="1" width="1" alt="Skip Navigation" title="Skip Navigation" />
 </a>
@@ -198,8 +199,8 @@ if(request.getSession() != null) {
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide questions and anwers that you can remember. Your questions can not be repeated (must be different).</p></td>
             </tr><tr>
                 <td valign="bottom">
-                <input type="submit" name="changePassword" value="Save" style="text-align: center" class="but2">
-                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2">
+                <input accesskey="s" type="submit" name="changePassword" value="Save" style="text-align: center" class="but2">
+                <input accesskey="c" type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2">
                 </td>
             </tr>
         	</table>

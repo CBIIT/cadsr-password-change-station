@@ -120,8 +120,8 @@ Your new password may only use characters from the following categories and must
                 <td colspan="2" valign="middle"><p class="bstd" style="text-align: center; margin-top: 8pt; margin-bottom: 8pt" id="msg">Please provide your desired new password (repeated to avoid typos).</p></td>
             </tr><tr>
                 <td valign="bottom">
-                <input type="submit" name="changePassword" value="Change" style="text-align: center" class="but2">
-                <input type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2">
+                <input accesskey="h" type="submit" name="changePassword" value="Change" style="text-align: center" class="but2">
+                <input accesskey="c" type="submit" name="cancel" value="Cancel" style="text-align: center" class="but2">
                 </td>
             </tr><tr>
             <!--

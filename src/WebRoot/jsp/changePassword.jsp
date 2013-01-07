@@ -166,9 +166,9 @@ Your new password may only use characters from the following categories and must
 							id="msg"></p></td>
 				</tr>
 				<tr>
-					<td valign="bottom"><input type="submit" name="changePassword"
+					<td valign="bottom"><input accesskey="h" type="submit" name="changePassword"
 						value="Change" style="text-align: center" class="but2"> <input
-						type="submit" name="cancel" value="Cancel"
+						accesskey="c" type="submit" name="cancel" value="Cancel"
 						style="text-align: center" class="but2">
 				</tr>
 				<tr>
