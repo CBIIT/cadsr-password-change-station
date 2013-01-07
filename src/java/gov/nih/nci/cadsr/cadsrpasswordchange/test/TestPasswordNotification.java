@@ -381,7 +381,7 @@ public class TestPasswordNotification {
 		return ms.send();
 	}
 
-//	@Test
+	@Test
 	public void testEmailSending() throws Exception {
 		int daysLeft = 7;
 		User u = getExpiredUser("user10", "james.tan@nih.gov", daysLeft, 61);
@@ -561,7 +561,7 @@ public class TestPasswordNotification {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testNoonTime() {
         LocalDateTime time = new LocalDateTime().withDayOfWeek(DateTimeConstants.MONDAY).withHourOfDay(12);
         DateTimeUtils.setCurrentMillisFixed(time.toDateTime().toInstant().getMillis());
