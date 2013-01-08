@@ -1,4 +1,4 @@
-@drop_cadsrpasswordchange_user.sql
+-- @drop_cadsrpasswordchange_user.sql
 
 @create_cadsrpasswordchange_user.sql
 
