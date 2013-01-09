@@ -1,4 +1,4 @@
-@drop_security_questions_tables.sql
+--@drop_security_questions_tables.sql
 
 @create_security_questions_tables.sql
 
@@ -6,7 +6,7 @@
 
 @insert-web-links.sql
 
-@drop_password_expiration_queue.sql
+--@drop_password_expiration_queue.sql
 
 @create_password_expiration_queue.sql
 
