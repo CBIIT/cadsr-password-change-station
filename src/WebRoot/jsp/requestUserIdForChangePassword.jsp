@@ -6,6 +6,7 @@
 <html>
     <head>
         <title><%=Constants.CHANGE_PASSWORD_TITLE%></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         
 		<div style="position:absolute;">
  			<a href="#skip">
