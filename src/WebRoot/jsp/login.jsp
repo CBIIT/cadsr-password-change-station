@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-		<!-- Build 1.0 RC7e1 -->
+		<!-- Build 1.0 RC7 r1 -->
         <title><%=Constants.RESET_TITLE%></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
