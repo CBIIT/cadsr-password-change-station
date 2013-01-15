@@ -1239,13 +1239,25 @@ public class MainServlet extends HttpServlet {
 				connect();
 				PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 				try {
-					PasswordChangeDAO loginDAO = new PasswordChangeDAO(datasource);
-					UserBean userBean = loginDAO.checkValidUser(username, oldPassword);	//CADSRPASSW-97
-//					if(!userDAO.checkValidUser(username)) {
-					if (!userBean.isLoggedIn()) {	
-						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
-						resp.sendRedirect("./jsp/changePassword.jsp");
-						return;
+					try {
+						if(!userDAO.checkValidUser(username)) {	//incorrect user id
+							session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
+							resp.sendRedirect("./jsp/changePassword.jsp");
+							return;
+						}
+						//begin - CADSRPASSW-97
+						if(!ConnectionUtil.isExpiredAccount(username, oldPassword)) {	//meaning incorrect password
+							session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
+							//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
+							resp.sendRedirect("./jsp/changePassword.jsp");
+							return;
+						}
+						//end - CADSRPASSW-97
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error(e);
+					} finally {
+						disconnect();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
