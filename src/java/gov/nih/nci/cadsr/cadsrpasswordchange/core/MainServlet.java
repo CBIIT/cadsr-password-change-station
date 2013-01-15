@@ -1243,7 +1243,7 @@ public class MainServlet extends HttpServlet {
 					UserBean userBean = loginDAO.checkValidUser(username, oldPassword);	//CADSRPASSW-97
 //					if(!userDAO.checkValidUser(username)) {
 					if (!userBean.isLoggedIn()) {	
-						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.104"));
+						session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 						resp.sendRedirect("./jsp/changePassword.jsp");
 						return;
 					}
