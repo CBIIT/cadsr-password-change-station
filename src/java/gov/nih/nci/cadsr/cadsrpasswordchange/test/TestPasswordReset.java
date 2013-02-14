@@ -563,6 +563,10 @@ alter user test111 PASSWORD EXPIRE
 
 alter user test111 ACCOUNT LOCK
 
+alter user pw7 profile DEFAULT
+
+alter user pw7 identified by pw7
+
 INSERT INTO "SBREXT"."USER_SECURITY_QUESTIONS" (ua_name, QUESTION1, ANSWER1, QUESTION2, ANSWER2, QUESTION3, ANSWER3, ATTEMPTED_COUNT ) VALUES  ( 'test111', 'q1', 'a1', 'q2', 'a2', 'q3', 'a3',  -1)
 
 select * from sys.dba_profiles where lower(profile) = 'cadsr_user'
