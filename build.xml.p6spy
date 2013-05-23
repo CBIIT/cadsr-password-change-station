@@ -77,10 +77,6 @@
 		  <fileset file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" /> 
 		</copy>
 
-		<!-- added p6spy -->
-		<copy tofile="src/WebRoot/WEB-INF/classes/spy.properties" filtering="false">
-		  <fileset file="src/conf/spy.properties" />
-		</copy>
 	</target>
 
 

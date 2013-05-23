@@ -76,11 +76,6 @@
 		<copy tofile="src/WebRoot/WEB-INF/classes/messages.properties" filtering="true">
 		  <fileset file="src/java/gov/nih/nci/cadsr/cadsrpasswordchange/core/messages.properties" /> 
 		</copy>
-
-		<!-- added p6spy -->
-		<copy tofile="src/WebRoot/WEB-INF/classes/spy.properties" filtering="false">
-		  <fileset file="src/conf/spy.properties" />
-		</copy>
 	</target>
 
 
@@ -162,7 +157,7 @@
 		<echo>logLevel = ${logLevel}</echo>
 
 		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange-oracle-ds.xml" filtering="true" verbose="true">
-		  <fileset file="src/conf/template.cadsrpasswordchange-oracle-ds.xml.p6spy" />
+		  <fileset file="src/conf/template.cadsrpasswordchange-oracle-ds.xml" />
 		</copy>
 	
 		<copy tofile="${dist.dir}/jboss/cadsr-oracle-ds.xml" filtering="true" verbose="true">
