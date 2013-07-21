@@ -1,3 +1,10 @@
+/*L
+  Copyright SAIC-F Inc.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-password-change/LICENSE.txt for details.
+L*/
+
 --PLEASE run this in SBREXT schema!!!
 
 CREATE OR REPLACE FUNCTION encrypt(key_string IN varchar2, input_string IN char)

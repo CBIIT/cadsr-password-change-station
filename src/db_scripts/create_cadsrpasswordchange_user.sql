@@ -1,3 +1,10 @@
+/*L
+  Copyright SAIC-F Inc.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-password-change/LICENSE.txt for details.
+L*/
+
 -- run as sys (or any user that can create users and grant alter user)
 -- Creates a user for the caDSR Password Change Station that has the ability to change passwords (so that we can support end users with expired passwords)
 

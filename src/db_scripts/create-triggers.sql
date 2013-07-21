@@ -1,3 +1,10 @@
+/*L
+  Copyright SAIC-F Inc.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-password-change/LICENSE.txt for details.
+L*/
+
 CREATE OR REPLACE TRIGGER SBREXT." _TRG" 
  BEFORE INSERT OR UPDATE
  ON USER_SECURITY_QUESTIONS

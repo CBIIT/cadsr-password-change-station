@@ -1,3 +1,10 @@
+/*L
+  Copyright SAIC-F Inc.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-password-change/LICENSE.txt for details.
+L*/
+
 --run as sbrext
 
 insert into sbrext.tool_options_view_ext (Tool_name, Property, Value) values('PasswordChangeStation', 'EMAIL.NOTIFY_TYPE', '14,7,4')

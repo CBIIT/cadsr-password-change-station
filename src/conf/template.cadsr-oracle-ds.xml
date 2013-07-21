@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--L
+  Copyright SAIC-F Inc.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-password-change/LICENSE.txt for details.
+L-->
+
 <!--
    This is a shared datasource used by other caDSR applications.
    Consider excluding from automated deployment and only deploying manually. 
