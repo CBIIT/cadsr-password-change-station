@@ -1,7 +1,7 @@
 Welcome to the caDSR Password Change Station Project!
 =====================================
 
-The purpose of the caDSR Password Security Station is to allow users to set and reset the password used for logging in to the caDSR Tools.
+The purpose of the caDSR Password Change Station is to allow users to set and reset the password used for logging in to the caDSR Tools.
 
 The caDSR Password Change Station is developed in Java and requires Apache Ant for building.
 
