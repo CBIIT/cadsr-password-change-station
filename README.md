@@ -12,10 +12,6 @@ You will find more details about the caDSR Password Change Station in the follow
  * [Community Wiki] ( 	https://wiki.nci.nih.gov/x/rADgB)
  * [Code Repository] (https://github.com/NCIP/cadsr-password-change)
  * [Issue Tracker] (https://tracker.nci.nih.gov/browse/CADSRPASSW)
+ * [NCI Instance] (https://cadsrpasswordchange.nci.nih.gov)
  
- 
-An NCI hosted instance of caDSR Password Change Station is publicly available at:
-
-[Production Instance] (https://cadsrpasswordchange.nci.nih.gov)
-
 Please join us in further developing and improving the caDSR Password Change Station project.
