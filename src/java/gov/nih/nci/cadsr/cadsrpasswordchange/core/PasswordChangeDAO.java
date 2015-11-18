@@ -29,7 +29,7 @@ import org.joda.time.DateTimeUtils;
 public class PasswordChangeDAO implements PasswordChange {
 
     public static String _jndiUser = "java:/jdbc/caDSR";
-    public static String _jndiSystem = "java:/jdbc/caDSRPasswordChange";
+    public static String _jndiSystem = "java:jboss/datasources/PasswdChangeDS";
 	private Connection conn;
 	private DataSource datasource;
     private static final String  QUESTION_TABLE_NAME = "SBREXT.USER_SECURITY_QUESTIONS";

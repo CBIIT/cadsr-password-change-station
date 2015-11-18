@@ -258,9 +258,9 @@ public class ConnectionUtil {
 		  return retVal;
 	}
 
-	public static DataSource getDS(String _jndiUser) throws Exception {
+	public static DataSource getDS(String _jndiName) throws Exception {
 		Context envContext = new InitialContext();
-		DataSource ds = (DataSource)envContext.lookup(_jndiUser);
+		DataSource ds = (DataSource)envContext.lookup(_jndiName);
 		return ds;
 	}
 	

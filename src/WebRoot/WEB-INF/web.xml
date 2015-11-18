@@ -105,7 +105,7 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<context-param>
 		<param-name>Owasp.CsrfGuard.Config.Print</param-name>
 		<param-value>true</param-value>
-	</context-param>
+	</context-param>	
 	
 	<listener>
 		<listener-class>org.owasp.csrfguard.CsrfGuardListener</listener-class>
