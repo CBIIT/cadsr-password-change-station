@@ -50,7 +50,7 @@ public class HeaderTag extends TagSupport {
     	   if (showLogout != null && (showLogout.equalsIgnoreCase("yes") || showLogout.equalsIgnoreCase("true") ) )
     			   logoutLink = "<td align=\"right\"><a href=\"javascript:callLogout();\" alt=\"Logout\">Logout</a></td>";
 
-    	   String helpLink = "<td align=\"left\">"
+    	   String helpLink = "<td align=\"right\">"
     			   + "<div aria-hidden=true>"
     	   		   + "<a target=\"_blank\" href=\""+ PropertyHelper.getHELP_LINK() +"\">"
     			   + "<img style=\"border: 0px solid black\" title=\"Help Link\" src=\"/cadsrpasswordchange/images/icon_help.gif\" alt=\"Application Help\"></a>"
@@ -58,31 +58,28 @@ public class HeaderTag extends TagSupport {
     			   + "<br>"
     			   + "<font color=\"brown\" face=\"verdana\" size=\"1\">&nbsp;Help&nbsp;</font></td>";
     	   
-    	   out.print("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#A90101\">"
-    			   + "<tr bgcolor=\"#A90101\">"
-    			   + "<td valign=\"center\" align=\"left\">"
+    	   out.print("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+    			   + "<tr>"
+    			   + "<td width=\"25%\" valign=\"center\" align=\"left\">"
     			   + "<div aria-hidden=true>"
     			   + "<a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"NCI Logo\">"
-    			   + "<img src=\"/cadsrpasswordchange/images/brandtype.gif\" alt=\"NCI Logo\" border=\"0\"></a>"
+    			   + "<img src=\"/cadsrpasswordchange/images/CBIIT-36px-Logo-COLOR_contrast.png\" alt=\"NCI Logo\" border=\"0\"></a>"
     			   + "</div>"
     			   + "</td>"
-    			   + "<td valign=\"center\" align=\"right\">"
-    			   + "<div aria-hidden=true>"
-    			   + "<a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"NCI Logo\">"
-    			   + "<img src=\"/cadsrpasswordchange/images/tagline_nologo.gif\" alt=\"NCI Logo\" border=\"0\"></a>"
-    			   + "</div>"
-    			   + "</td></tr>"
+    			   +"<td width=\"60%\" valign=\"center\" align=\"right\"><img alt=\"Password Change Station Logo\" src=\"/cadsrpasswordchange/images/cadsrpasswordchange_banner_round.gif\"/></td>"
+    			   +"<td width=\"15%\" valign=\"top\" align=\"right\"><div aria-hidden=true>"
+    			   + "<a href=\"http://www.nih.gov/\" target=\"_blank\"><span>U.S. National Institutes of Health</span></a></div></td>"
+    			   +"</tr>"
     			   + "\n</table>\n"
     			   + "<table class=\"secttable\"><colgroup><col /></colgroup><tbody class=\"secttbody\" />"
     			   + "<tr>"
     			   + "<td align=\"left\">"
     			   + "<div aria-hidden=true>"
     			   + "<a target=\"_blank\" href=\""+ PropertyHelper.getLOGO_LINK() +"\">"
-    			   + "<img style=\"border: 0px solid black\" title=\"NCICB caDSR\" src=\"/cadsrpasswordchange/images/cadsrpasswordchange_banner.gif\" alt=\"Application Logo\"></a>"
+    			   + "<img style=\"border: 0px solid black\" title=\"NCICB caDSR\" src=\"/cadsrpasswordchange/images/caDSR_logo2_contrast.png\" alt=\"Application Logo\"></a>"
     			   + "</div>"
     			   + "</td>"
     			   + logoutLink + helpLink + "</tr>"
-//    			   + "<tr><td align=\"center\"><p class=\"ttl18\">caDSR Password Change Station</p></td></tr>"
     			   + "\n</table>\n");
     	   
        } catch (Exception ex) {
