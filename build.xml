@@ -7,6 +7,9 @@ L-->
 
 <project name="caDSRPasswordChange" basedir="./" default="all">
 
+	<tstamp>
+	      <format property="buildDateTime" pattern="yyyyMMddHHmm" />
+	</tstamp>
 	<!-- Project settings -->
 	<property name="project.title" value="caDSRPasswordChange" />
 	<property name="project.war.file" value="cadsrpasswordchange.war" />
@@ -131,6 +134,7 @@ L-->
 		<echo>logLevel = ${logLevel}</echo>
 		<filter token="host" value="${host}"/>
 		<echo>logLevel = ${host}</echo>
+		<filter token="buildDateTime" value="${buildDateTime}" />
 
 		<copy tofile="src/WebRoot/WEB-INF/lib/Owasp.CsrfGuard.jar" filtering="false" verbose="true">
 			<fileset file="src/lib/Owasp.CsrfGuard.jar" />
