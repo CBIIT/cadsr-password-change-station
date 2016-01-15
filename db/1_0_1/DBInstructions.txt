@@ -1,0 +1,2 @@
+1. Please execute teh sql script in dmlFor101.sql in the SBREXT schema.
+2. Please copy over the table SYS.CADSR_USERS from 10g to 11g if it does not already exist and grant select privileges on the table to DB account cadsrpasswordchange.
