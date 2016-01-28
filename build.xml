@@ -152,6 +152,10 @@ L-->
 			<fileset file="src/lib/commons-codec-1.10.jar" />
 		</copy>
 
+		<copy tofile="src/WebRoot/WEB-INF/lib/ojdbc7.jar" filtering="false" verbose="true">
+			<fileset file="src/lib/ojdbc7.jar" />
+		</copy>
+
 		<copy tofile="${dist.dir}/jboss/cadsrpasswordchange_modules.cli" filtering="true" verbose="true">
 			<fileset file="${basedir}/cadsrpasswordchange_modules.cli" />
 		</copy>
