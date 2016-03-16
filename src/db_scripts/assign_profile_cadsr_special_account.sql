@@ -37,3 +37,5 @@ alter user BLKLDR profile "cadsr_special_account"
 /
 alter user SITESCOPE profile "cadsr_special_account"
 /
+alter user VIEWER profile "cadsr_special_account"
+/
