@@ -33,7 +33,7 @@ echo "=> deploying modules"
 cp dist/cadsrpasswordchange.war /local/content/cadsrpasswordchange/jboss
 cp dist/ojdbc7.jar /local/content/cadsrpasswordchange/bin
 
-/opt/wildfly/bin/jboss-cli.sh -c --controller=localhost:9990 --file=dist/cadsrpasswordchange_modules.cli
+/opt/wildfly/bin/jboss-cli.sh -c --controller=localhost:9990 --file=dist/jboss/cadsrpasswordchange_modules.cli
 
 echo "=> reloading wildfly"
 /opt/wildfly/bin/jboss-cli.sh --connect command=:reload
@@ -42,7 +42,7 @@ echo "=> Waiting for the server to reload"
 wait_for_server
 
 echo "=> deploying"
-/opt/wildfly/bin/jboss-cli.sh -c --controller=localhost:9990 --file=dist/cadsrpasswordchange_setup_deploy.cli
+/opt/wildfly/bin/jboss-cli.sh -c --controller=localhost:9990 --file=dist/jboss/cadsrpasswordchange_setup_deploy.cli
 
 echo "=> shutting wildfly down"
 /opt/wildfly/bin/jboss-cli.sh --connect command=:shutdown
