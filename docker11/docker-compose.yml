@@ -1,0 +1,22 @@
+version: '2'
+services:
+  server:
+    container_name: cadsr-passwordchange11
+    image: cadsr-passwordchange11
+    build: ./
+    ports:
+     - "8090:8080"
+    environment:
+      CADSR_DS_TNS_HOST: $CADSR_DS_HOST
+      CADSR_DS_TNS_PORT: $CADSR_DS_PORT
+      CADSR_DS_USER: $CADSR_DS_USER
+      CADSR_DS_PSWD: $CADSR_DS_PSWD
+      CADSR_DS_TNS_ENTRY: $CADSR_DS_TNS_ENTRY
+      BRANCH_OR_TAG: $BRANCH_OR_TAG
+      tag: $BRANCH_OR_TAG
+      JBOSS_MODULES_SYSTEM_PKGS: $JBOSS_MODULES_SYSTEM_PKGS
+      JAVA_OPTS: $JAVA_OPTS
+      debug: $debug
+      tier: $tier
+      host: $host
+      connectionUrl: $CADSR_DS_HOST:$CADSR_DS_PORT:$CADSR_DS_TNS_ENTRY
