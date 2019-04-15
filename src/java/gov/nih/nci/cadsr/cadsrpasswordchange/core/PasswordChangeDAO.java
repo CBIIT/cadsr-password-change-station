@@ -76,7 +76,7 @@ public class PasswordChangeDAO implements PasswordChange {
 	public boolean checkValidUser(String username) throws Exception {
 		boolean retVal = false;
 		
-		logger.info ("checkValidUser(username) user: " + username);
+		logger.info("checkValidUser(username) user: " + username);
 		if(username == null) {
 			throw new Exception("Username can not be NULL or empty.");
 		}
@@ -90,7 +90,7 @@ public class PasswordChangeDAO implements PasswordChange {
 //	        conn = ds.getConnection();
 	        conn = getConnection();
 	        }
-	        logger.debug("connected");
+	        //logger.debug("connected");
 			stmt = conn.prepareStatement("select * from SBR.USER_ACCOUNTS_VIEW where UPPER(UA_NAME) = ?");	//CADSRPASSW-15
 			stmt.setString(1, username.toUpperCase());
 			rs = stmt.executeQuery();
@@ -99,7 +99,7 @@ public class PasswordChangeDAO implements PasswordChange {
 				retVal = true;
 			}
 	    } catch (Exception e) {
-	    	logger.debug(e.getMessage());
+	    	logger.error("Exception checkValidUser username: " + username + e);
         }
         finally {
             if (rs != null) { try { rs.close(); } catch (SQLException e) { logger.error(e.getMessage()); } }
@@ -107,8 +107,7 @@ public class PasswordChangeDAO implements PasswordChange {
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 	    }
 		
-		
-        logger.info("checkValidUser(): " + retVal);
+        logger.info("checkValidUser(): " + retVal + ", user: " + username);
         return retVal;
 	}
 

@@ -201,7 +201,7 @@ public class MainServlet extends HttpServlet {
 				username = username.toUpperCase();
 			}
 			
-			logger.debug("username " + username);			
+			logger.info("MainServlet.doQuestion1 username " + username);			
 			
 			// Security enhancement
 			Map<String, String> userQuestions = new HashMap<String, String>();
@@ -617,7 +617,7 @@ public class MainServlet extends HttpServlet {
 				return;
 			}
 			
-			logger.info("saving request: user provided " +  userQuestions + " " + userAnswers);
+			logger.info("saving request: user provided " +  userQuestions + " " + userAnswers + ", user: " + loginID);
 		    saveUserStoredQna(loginID, userQuestions, userAnswers);
 			
 			//TBD - retrieve all questions related to the users from dao and set them into sessions
@@ -649,7 +649,7 @@ public class MainServlet extends HttpServlet {
 			if(username != null) {
 				username = username.toUpperCase();
 			}
-			logger.debug("username " + username);
+			logger.info("MainServlet.doRequestUserQuestions username " + username);
 			//begin - CADSRPASSW-73
 			String status = "";
 			try {
@@ -749,27 +749,27 @@ public class MainServlet extends HttpServlet {
 				username = username.toUpperCase();
 			}
 			session.setAttribute(Constants.USERNAME, username);
-			logger.debug("username " + username);
+			logger.info("MainServlet.doValidateUserQuestionsForPasswordChange username: " + username);
 			//begin - CADSRPASSW-73
 			String status = "";
 			try {
-				logger.info("doSaveQuestions: checking account status ...");
+				logger.info("doSaveQuestions: checking account status for username: " + username);
 				status = doValidateAccountStatus(username, session, req, resp, Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
-				logger.debug("doSaveQuestions: account status check done");
+				logger.debug("doSaveQuestions: account status check done for username: " + username);
 			} catch (Exception e1) {
-				logger.debug("doSaveQuestions: account status was: [" + status + "]");
+				logger.debug("doSaveQuestions: account status was: [" + status + "] for username: " + username);
 				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
 					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
 					return;
 				} else {
-					logger.debug("doSaveQuestions: account status check error was: " + e1.getMessage());
+					logger.debug("doSaveQuestions: account status for username: " + username + " check error was: " + e1.getMessage());
 					e1.printStackTrace();
 				}
 			}
 			//end - CADSRPASSW-73			
 			if(status.indexOf(Constants.LOCKED_STATUS) > -1) {
-				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything ...");
+				logger.debug("doRequestUserQuestions:status [" + status + "] returning without doing anything for username: " + username);
 				return;
 			}
 			
@@ -886,6 +886,9 @@ public class MainServlet extends HttpServlet {
 		}
 		
 		String userID = (String)session.getAttribute(Constants.USERNAME);
+		if (userID == null) {
+			logger.error("userID is null in MainServlet.doValidateAttemptedCount; session.getAttribute(username) is null !!!");
+		}
 		//CADSRPASSW-51
 		if(isAnswerLockPeriodOver(userID)) {
 			resetUserStoredAttemptedCount(userID);
@@ -1043,10 +1046,11 @@ public class MainServlet extends HttpServlet {
 		Map<String, String> userQuestions = new HashMap<String, String>();
 		Map<String, String> userAnswers =  new HashMap<String, String>();
 		String username = (String)session.getAttribute(Constants.USERNAME);
+		logger.info("MainServlet.validateQuestions username: " + username);
 		//pull all questions related to this user
 		loadUserStoredQna(username, userQuestions, userAnswers);
 		//end CADSRPASSW-43
-		logger.info("questions " + userQuestions != null?userQuestions.size():0 + " answers " + userAnswers.size());
+		logger.info("questions " + userQuestions != null?userQuestions.size():0 + " answers " + userAnswers.size() + ", username: " + username);
 
 		String question1 = req.getParameter("question");
 		String answer1 = req.getParameter("answer");
