@@ -104,28 +104,32 @@ public class MainServlet extends HttpServlet {
 				doLogin(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptUserID")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 					req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.VALIDATE_TOKEN);	//CADSRPASSW-90 //CADSRPASSW-91
 					doValidateUserQuestionsForPasswordChange(req, resp);	//CADSRPASSW-76
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/changePassword")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 	    			req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.CHANGE_TOKEN);
 					doChangePassword(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/saveQuestions")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 	    			req.getSession().setAttribute(Constants.ACTION_TOKEN, Constants.SAVE_TOKEN);
 					doSaveQuestions(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/promptUserQuestions")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {				
 				doRequestUserQuestions(req, resp);
 				}
@@ -137,25 +141,29 @@ public class MainServlet extends HttpServlet {
 				doQuestion3(req, resp);
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion1")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 				doValidateQuestion1(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion2")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 				doValidateQuestion2(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/validateQuestion3")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 				doValidateQuestion3(req, resp);
 				}
 			} else if (servletPath.equals(Constants.SERVLET_URI + "/resetPassword")) {
 				if(req.getParameter("cancel") != null) {
-					resp.sendRedirect(Constants.LANDING_URL);
+					//resp.sendRedirect(Constants.LANDING_URL);
+					req.getRequestDispatcher(Constants.LANDING_URL).forward(req, resp);
 				} else {
 					doChangePassword2(req, resp);
 				}
@@ -164,10 +172,11 @@ public class MainServlet extends HttpServlet {
 				logger.info("logging out because of invalid servlet path");				
 				HttpSession session = req.getSession(false);
 				if (session != null) {
-					logger.debug("non-null session");					
+					logger.debug("MainServlet.doPost non-null session");					
 					session.invalidate();
 				}				
 				resp.sendRedirect("./jsp/loggedOut.jsp");
+				//req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp); 
 			}
 		}
 		catch (Throwable theException) {
@@ -175,8 +184,9 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-	private void doQuestion3(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		resp.sendRedirect(Constants.RESET_URL);
+	private void doQuestion3(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		//resp.sendRedirect(Constants.RESET_URL);
+		req.getRequestDispatcher(Constants.RESET_URL).forward(req, resp); 
 	}
 
 	private void doQuestion2(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -193,6 +203,7 @@ public class MainServlet extends HttpServlet {
 				logger.debug("null session");
 				// this shouldn't happen, make the user start over
 				resp.sendRedirect("./jsp/loggedOut.jsp");
+				//req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp); 
 				return;
 			}
 
@@ -219,7 +230,8 @@ public class MainServlet extends HttpServlet {
 			if(userQuestions.size() == 0) {
 				logger.info("no security question found");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
-				resp.sendRedirect(Constants.ASK_USERID_URL);
+				//resp.sendRedirect(Constants.ASK_USERID_URL);
+				req.getRequestDispatcher(Constants.ASK_USERID_URL).forward(req, resp);
 			} else {
 				//resp.sendRedirect(Constants.Q1_URL);
 				req.getRequestDispatcher("./jsp/askQuestion1.jsp").forward(req, resp);
@@ -384,6 +396,7 @@ public class MainServlet extends HttpServlet {
 				logger.debug("null session");
 				// this shouldn't happen, make the user start over
 				resp.sendRedirect("./jsp/loggedOut.jsp");
+				//req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp); 
 				return;
 			}
 			
@@ -399,13 +412,15 @@ public class MainServlet extends HttpServlet {
 			// Limit input to legal characters before attempting any processing
 			if(Messages.getString("PasswordChangeHelper.1").equals(PasswordChangeHelper.validateLogin(username, password))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.1"));
-				resp.sendRedirect("./jsp/login.jsp");				
+				//resp.sendRedirect("./jsp/login.jsp");
+				req.getRequestDispatcher("./jsp/login.jsp").forward(req, resp); 
 				return;
 			}
 
 			if(Messages.getString("PasswordChangeHelper.2").equals(PasswordChangeHelper.validateLogin(username, password))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.2"));
-				resp.sendRedirect("./jsp/login.jsp");				
+				//resp.sendRedirect("./jsp/login.jsp");
+				req.getRequestDispatcher("./jsp/login.jsp").forward(req, resp); 
 				return;
 			}
 
@@ -425,12 +440,14 @@ public class MainServlet extends HttpServlet {
 				logger.debug ("userMessage " + userMessage);
 				session.setAttribute(USER_MESSAGE_SESSION_ATTRIBUTE, userMessage);
 				session.setAttribute("username", username);
-				resp.sendRedirect("./jsp/changePassword.jsp"); //logged-in page
+				//resp.sendRedirect("./jsp/changePassword.jsp"); //logged-in page
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp); 
 			} else {
 				String errorMessage1 = userBean.getResult().getMessage();
 				logger.debug ("errorMessage " + errorMessage1);
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage1);
-				resp.sendRedirect("./jsp/login.jsp");				
+				//resp.sendRedirect("./jsp/login.jsp");
+				req.getRequestDispatcher("./jsp/login.jsp").forward(req, resp); 
 			}
 		}
 		catch (Throwable e) {
@@ -479,7 +496,8 @@ public class MainServlet extends HttpServlet {
 				logger.debug("doSaveQuestions: account status was: [" + status + "]");
 				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect("./jsp/setupPassword.jsp");
+					//resp.sendRedirect("./jsp/setupPassword.jsp");
+					req.getRequestDispatcher("./jsp/setupPassword.jsp").forward(req, resp); 
 					return;
 				} else {
 					logger.debug("doSaveQuestions: account status check error was: " + e1.getMessage());
@@ -624,7 +642,8 @@ public class MainServlet extends HttpServlet {
 			session.setAttribute(Constants.USERNAME, loginID);
 			
 			session.invalidate();
-			resp.sendRedirect(Constants.SETUP_SAVED_URL);
+			//resp.sendRedirect(Constants.SETUP_SAVED_URL);
+			req.getRequestDispatcher(Constants.SETUP_SAVED_URL).forward(req, resp);
 		}
 		catch (Throwable theException) {
 			logger.error(theException);
@@ -641,7 +660,8 @@ public class MainServlet extends HttpServlet {
 			if (session == null) {
 				logger.debug("null session");
 				// this shouldn't happen, make the user start over
-				resp.sendRedirect("./jsp/loggedOut.jsp");
+				//resp.sendRedirect("./jsp/loggedOut.jsp");
+				req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp);
 				return;
 			}
 
@@ -660,7 +680,8 @@ public class MainServlet extends HttpServlet {
 				logger.debug("doRequestUserQuestions: account status was: [" + status + "]");
 				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect(Constants.ASK_USERID_URL);
+					//resp.sendRedirect(Constants.ASK_USERID_URL);
+					req.getRequestDispatcher(Constants.ASK_USERID_URL).forward(req, resp);
 					return;
 				} else {
 					logger.debug("doRequestUserQuestions: account status check error was: " + e1.getMessage());
@@ -678,7 +699,8 @@ public class MainServlet extends HttpServlet {
 			try {
 				if(!userDAO.checkValidUser(username)) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect(Constants.ASK_USERID_URL);
+					//resp.sendRedirect(Constants.ASK_USERID_URL);
+					req.getRequestDispatcher(Constants.ASK_USERID_URL).forward(req, resp);
 					return;
 				}
 			} catch (Exception e) {
@@ -715,11 +737,12 @@ public class MainServlet extends HttpServlet {
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.140"));
-				resp.sendRedirect(Constants.ASK_USERID_URL);
+				//resp.sendRedirect(Constants.ASK_USERID_URL);
+				req.getRequestDispatcher(Constants.ASK_USERID_URL).forward(req, resp);
 				return;
 			}
 			
-			if(doValidateAttemptedCount(session, resp, Constants.ASK_USERID_URL) == false) {
+			if(doValidateAttemptedCount(session, req, resp, Constants.ASK_USERID_URL) == false) {
 				return;
 			}			
 			
@@ -760,7 +783,8 @@ public class MainServlet extends HttpServlet {
 				logger.debug("doSaveQuestions: account status was: [" + status + "] for username: " + username);
 				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+					//resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+					req.getRequestDispatcher(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL).forward(req, resp);
 					return;
 				} else {
 					logger.debug("doSaveQuestions: account status for username: " + username + " check error was: " + e1.getMessage());
@@ -777,7 +801,8 @@ public class MainServlet extends HttpServlet {
 			PasswordChangeDAO userDAO = new PasswordChangeDAO(datasource);
 			try {
 				if(!userDAO.checkValidUser(username)) {
-					resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+					//resp.sendRedirect(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL);
+					req.getRequestDispatcher(Constants.REQUEST_USERID_FOR_CHANGE_PASSWORD_URL).forward(req, resp);
 					return;
 				}
 			} catch (Exception e) {
@@ -795,7 +820,8 @@ public class MainServlet extends HttpServlet {
 			if(userQuestions == null || userQuestions.size() == 0) {
 				logger.info("no security question found");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.136"));
-				resp.sendRedirect(Constants.SETUP_QUESTIONS_URL + "?donotclear");
+				//resp.sendRedirect(Constants.SETUP_QUESTIONS_URL + "?donotclear");
+				req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);
 				return;
 			}
 			
@@ -868,7 +894,8 @@ public class MainServlet extends HttpServlet {
 				logger.info("Less than 1 hour, password lock stays (" + tmp + ")");		//CADSRPASSW-87
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.103"));
 				logger.debug("Redirecting to '" + redictedUrl + "'");
-				resp.sendRedirect(redictedUrl);
+				//resp.sendRedirect(redictedUrl);
+				req.getRequestDispatcher(redictedUrl).forward(req, resp);
 			}
 		}
 
@@ -878,7 +905,7 @@ public class MainServlet extends HttpServlet {
 	}
 
 	//CADSRPASSW-42
-	private boolean doValidateAttemptedCount(HttpSession session, HttpServletResponse resp, String redictedUrl) throws Exception {
+	private boolean doValidateAttemptedCount(HttpSession session,HttpServletRequest req, HttpServletResponse resp, String redictedUrl) throws Exception {
 		boolean retVal = true;
 
 		if(session == null) {
@@ -897,7 +924,8 @@ public class MainServlet extends HttpServlet {
 			if(count >= 5) {	//https://tracker.nci.nih.gov/browse/CADSRPASSW-60
 				logger.info("security answers limit reached");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.111"));
-				resp.sendRedirect(redictedUrl);
+				//resp.sendRedirect(redictedUrl);
+				req.getRequestDispatcher(redictedUrl).forward(req, resp);
 				retVal = false;
 			} else {
 				retVal = true;
@@ -943,13 +971,14 @@ public class MainServlet extends HttpServlet {
 		
 		HttpSession session = req.getSession(false);
 		if (session == null) {
-			logger.debug("null session");
+			logger.debug("MainServlet.doValidateQuestion1 null session");
 			// this shouldn't happen, make the user start over
 			resp.sendRedirect("./jsp/loggedOut.jsp");
+			//req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp);
 			return;
 		}		
 
-		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion1.jsp") == false) {
+		if(doValidateAttemptedCount(session, req, resp, "./jsp/askQuestion1.jsp") == false) {
 			return;
 		}
 		
@@ -957,12 +986,14 @@ public class MainServlet extends HttpServlet {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
 				resetUserStoredAttemptedCount((String)req.getSession().getAttribute(Constants.USERNAME));	//CADSRPASSW-42
-				resp.sendRedirect("./jsp/askQuestion2.jsp");				
+				//resp.sendRedirect("./jsp/askQuestion2.jsp");
+				req.getRequestDispatcher("./jsp/askQuestion2.jsp").forward(req, resp);
 			} else {
 				logger.info("security question answered wrongly");
 				updateUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
-				resp.sendRedirect("./jsp/askQuestion1.jsp");		
+				//resp.sendRedirect("./jsp/askQuestion1.jsp");
+				req.getRequestDispatcher("./jsp/askQuestion1.jsp").forward(req, resp);
 			}
 		}
 		catch (Throwable theException) {
@@ -979,10 +1010,11 @@ public class MainServlet extends HttpServlet {
 			logger.debug("null session");
 			// this shouldn't happen, make the user start over
 			resp.sendRedirect("./jsp/loggedOut.jsp");
+			//req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp);
 			return;
 		}		
 
-		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion2.jsp") == false) {
+		if(doValidateAttemptedCount(session, req, resp, "./jsp/askQuestion2.jsp") == false) {
 			return;
 		}
 		
@@ -990,12 +1022,14 @@ public class MainServlet extends HttpServlet {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
 				resetUserStoredAttemptedCount((String)req.getSession().getAttribute(Constants.USERNAME));	//CADSRPASSW-42
-				resp.sendRedirect("./jsp/askQuestion3.jsp");				
+				//resp.sendRedirect("./jsp/askQuestion3.jsp");	
+				req.getRequestDispatcher("./jsp/askQuestion3.jsp").forward(req, resp);
 			} else {
 				logger.info("security question answered wrongly");
 				updateUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
-				resp.sendRedirect("./jsp/askQuestion2.jsp");		
+				//resp.sendRedirect("./jsp/askQuestion2.jsp");
+				req.getRequestDispatcher("./jsp/askQuestion2.jsp").forward(req, resp);
 			}
 		}
 		catch (Throwable theException) {
@@ -1015,7 +1049,7 @@ public class MainServlet extends HttpServlet {
 			return;
 		}		
 
-		if(doValidateAttemptedCount(session, resp, "./jsp/askQuestion3.jsp") == false) {
+		if(doValidateAttemptedCount(session, req, resp, "./jsp/askQuestion3.jsp") == false) {
 			return;
 		}
 		
@@ -1023,12 +1057,14 @@ public class MainServlet extends HttpServlet {
 			if (validateQuestions(req, resp)) {
 				logger.info("answer is correct");
 				resetUserStoredAttemptedCount((String)req.getSession().getAttribute(Constants.USERNAME));	//CADSRPASSW-42
-				resp.sendRedirect("./jsp/resetPassword.jsp");				
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 			} else {
 				logger.info("security question answered wrongly");
 				updateUserStoredAttemptedCount((String)session.getAttribute(Constants.USERNAME));	//CADSRPASSW-42
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.130"));
-				resp.sendRedirect("./jsp/askQuestion3.jsp");		
+				//resp.sendRedirect("./jsp/askQuestion3.jsp");
+				req.getRequestDispatcher("./jsp/askQuestion3.jsp").forward(req, resp);
 			}
 		}
 		catch (Throwable theException) {
@@ -1113,7 +1149,8 @@ public class MainServlet extends HttpServlet {
 				logger.debug("doChangePassword: account status was: [" + status + "]");
 				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect("./jsp/resetPassword.jsp");
+					//resp.sendRedirect("./jsp/resetPassword.jsp");
+					req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 					return;
 				} else {
 					logger.debug("doChangePassword: account status check error was: " + e1.getMessage());
@@ -1129,26 +1166,30 @@ public class MainServlet extends HttpServlet {
 //=== begin of moved down (CADSRPASSW-5)
 			if(Messages.getString("PasswordChangeHelper.3").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.3"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 				return;
 			}
 
 			if(Messages.getString("PasswordChangeHelper.4").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.4"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 				return;
 			}
 			
 			if(Messages.getString("PasswordChangeHelper.5").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.5"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 				return;
 			}
 
 			//begin - CADSRPASSW-88
 			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 				return;
 			}					
 			//end - CADSRPASSW-88
@@ -1156,13 +1197,15 @@ public class MainServlet extends HttpServlet {
 			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid").toUpperCase());
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.7"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");				
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 				return;
 			}
 			if(Messages.getString("PasswordChangeHelper.8").equals(PasswordChangeHelper.validateChangePassword(username, null, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("new password mis-typed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.8"));
-				resp.sendRedirect("./jsp/resetPassword.jsp");
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 				return;
 			}
 //=== end of moved down (CADSRPASSW-5)
@@ -1184,12 +1227,14 @@ public class MainServlet extends HttpServlet {
 				dao.removeQueue(usr);	//CADSRPASSW-72
 				logger.info("doChangePassword: user [" + usr.getUsername() + "] removed from the notification queue");
 				session.invalidate();  // they are done, log them out
-				resp.sendRedirect("./jsp/passwordChanged.jsp");				
+				//resp.sendRedirect("./jsp/passwordChanged.jsp");
+				req.getRequestDispatcher("./jsp/passwordChanged.jsp").forward(req, resp);
 			} else {
 				logger.info("password change failed");
 				String errorMessage = passwordChangeResult.getMessage();
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
-				resp.sendRedirect("./jsp/resetPassword.jsp");	
+				//resp.sendRedirect("./jsp/resetPassword.jsp");
+				req.getRequestDispatcher("./jsp/resetPassword.jsp").forward(req, resp);
 			}
 		}
 		catch (Throwable theException) {
@@ -1208,6 +1253,7 @@ public class MainServlet extends HttpServlet {
 				logger.debug("null session");
 				// this shouldn't happen, make the user start over
 				resp.sendRedirect("./jsp/loggedOut.jsp");
+				//req.getRequestDispatcher("./jsp/loggedOut.jsp").forward(req, resp);
 				return;
 			}
 
@@ -1232,7 +1278,8 @@ public class MainServlet extends HttpServlet {
 				logger.debug("doChangePassword: account status was: [" + status + "]");
 				if(status != null && status.equals("")) {
 					session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.101"));
-					resp.sendRedirect("./jsp/changePassword.jsp");
+					//resp.sendRedirect("./jsp/changePassword.jsp");
+					req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 					return;
 				} else {
 					logger.debug("doChangePassword: account status check error was: " + e1.getMessage());
@@ -1260,7 +1307,8 @@ public class MainServlet extends HttpServlet {
 						if(!ConnectionUtil.isExpiredAccount(username, oldPassword)) {	//meaning incorrect password
 							session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.102"));
 							//req.getRequestDispatcher(Constants.SETUP_QUESTIONS_URL).forward(req, resp);		//didn't work for jboss 4.0.5
-							resp.sendRedirect("./jsp/changePassword.jsp");
+							//resp.sendRedirect("./jsp/changePassword.jsp");
+							req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 							return;
 						}
 						//end - CADSRPASSW-97
@@ -1320,26 +1368,30 @@ public class MainServlet extends HttpServlet {
 //=== begin of moved down (CADSRPASSW-48)
 			if(Messages.getString("PasswordChangeHelper.3").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.3"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 				return;
 			}
 
 			if(Messages.getString("PasswordChangeHelper.4").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.4"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 				return;
 			}
 			
 			if(Messages.getString("PasswordChangeHelper.5").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.5"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 				return;
 			}
 
 			//begin - CADSRPASSW-88
 			if(Messages.getString("PasswordChangeHelper.6").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.6"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 				return;
 			}					
 			//end - CADSRPASSW-88
@@ -1347,13 +1399,15 @@ public class MainServlet extends HttpServlet {
 			if(Messages.getString("PasswordChangeHelper.7").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("entered username doesn't match session " + username + " " + req.getParameter("userid").toUpperCase());
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.7"));
-				resp.sendRedirect("./jsp/changePassword.jsp");				
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 				return;
 			}
 			if(Messages.getString("PasswordChangeHelper.8").equals(PasswordChangeHelper.validateChangePassword(username, oldPassword, newPassword, newPassword2, username, req.getParameter("newpswd2")))) {
 				logger.debug("new password mis-typed");
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, Messages.getString("PasswordChangeHelper.8"));
-				resp.sendRedirect("./jsp/changePassword.jsp");
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 				return;
 			}
 //=== end of moved down (CADSRPASSW-48)
@@ -1382,7 +1436,8 @@ public class MainServlet extends HttpServlet {
 				logger.info("password change failed");
 				String errorMessage = passwordChangeResult.getMessage();
 				session.setAttribute(ERROR_MESSAGE_SESSION_ATTRIBUTE, errorMessage);
-				resp.sendRedirect("./jsp/changePassword.jsp");		
+				//resp.sendRedirect("./jsp/changePassword.jsp");
+				req.getRequestDispatcher("./jsp/changePassword.jsp").forward(req, resp);
 			}
 		}
 		catch (Throwable theException) {		
