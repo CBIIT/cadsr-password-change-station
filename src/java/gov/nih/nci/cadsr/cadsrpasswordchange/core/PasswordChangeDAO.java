@@ -56,10 +56,10 @@ public class PasswordChangeDAO implements PasswordChange {
     //CADSRPASSW-46
     private Connection getConnection() throws Exception {
 		DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
-        logger.debug("got DataSource for " + _jndiSystem);    	
+        logger.debug("got DataSource for " + _jndiSystem + "; DB User: " + PropertyHelper.getDatabaseUserID());    	
 //        conn = ds.getConnection();
-      logger.debug("got connection from jboss pool [" + _jndiSystem + "]");
         conn = ds.getConnection(PropertyHelper.getDatabaseUserID(), PropertyHelper.getDatabasePassword());
+        logger.debug("got connection from jboss pool [" + _jndiSystem + "]");
         
 //        String jdbcurl = PropertyHelper.getDatabaseURL();
 //        logger.debug("got connection using direct jdbc url [" + jdbcurl + "]");
@@ -220,11 +220,14 @@ public class PasswordChangeDAO implements PasswordChange {
         if(uaName != null) {
         	uaName = uaName.toUpperCase();
         }
+        else {
+        	logger.error("findByPrimaryKey received uaName null !!!");
+        }
         //end CADSRPASSW-15
         try {
             sql = "select * from " + QUESTION_TABLE_NAME + " where UPPER(ua_name) = ?";		//CADSRPASSW-15
 
-            logger.debug("findByPrimaryKey sql : " + sql);
+            logger.debug("findByPrimaryKey sql : " + sql + "; uaName: " + uaName);
 
 	        if(conn == null) {
 //            DataSource ds = ConnectionUtil.getDS(PasswordChangeDAO._jndiSystem);
@@ -233,7 +236,7 @@ public class PasswordChangeDAO implements PasswordChange {
 		        conn = getConnection();
 	        }
             pstmt = conn.prepareStatement( sql );
-            pstmt.setString(1, uaName.toUpperCase());		//CADSRPASSW-58
+            pstmt.setString(1, uaName);		//CADSRPASSW-58
 			rs = pstmt.executeQuery();
 			int count = 0;
 			logger.debug("findByPrimaryKey: " + count);    			
