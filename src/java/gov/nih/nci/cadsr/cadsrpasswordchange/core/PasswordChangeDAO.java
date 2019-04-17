@@ -758,7 +758,7 @@ public class PasswordChangeDAO implements PasswordChange {
         	if (conn != null) { try { conn.close(); conn = null; } catch (SQLException e) { logger.error(e.getMessage()); } }
 		}
 
-       logger.info("returning account status [" + retVal + "]");
+       logger.info("returning account status " + retVal + ", for username: " + user);
 
        return retVal;
 	}
