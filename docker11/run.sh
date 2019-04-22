@@ -32,6 +32,9 @@ wait_for_server
 echo "=> deploying modules"
 cp dist/cadsrpasswordchange.war /local/content/cadsrpasswordchange/jboss
 cp dist/bin/ojdbc7.jar /local/content/cadsrpasswordchange/bin
+cp dist/bin/cadsrnotifypassword.jar dist/bin/commons-lang3-3.4.jar dist/bin/joda-time-2.9.jar dist/bin/log4j-1.2.13.jar dist/bin/mail.jar dist/bin/config.xml dist/bin/log4j.properties /local/content/cadsrpasswordchange/bin
+cp dist/bin/ojdbc7.jar autorun11.sh /local/content/cadsrpasswordchange/bin
+chmod 755 /local/content/cadsrpasswordchange/bin/autorun11.sh 
 
 /opt/wildfly/bin/jboss-cli.sh -c --controller=localhost:9990 --file=dist/jboss/cadsrpasswordchange_modules.cli
 
