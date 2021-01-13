@@ -95,7 +95,7 @@ L--%>
         	<table summary="Login credentials and new password to change password.">
             <tr>
                 <td valign="middle"><label for="LoginID" class=bstd>Login ID:</p></td>
-                <td valign="middle"><input id="LoginID" type="text" name="userid" value="<%= request.getAttribute("userid") %>" style="width: 3.75in" class="std"></td>
+                <td valign="middle"><input id="LoginID" type="text" name="userid" value="<%= request.getAttribute("userid") %>" style="width: 3.75in" class="std" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="OldPassword" class=bstd>Current Password:</p></td>
