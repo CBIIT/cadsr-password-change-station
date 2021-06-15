@@ -138,7 +138,7 @@ Your new password may only use characters from the following categories and must
 							</p></td>
 					<td valign="middle"><input id="userid" type="text"
 						name="userid" value="<%= request.getAttribute("userid") %>" style="width: 3.75in"
-						class="std"></td>
+						class="std" autocomplete="off"></td>
 				</tr>
 				<tr>
 				<tr>

@@ -104,7 +104,7 @@ L--%>
         	<table summary="Login credentials and new password to change password.">
             <tr>
                 <td valign="middle"><label for="question" class=bstd>Question 1:</p></td>
-                <td valign="middle"><input id="question" type="text" name="question" value="<%=session.getAttribute(Constants.Q1)%>" style="width: 3.75in" class="std" readonly="readonly"></td>
+                <td valign="middle"><input id="question" type="text" name="question" value="<%=session.getAttribute(Constants.Q1)%>" style="width: 3.75in" class="std" readonly="readonly" autocomplete="off"></td>
             </tr><tr>
             <tr>
                 <td valign="middle"><label for="answer" class=bstd>Answer 1:</p></td>
