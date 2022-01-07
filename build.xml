@@ -99,9 +99,15 @@ L-->
 		<copy tofile="${dist.dir}/bin/ojdbc7.jar" filtering="false" verbose="true">
 			<fileset file="src/lib/ojdbc7.jar" />
 		</copy>
-		<copy tofile="${dist.dir}/bin/log4j-1.2.13.jar" filtering="false" verbose="true">
-			<fileset file="src/lib/log4j-1.2.13.jar" />
+		<copy tofile="${dist.dir}/bin/log4j-over-slf4j-1.7.32.jar" filtering="false" verbose="true">
+			<fileset file="src/lib/log4j-over-slf4j-1.7.32.jar" />
 		</copy>
+		<copy tofile="${dist.dir}/bin/slf4j-simple-1.7.32.jar" filtering="false" verbose="true">
+			<fileset file="src/lib/slf4j-simple-1.7.32.jar" />
+		</copy>
+		<copy tofile="${dist.dir}/bin/slf4j-api-1.7.32.jar" filtering="false" verbose="true">
+			<fileset file="src/lib/slf4j-api-1.7.32.jar" />
+		</copy>				
 		<copy tofile="${dist.dir}/bin/log4j.properties" filtering="false" verbose="true">
 			<fileset file="src/conf/log4j.properties" />
 		</copy>
