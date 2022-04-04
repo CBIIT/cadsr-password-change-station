@@ -49,7 +49,7 @@ public class FooterTag extends TagSupport {
 	    		   + "<a target=\"_blank\" href=\"https://www.dhhs.gov/\"><img border=\"0\" src=\"/cadsrpasswordchange/images/footer_hhs.gif\" alt=\"Department of Health and Human Services Logo\" title=\"Department of Health and Human Services\"></a>"
 	    		   + "<a target=\"_blank\" href=\"https://www.nih.gov/\"><img border=\"0\" src=\"/cadsrpasswordchange/images/footer_nih.gif\" alt=\"National Institutes of Health Logo\" title=\"National Institutes of Health\"></a>"
 	    		   + "<a target=\"_blank\" href=\"https://www.usa.gov/\"><img border=\"0\" src=\"/cadsrpasswordchange/images/footer_usagov.gif\" alt=\"USA.gov\" title=\"USA.gov\"></a>"
-	    		   + "<a target=\"_blank\" href=\"https://wiki.nci.nih.gov/x/qxEhAQ\">Privacy Notice</a>"
+	    		   + "<a target=\"_blank\" href=\"https://wiki.nci.nih.gov/x/qxEhAQ\">Privacy Notice</a>&nbsp;&nbsp;"
 	    		   + "<a target=\"_blank\" href=\"https://www.hhs.gov/vulnerability-disclosure-policy/index.html\">Vulnerability Disclosure</a>"
 	    		   + "</div>"
 	    		   + "</td>\n</tr>\n</table>\n");
